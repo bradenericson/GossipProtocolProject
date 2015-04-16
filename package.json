@@ -1,0 +1,22 @@
+{
+  "name": "DatagramSender",
+  "version": "0.0.0",
+  "description": "A NodeJS implementation of UDP communication.",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt nodeunit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bradenericson/DatagramSender"
+  },
+  "keywords": [
+    "UDP"
+  ],
+  "author": "Braden Ericson & Chad Luangrath",
+  "license": "No License",
+  "bugs": {
+    "url": "https://github.com/bradenericson/DatagramSender/issues"
+  },
+  "homepage": "https://github.com/bradenericson/DatagramSender"
+}
