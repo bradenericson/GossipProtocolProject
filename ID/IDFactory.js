@@ -60,6 +60,9 @@ module.exports = function() {
         if (isNaN(lengthInBytes)) {
             throw new Error("Passed lengthInBytes parameter is not a number!");
         }
+
+        idLength = lengthInBytes;
+
     };
 
     /* Private Methods */
