@@ -2,14 +2,16 @@
  * Created by braden on 4/23/15.
  */
 
-var exports = {};
+module.exports = function() {
+    var service = {};
 
-exports.sayHelloInEnglish = function() {
-    return "HELLO";
+    service.sayHelloInEnglish = function() {
+        return "HELLO";
+    };
+
+    service.sayHelloInSpanish = function() {
+        return "Hola";
+    };
+
+    return service;
 };
-
-exports.sayHelloInSpanish = function() {
-    return "Hola";
-};
-
-module.exports = exports;
