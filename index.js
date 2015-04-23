@@ -3,11 +3,10 @@
  * and Matt Woelfel
  */
 
-var IDFactory = require('./IDFactory.js');
+var IDFactory = require('./ID/IDFactory.js');
 
-var test = new IDFactory();
+var idFactory = new IDFactory();
 
-console.log(test.sayHello());
 
 //var dgram = require('dgram');
 //var s = dgram.createSocket('udp4');
