@@ -32,6 +32,7 @@ module.exports = function(byteArray, datagramPacket, startingByte, hexString) {
         return object === self;
     };
 
+    //TODO
     self.hashCode = function(object) {
 
     };
@@ -46,6 +47,10 @@ module.exports = function(byteArray, datagramPacket, startingByte, hexString) {
         };
 
         return isZero;
+    };
+
+    self.toString = function() {
+        return self.id.toString();
     };
 
     //TODO
