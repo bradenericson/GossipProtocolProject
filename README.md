@@ -51,3 +51,26 @@ Gossip Protocol:
         -Part Number of Resource
         -data.length
         -data
+
+
+---
+
+for creating a new JavaScript Class:
+
+module.exports = function() {
+    var service = {};
+    var privateVariable = "This is a private variable";
+    service.sayHelloInEnglish = function() {
+        return "HELLO";
+    };
+
+    service.sayHelloInSpanish = function() {
+        return "Hola";
+    };
+
+    service.instanceVariable = "This is an instance variable";
+
+    return service;
+};
+
+

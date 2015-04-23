@@ -4,7 +4,7 @@
 
 module.exports = function() {
     var service = {};
-
+    var privateVariable = "This is a private variable";
     service.sayHelloInEnglish = function() {
         return "HELLO";
     };
@@ -12,6 +12,8 @@ module.exports = function() {
     service.sayHelloInSpanish = function() {
         return "Hola";
     };
+
+    service.instanceVariable = "This is an instance variable";
 
     return service;
 };
