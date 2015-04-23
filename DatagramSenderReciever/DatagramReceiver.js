@@ -2,20 +2,14 @@
  * Created by braden on 4/23/15.
  */
 
-module.exports = function() {
+var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
 
+module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
 
-    var service = {};
-    var privateVariable = "This is a private variable";
-    service.sayHelloInEnglish = function() {
-        return "HELLO";
+    var service = new DatagramSenderReceiver(datagramSocket, incomingPacketQueue, packetSize);
+    service.action = function(datagramSocket, packetQueue){
+      console.log('listening for packets');
     };
-
-    service.sayHelloInSpanish = function() {
-        return "Hola";
-    };
-
-    service.instanceVariable = "This is an instance variable";
 
     return service;
 };

@@ -3,16 +3,16 @@
  */
 
 
-module.exports = function(datagramSocketInput, packetSizeInput) {
+module.exports = function(datagramSocketInput, packetQueue, packetSizeInput) {
 
     var datagramSocket = datagramSocketInput;
     var packetSize = packetSizeInput;
-    var queue = [];
+    var queue = packetQueue;
     var done = false;
 
     var service = {};
-    service.action = function(datagramSocket){
-
+    service.action = function(datagramSocket, queue){
+        console.log("sending and receiving one... we don't want this");
     };
 
     service.getPort = function(){
@@ -29,6 +29,7 @@ module.exports = function(datagramSocketInput, packetSizeInput) {
 
     service.run = function(){
         //create the sub service
+       service.action(datagramSocket,queue);
     };
 
     service.startAsThread = function(){
@@ -42,4 +43,4 @@ module.exports = function(datagramSocketInput, packetSizeInput) {
 
 
     return service;
-};;
+};

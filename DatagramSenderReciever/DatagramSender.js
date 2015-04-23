@@ -2,14 +2,14 @@
  * Created by braden on 4/23/15.
  */
 
-var exports = {};
+var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
 
-exports.sayHelloInEnglish = function() {
-    return "HELLO";
+module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
+
+    var service = new DatagramSenderReceiver(datagramSocket, incomingPacketQueue, packetSize);
+    service.action = function(datagramSocket, packetQueue){
+        console.log('sending packets');
+    };
+
+    return service;
 };
-
-exports.sayHelloInSpanish = function() {
-    return "Hola";
-};
-
-module.exports = exports;
