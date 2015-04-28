@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/bradenericson/DatagramSender/issues"
   },
-  "homepage": "https://github.com/bradenericson/DatagramSender"
+  "homepage": "https://github.com/bradenericson/DatagramSender",
+  "dependencies": {
+    "secure-random": "^1.1.1"
+  }
 }
