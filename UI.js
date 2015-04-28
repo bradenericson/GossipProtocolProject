@@ -6,6 +6,7 @@ process.stdin.resume();
 process.stdin.setEncoding('utf8');
 var util = require('util');
 var main = require("./Main.js");
+var childProcess = require("child_process");
 
 console.log("Welcome to the JS P2P system!\n");
 console.log("Please enter a command:");
@@ -43,7 +44,8 @@ process.stdin.on('data', function (text) {
     }
     if (text === 'join\r\n') {
         //join the P2P system
-
+        var mainProcess = childProcess.fork(__dirname + "/Main.js");
+        mainProcess.send("join");
     }
 
     if (text !== 'quit\r\n' && text !== 'help\r\n' && text.indexOf('search') < 0 && text.indexOf('request') < 0 && text !== 'join\r\n') {
