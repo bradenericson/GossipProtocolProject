@@ -1,36 +1,32 @@
 /** Created by matt on 4/23/15. */
 
 /** need to figure out multiple constructors */
-module.exports = function(id1_in, id2_in, timeToLive_in, message_in, datagramPacket_in) {
+module.exports = function(datagramPacket_in) {
 
     var id1;
     var id2;
     var timeToLive;
     var message;
+    var packetSize = 476;
 
     var self = {};
 
-    if (typeof id1_in != "undefined" && id2_in != "undefined" && timeToLive_in != "undefined" && message_in != "undefined" {
-        id1 = id1_in;
-        id2 = id2_in;
-        timeToLive = timeToLive_in;
-        message = message_in;
+    if (typeof datagramPacket_in != "undefined") {
+        id1 = datagramPacket_in.toString("utf8", 0, 15);
+        id2 = datagramPacket_in.toString("utf8", 16, 31);
+        timeToLive = datagramPacket_in.toString("utf8", 32, 35);
+        message = datagramPacket_in.toString("utf8", 36, datagramPacket_in.length);
     }
-    else if (typeof datagramPacket_in != "undefined") {
-
+    else {
+        throw new Error("The UDP message class did not receive a datagram");
     }
 
     self.getDatagramPacket = function() {
         return datagramPacket_in;
     };
 
-    self.getDatagramPacket = function(payload) {
-
-    }
-
-    self.getDatagramPacket = function(byte[]) {
-
-    }
+    //self.getDatagramPacket = function(payload_string) {} implement these if needed
+    //self.getDatagramPacket = function(payload_byte) {}
 
     self.getID1 = function() {
         return id1;
@@ -46,6 +42,14 @@ module.exports = function(id1_in, id2_in, timeToLive_in, message_in, datagramPac
 
     self.getMessage = function() {
         return message;
+    }
+
+    self.getMaximumPacketSizeInBytes = function() {
+        return packetSize;
+    }
+
+    self.getMinimumPacketSizeInBytes = function() {
+        return packetSize;
     }
 
     return self;

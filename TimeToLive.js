@@ -2,26 +2,22 @@
  * Created by matt on 4/23/15.
  */
 
-module.exports = function(timeToLive_in, byteArray) {
+module.exports = function(timeToLive_in) {
 
-    var timeToLive
+    var timeToLive;
 
     var self = {};
 
     if (typeof timeToLive_in != "undefined") {
-        timeToLive = timeToLive_in;
-    }
-    else if (typeof byteArray != "undefined") {
-        timeToLive = byteArray;
+        timeToLive = timeToLive_in.toString("utf8", 32, 47);
     }
     else {
         throw new Error("Invalid parameter was entered!");
     }
 
     self.getLengthInBytes = function() {
-        var bytes;
-        bytes = timeToLive.slice(2);
-
+        var lengthInBytes = timeToLive.toString("utf8", 32, 47);
+        return lengthInBytes.length;
     }
 
     self.get = function() {
@@ -30,11 +26,11 @@ module.exports = function(timeToLive_in, byteArray) {
 
     self.set = function(timeToLive) {
         timeToLive = timeToLive - 1;
-        return self.ttl;
+        return timeToLive;
     }
 
     self.getBytes = function() {
-       return timeToLive.slice(2);
+       return timeToLive.toString("utf8", 32, 47);
     }
 
     self.toString = function() {
