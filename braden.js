@@ -30,7 +30,7 @@ sender.start();
 var factory = new idFactory();
 var byteArray = factory.idFactory();
 var byteArray2 = factory.idFactory();
-byteArray = byteArray.concat(byteArray2);
+byteArray = byteArray + byteArray2;
 var buffer = new Buffer(byteArray);
 setTimeout(function(){
     //outgoingPacketQueue.add();

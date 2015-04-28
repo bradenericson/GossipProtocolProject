@@ -16,12 +16,12 @@ help();
 
 process.stdin.on('data', function (text) {
 
-    text = text.toLowerCase();
+    text = text.toLowerCase().trim();
 
-    if (text === 'quit\r\n') {
+    if (text === 'quit') {
         done();
     }
-    if (text === 'help\r\n') {
+    if (text === 'help') {
         help();
     }
     if (text.indexOf('search') >= 0) {
@@ -42,13 +42,13 @@ process.stdin.on('data', function (text) {
         var requestText = text.substring(text.indexOf('--') + 2, text.length - 1);
         requestResource(requestText);
     }
-    if (text === 'join\r\n') {
+    if (text === 'join') {
         //join the P2P system
         var mainProcess = childProcess.fork(__dirname + "/Main.js");
         mainProcess.send("join");
     }
 
-    if (text !== 'quit\r\n' && text !== 'help\r\n' && text.indexOf('search') < 0 && text.indexOf('request') < 0 && text !== 'join\r\n') {
+    if (text !== 'quit' && text !== 'help\r\n' && text.indexOf('search') < 0 && text.indexOf('request') < 0 && text !== 'join\r\n') {
         console.log("You did not enter a valid command. Please enter a valid command.");
     }
 });

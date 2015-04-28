@@ -19,6 +19,9 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
        if(queue.length() > 0){
            var udp = queue.remove();
            console.log("The message:",udp.getMessage());
+           console.log("The id1:",udp.getID1().id);
+           console.log("The id2:",udp.getID2().id);
+           console.log("The TTL:",udp.getTimeToLive().get());
            console.log("sending off to Main:", udp);
            //process.send({UDP: UDP});
 

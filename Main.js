@@ -12,7 +12,7 @@ var idFactory = require('./DatagramSenderReceiver/UDP/ID/IDFactory.js');
 var _idFactory = new idFactory();
 
 process.on('message', function(m) {
-    if (message === "join") {
+    if (m === "join") {
         console.log("Creating the join datagram packet");
 
         var newBuffer = new Buffer(_idFactory.idFactory());
