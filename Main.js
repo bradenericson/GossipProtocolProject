@@ -16,11 +16,11 @@ process.on('message', function(m) {
         console.log("Creating the join datagram packet");
 
         var newBuffer = new Buffer(_idFactory.idFactory());
-        newBuffer.concat(_idFactory.getZeroID());
-        newBuffer.concat(new timeToLive(0));
+        //newBuffer.concat(_idFactory.getZeroID());
+        //newBuffer.concat(new timeToLive(0));
 
         var joinMessage = new udpMessage(newBuffer);
-
+        process.send({message: "hello dad"});
 
     }
 });

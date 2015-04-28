@@ -46,6 +46,9 @@ process.stdin.on('data', function (text) {
         //join the P2P system
         var mainProcess = childProcess.fork(__dirname + "/Main.js");
         mainProcess.send("join");
+        mainProcess.on("message", function(m){
+            console.log(m);
+        });
     }
 
     if (text !== 'quit' && text !== 'help\r\n' && text.indexOf('search') < 0 && text.indexOf('request') < 0 && text !== 'join\r\n') {
