@@ -3,6 +3,7 @@
  */
 
 var ID = require("./ID.js");
+var secureRandom = require("../node_modules/secure-random");
 
 module.exports = function() {
     var self = {};
@@ -24,13 +25,9 @@ module.exports = function() {
     };
 
     self.generateId = function() {
-        var byteArray = new Array(idLength);
+        var byteIdArray = secureRandom(16, { type: 'Array' });
 
-        for(var i = 0; i < byteArray.length; i++) {
-            byteArray[i] = Math.floor(Math.random() * (256 - 0)) + 0;
-        }
-
-        idQueue.push(new ID(byteArray));
+        idQueue.push(new ID(byteIdArray));
     };
 
     self.getLengthInBytes = function() {
