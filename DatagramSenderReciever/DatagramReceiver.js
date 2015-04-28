@@ -3,16 +3,15 @@
  */
 
 var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
-var UDPMessage = require('./UDP/UDPMessage.js')
+var UDPMessage = require('./UDP/UDPMessage.js');
 
 module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
 
     var service = new DatagramSenderReceiver(datagramSocket, incomingPacketQueue, packetSize);
     service.socket.on('message', function(msg, rinfo) {
         console.log(msg,rinfo);
-        //TODO: Add Matt's code to convert UDP packet to object
-        var UDPMessage = {message: msg.toString()};
-        incomingPacketQueue.add(UDPMessage);
+        var udp = new UDPMessage(msg);
+        incomingPacketQueue.add(udp);
         console.log('Received %d bytes from %s:%d\n',
             msg.length, rinfo.address, rinfo.port);
     });

@@ -5,7 +5,7 @@
 module.exports = function(byteArray) {
     var self = {};
 
-    self.id;
+
 
     if (typeof byteArray != "undefined") {
         self.id = byteArray;
@@ -38,7 +38,7 @@ module.exports = function(byteArray) {
             if (self.id[i] == 0) {
                 isZero = true;
             }
-        };
+        }
 
         return isZero;
     };
