@@ -1,5 +1,8 @@
 /** Created by matt on 4/23/15. */
 
+var ID = require("./ID/ID.js");
+var TTL = require("./TimeToLive.js");
+
 /** need to figure out multiple constructors */
 module.exports = function(datagramPacket_in) {
 
@@ -12,9 +15,9 @@ module.exports = function(datagramPacket_in) {
     var self = {};
 
     if (typeof datagramPacket_in != "undefined") {
-        id1 = datagramPacket_in.toString("utf8", 0, 15);
-        id2 = datagramPacket_in.toString("utf8", 16, 31);
-        timeToLive = datagramPacket_in.toString("utf8", 32, 35);
+        id1 = new ID(datagramPacket_in.toString("utf8", 0, 15));
+        id2 = new ID(datagramPacket_in.toString("utf8", 16, 31));
+        timeToLive = new TTL(datagramPacket_in.toString("utf8", 32, 35));
         message = datagramPacket_in.toString("utf8", 36, datagramPacket_in.length);
     }
     else {
@@ -30,27 +33,27 @@ module.exports = function(datagramPacket_in) {
 
     self.getID1 = function() {
         return id1;
-    }
+    };
 
     self.getID2 = function() {
         return id2;
-    }
+    };
 
     self.getTimeToLive = function() {
         return timeToLive;
-    }
+    };
 
     self.getMessage = function() {
         return message;
-    }
+    };
 
     self.getMaximumPacketSizeInBytes = function() {
         return packetSize;
-    }
+    };
 
     self.getMinimumPacketSizeInBytes = function() {
         return packetSize;
-    }
+    };
 
     return self;
 };
