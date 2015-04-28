@@ -3,6 +3,7 @@
  */
 
 var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
+var UDPMessage = require('./UDP/UDPMessage.js')
 
 module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
 
