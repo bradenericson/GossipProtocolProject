@@ -16,8 +16,7 @@ module.exports = function(timeToLive_in) {
     }
 
     self.getLengthInBytes = function() {
-        var lengthInBytes = timeToLive.toString("utf8", 32, 47);
-        return lengthInBytes.length;
+        return timeToLive.length;
     }
 
     self.get = function() {
