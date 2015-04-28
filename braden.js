@@ -14,6 +14,6 @@ var datagramSocket = new DatagramSocket();
 var receiver = new DatagramReceiver(datagramSocket, incomingPacketQueue, packetSize);
 var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize);
 
-receiver.action(portNumber,incomingPacketQueue);
-sender.action(portNumber,outgoingPacketQueue);
-sender.run();
+receiver.action();
+sender.action();
+//sender.run();
