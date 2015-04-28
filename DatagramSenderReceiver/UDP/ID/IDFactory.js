@@ -3,7 +3,7 @@
  */
 
 var ID = require("./ID.js");
-var secureRandom = require("../node_modules/secure-random");
+var secureRandom = require("../../../node_modules/secure-random");
 
 module.exports = function() {
     var self = {};
