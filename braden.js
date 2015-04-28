@@ -14,6 +14,17 @@ var datagramSocket = new DatagramSocket();
 var receiver = new DatagramReceiver(datagramSocket, incomingPacketQueue, packetSize);
 var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize);
 
-receiver.action();
-sender.action();
+//receiver.action();
+
+receiver.start();
+
+sender.start();
+setTimeout(function(){
+    outgoingPacketQueue.add({message:"hello world"});
+    outgoingPacketQueue.add({message:"hello world"});
+    outgoingPacketQueue.add({message:"hello world"});
+    outgoingPacketQueue.add({message:"hello world"});
+    outgoingPacketQueue.add({message:"hello world"});
+    outgoingPacketQueue.add({message:"hello world"});
+},2000);
 //sender.run();
