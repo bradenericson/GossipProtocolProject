@@ -6,9 +6,11 @@
 module.exports = function(datagramSocketInput, packetQueue, packetSizeInput) {
 
 
-    var packetSize = packetSizeInput;
+    var packetSize = packetSizeInput || 476;
     var queue = packetQueue;
     var done = false;
+    var timeoutObject;
+    var intervalObject;
 
     var service = {};
     service.action = function(){
@@ -31,15 +33,19 @@ module.exports = function(datagramSocketInput, packetQueue, packetSizeInput) {
 
     service.run = function(){
         //create the sub service
-       service.action(queue);
+        intervalObject = setInterval(function(){
+            console.log("checking the queue" + Math.random());
+            service.action(queue);
+        },1000);
     };
 
-    service.startAsThread = function(){
-
+    service.start = function(){
+        service.run();
     };
 
     service.stop = function(){
       //stop the process
+        clearInterval(intervalObject);
         datagramSocket.close();
     };
 

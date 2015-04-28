@@ -12,7 +12,7 @@ module.exports = function(){
     };
 
     service.remove = function(){
-        queue.shift();
+        return queue.shift();
     };
 
     service.length = function(){
