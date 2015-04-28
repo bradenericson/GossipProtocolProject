@@ -2,10 +2,10 @@
  * Created by braden on 4/23/15.
  */
 
-var DatagramSender = require('./DatagramSenderReciever/DatagramSender.js');
-var DatagramReceiver = require('./DatagramSenderReciever/DatagramReceiver.js');
+var DatagramSender = require('./DatagramSenderReceiver/DatagramSender.js');
+var DatagramReceiver = require('./DatagramSenderReceiver/DatagramReceiver.js');
 var PacketQueue = require('./Queue/DatagramQueue.js');
-var DatagramSocket = require('./DatagramSenderReciever/DatagramSocket.js');
+var DatagramSocket = require('./DatagramSenderReceiver/DatagramSocket.js');
 var portNumber = 12345;
 var packetSize = 32;
 var incomingPacketQueue = new PacketQueue();
