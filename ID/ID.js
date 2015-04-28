@@ -2,19 +2,13 @@
  * Created by Chad Luangrath on 4/23/2015.
  */
 
-module.exports = function(byteArray, datagramPacket, startingByte, hexString) {
+module.exports = function(byteArray) {
     var self = {};
 
     self.id;
 
     if (typeof byteArray != "undefined") {
         self.id = byteArray;
-    }
-    else if (typeof datagramPacket != "undefined" && typeof startingByte != "undefined") {
-
-    }
-    else if (typeof hexString != "undefined") {
-        self.id = parseInt(hexString, 16);
     }
     else {
         throw new Error("No valid parameter combination detected for ID constructor");
