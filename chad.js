@@ -1,7 +1,7 @@
 /**
  * Created by braden on 4/23/15.
  */
-var IDFactory = require('./DatagramSenderReciever/UDP/ID/IDFactory.js');
+var IDFactory = require('./DatagramSenderReceiver/UDP/ID/IDFactory.js');
 
 var test = new IDFactory();
 var idFactory = new IDFactory();

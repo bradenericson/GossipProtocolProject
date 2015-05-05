@@ -3,7 +3,7 @@
  */
 
 var ID = require("./ID.js");
-var secureRandom = require("../node_modules/secure-random");
+var secureRandom = require("../../../node_modules/secure-random");
 
 module.exports = function() {
     var self = {};
@@ -20,7 +20,8 @@ module.exports = function() {
             return idQueue.pop();
         }
         else {
-            throw new Error("Queue Underflow Exception. There are no IDs in the idQueue right now!");
+            return new ID(secureRandom(16, { type: 'Array' }));
+            //throw new Error("Queue Underflow Exception. There are no IDs in the idQueue right now!");
         }
     };
 

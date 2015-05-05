@@ -10,9 +10,9 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
     service.action = function(queue){
         console.log("queue size:", queue.length());
         if(queue.length() > 0){
-            var message = queue.remove().message;
+            var message = queue.remove();
            // console.log(message.mes);
-            var buffer = new Buffer(message, "utf-8");
+            var buffer = new Buffer(message);
             service.socket.send(buffer, 0, buffer.length, service.getPort(), service.getAddress(), function(){
                 console.log("message sent");
             });

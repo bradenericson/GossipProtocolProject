@@ -6,6 +6,7 @@ process.stdin.resume();
 process.stdin.setEncoding('utf8');
 var util = require('util');
 var main = require("./Main.js");
+var childProcess = require("child_process");
 
 console.log("Welcome to the JS P2P system!\n");
 console.log("Please enter a command:");
@@ -15,12 +16,12 @@ help();
 
 process.stdin.on('data', function (text) {
 
-    text = text.toLowerCase();
+    text = text.toLowerCase().trim();
 
-    if (text === 'quit\r\n') {
+    if (text === 'quit') {
         done();
     }
-    if (text === 'help\r\n') {
+    if (text === 'help') {
         help();
     }
     if (text.indexOf('search') >= 0) {
@@ -41,12 +42,16 @@ process.stdin.on('data', function (text) {
         var requestText = text.substring(text.indexOf('--') + 2, text.length - 1);
         requestResource(requestText);
     }
-    if (text === 'join\r\n') {
+    if (text === 'join') {
         //join the P2P system
-
+        var mainProcess = childProcess.fork(__dirname + "/Main.js");
+        mainProcess.send("join");
+        mainProcess.on("message", function(m){
+            console.log(m);
+        });
     }
 
-    if (text !== 'quit\r\n' && text !== 'help\r\n' && text.indexOf('search') < 0 && text.indexOf('request') < 0 && text !== 'join\r\n') {
+    if (text !== 'quit' && text !== 'help\r\n' && text.indexOf('search') < 0 && text.indexOf('request') < 0 && text !== 'join\r\n') {
         console.log("You did not enter a valid command. Please enter a valid command.");
     }
 });

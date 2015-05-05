@@ -1,7 +1,7 @@
 # GossipProtocolProject
 A NodeJS implementation of UDP communication. 
 
-Gossip Protocol:
+Gossip Protocol - Participate Phase:
 
 1. Query Request
     UDP Message Contents:
@@ -52,6 +52,14 @@ Gossip Protocol:
         -data.length
         -data
 
+
+Gossip Protocol - Join Phase:
+
+1. Join Request
+    UDP Message Contents:
+        -Request ID
+        -Zero ID
+        -TTL
 
 ---
 

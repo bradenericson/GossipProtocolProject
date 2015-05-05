@@ -10,7 +10,7 @@ module.exports = function(datagramPacket_in) {
     var id2;
     var timeToLive;
     var message;
-    var packetSize = 476;
+    var packetSize = 456;
 
     var self = {};
 
