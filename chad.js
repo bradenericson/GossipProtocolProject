@@ -25,7 +25,7 @@ socket.on("error", function (err) {
 socket.on('listening', function () {
     var address = socket.address();
     console.log('UDP Client listening on ' + address.address + ":" + address.port);
-    socket.setBroadcast(true)
+    socket.setBroadcast(true);
     socket.setMulticastTTL(128);
     socket.addMembership('224.1.1.1');
 });
@@ -37,6 +37,6 @@ socket.on('message', function (message, rinfo) {
     console.log("The message is: ", message.toString());
 });
 
-socket.bind(7000, HOST);
+socket.bind(7000, process.env.HOST);
 
 //process.send({ foo: 'bar' });
