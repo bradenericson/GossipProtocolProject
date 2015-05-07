@@ -2,8 +2,8 @@
  * Created by braden on 4/23/15.
  */
 
-var buf = new buffer(id1aaaaaaaaaaaaaid2aaaaaaaaaaaaaTTLXmessageeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
-console.log(buf.getID1());
-console.log(buf.getID2());
-console.log(buf.getTimeToLive());
-console.log(buf.getMessage());
+//var buf = require("./DatagramSenderReciever/UDP/UDPMessage.js");
+
+//var buffer = new Buffer("id1aaaaaaaaaaaaaid2aaaaaaaaaaaaaTTLXmessageeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "utf8");
+//var matt = new buf(buffer);
+//console.log(matt.getID1().toString());

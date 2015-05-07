@@ -61,6 +61,10 @@ Gossip Protocol - Join Phase:
         -Zero ID
         -TTL
 
+2. Joiner is the person in charge
+    - multicast UDP message out to everyone with their IP
+    - Everyone responds with their IP
+
 ---
 
 for creating a new JavaScript Class:
