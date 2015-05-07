@@ -31,7 +31,7 @@ socket.on('listening', function () {
 });
 
 socket.on('message', function (message, rinfo) {
-    console.log("Received a message!");
+    //console.log("Received a message!");
     console.log('Received %d bytes from %s:%d\n',
         message.length, rinfo.address, rinfo.port);
     console.log("The message is: ", message.toString());

@@ -19,10 +19,6 @@ process.on('message', function (m) {
 
         var socket = datagramPacket.createSocket('udp4');
 
-        //socket.bind(7000, null, function () {
-        //
-        //});
-
         socket.bind(null, null, function() {
             socket.setBroadcast(true);
             socket.setMulticastTTL(128);
