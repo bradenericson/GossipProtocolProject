@@ -18,22 +18,23 @@ process.on('message', function (m) {
         console.log("Creating the join datagram packet");
 
         var socket = datagramPacket.createSocket('udp4');
-        socket.bind(5007, null, function () {
+
+        socket.bind(null, null, function() {
             socket.setBroadcast(true);
             socket.setMulticastTTL(128);
+        });
 
-            var newBuffer = new Buffer(_idFactory.idFactory());
-            var zeroIdBuffer = new Buffer(_idFactory.getZeroID());
-            var ttlBuffer = new Buffer(new timeToLive(0));
+        var newBuffer = new Buffer(_idFactory.idFactory());
+        var zeroIdBuffer = new Buffer(_idFactory.getZeroID());
+        var ttlBuffer = new Buffer(new timeToLive(0));
 
-            var testBuffer = new Buffer("message");
+        var testBuffer = new Buffer("message");
 
-            var completedBuffer = Buffer.concat([newBuffer, zeroIdBuffer, ttlBuffer]);
-            console.log("completedBuffer: " + completedBuffer);
+        var completedBuffer = Buffer.concat([newBuffer, zeroIdBuffer, ttlBuffer]);
+        console.log("completedBuffer: " + completedBuffer);
 
-            socket.send(testBuffer, 0, testBuffer.length, 5007, '224.1.1.1', function () {
-                console.log("Multicasted the join message to 224.1.1.1:5007!");
-            });
+        socket.send(testBuffer, 0, testBuffer.length, 7000, '224.1.1.1', function () {
+            console.log("Multicasted the join message to 224.1.1.1:5007!");
         });
         //process.send({message: "hello dad"});
 
