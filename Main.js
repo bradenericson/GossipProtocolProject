@@ -26,7 +26,7 @@ process.on('message', function (m) {
             var zeroIdBuffer = new Buffer(_idFactory.getZeroID());
             var ttlBuffer = new Buffer(new timeToLive(0));
 
-            var testBuffer = new Buffer("asiuodfjaosidfjasoiufj");
+            var testBuffer = new Buffer("message");
 
             var completedBuffer = Buffer.concat([newBuffer, zeroIdBuffer, ttlBuffer]);
             console.log("completedBuffer: " + completedBuffer);
