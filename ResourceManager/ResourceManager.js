@@ -26,7 +26,7 @@ process.on('message', function (m) {
                 var UDPmsg = m;
                 UDPmsg.swapID();
                 var message = new Buffer(UDPmsg.getMaximumPacketSizeInBytes());
-                messasge.write(); //something
+                messasge.write();
 
 
                 //resourceID is 12 bytes long

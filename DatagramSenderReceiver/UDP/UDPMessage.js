@@ -66,6 +66,16 @@ module.exports = function() {
         message = byteArray;
     };
 
+    self.setID = function(input) {
+        var buffer;
+        buffer = new Buffer(16);
+        if(typeof input === 'string') {
+            buffer.write(input);
+        }
+        var id = new ID(buffer);
+        id1 = id;
+    };
+
     self.getMaximumPacketSizeInBytes = function() {
         return packetSize;
     };
