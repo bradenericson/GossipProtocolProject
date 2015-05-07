@@ -18,6 +18,15 @@ process.stdin.on('data', function (text) {
 
     text = text.toLowerCase().trim();
 
+    if (text !== 'quit' &&
+        text !== 'help' &&
+        text.indexOf('search') < 0 &&
+        text.indexOf('request') < 0 &&
+        text !== 'join') {
+        console.log("You did not enter a valid command. Please enter a valid command.");
+        return;
+    }
+
     if (text === 'quit') {
         done();
     }
@@ -49,10 +58,6 @@ process.stdin.on('data', function (text) {
         mainProcess.on("message", function(m){
             console.log(m);
         });
-    }
-
-    if (text !== 'quit' && text !== 'help\r\n' && text.indexOf('search') < 0 && text.indexOf('request') < 0 && text !== 'join\r\n') {
-        console.log("You did not enter a valid command. Please enter a valid command.");
     }
 });
 
