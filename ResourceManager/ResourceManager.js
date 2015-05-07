@@ -17,9 +17,15 @@ process.on('message', function (m) {
             }
         }
     }
+    getFromDatabase(tags, function(err, data){
+        if(err){console.error(err);}
+        else{
+            //do stuff
+        }
+    })
 });
 
-function getFromDatabase(callback) {
+function getFromDatabase(tags, callback) {
   //mongo code
     callback(null, {_id: "23958203948", mimeType: "type/text", location: "/resources/file.txt", description: "This is a description for our really cool file.", size: 1024, fileName: "file.txt"});
 }
