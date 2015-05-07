@@ -37,6 +37,6 @@ socket.on('message', function (message, rinfo) {
     console.log("The message is: ", message.toString());
 });
 
-socket.bind(7000);
+socket.bind(7000, HOST);
 
 //process.send({ foo: 'bar' });
