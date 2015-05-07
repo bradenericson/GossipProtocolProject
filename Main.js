@@ -32,7 +32,7 @@ process.on('message', function (m) {
             console.log("completedBuffer: " + completedBuffer);
 
             socket.send(testBuffer, 0, testBuffer.length, 5007, '224.1.1.1', function () {
-                console.log("multicasted the join message");
+                console.log("Multicasted the join message to 224.1.1.1:5007!");
             });
         });
         //process.send({message: "hello dad"});
