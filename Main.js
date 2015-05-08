@@ -4,6 +4,11 @@
  */
 
 var datagramPacket = require('dgram');
+var messenger = require('messenger');
+transceiverChild = messenger.createSpeaker(8001);
+server = messenger.createListener(8000);
+var childProcess = require("child_process");
+
 
 var timeToLive = require('./DatagramSenderReceiver/UDP/TimeToLive.js');
 var udpMessage = require('./DatagramSenderReceiver/UDP/UDPMessage.js');
@@ -11,6 +16,9 @@ var idFactory = require('./DatagramSenderReceiver/UDP/ID/IDFactory.js');
 
 
 var _idFactory = new idFactory();
+
+
+childProcess.fork(__dirname + "/Transceiver.js");
 
 process.on('message', function (m) {
     if (m === "join") {
@@ -40,5 +48,17 @@ process.on('message', function (m) {
 
     }
 });
+
+server.on('transceiver-to-main', function(message, data){
+   //data = UDP message
+    console.log("got UDP message");
+    //code that handles what to do with the packet
+        //could be a response to one of our packets
+        //could be a dead packet
+        //could be a packet we need to send on
+        //could be a resource that is being built
+});
+
+
 
 //process.send({ foo: 'bar' });

@@ -7,10 +7,10 @@ var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
 module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
 
     var service = new DatagramSenderReceiver(datagramSocket, incomingPacketQueue, packetSize);
-    service.action = function(queue){
-        console.log("queue size:", queue.length());
-        if(queue.length() > 0){
-            var message = queue.remove();
+    service.action = function(){
+        console.log("queue size:", service.queue.length());
+        if(service.queue.length() > 0){
+            var message = service.queue.remove();
            // console.log(message.mes);
             var buffer = new Buffer(message);
             service.socket.send(buffer, 0, buffer.length, service.getPort(), service.getAddress(), function(){

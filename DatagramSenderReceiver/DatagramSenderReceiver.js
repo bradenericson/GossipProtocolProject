@@ -7,12 +7,13 @@ module.exports = function(datagramSocketInput, packetQueue, packetSizeInput) {
 
 
     var packetSize = packetSizeInput || 476;
-    var queue = packetQueue;
+
     var done = false;
     var timeoutObject;
     var intervalObject;
 
     var service = {};
+    service.queue = packetQueue;
     service.action = function(){
         console.log("sending and receiving one... this gets overwritten");
     };
@@ -35,7 +36,7 @@ module.exports = function(datagramSocketInput, packetQueue, packetSizeInput) {
         //create the sub service
         intervalObject = setInterval(function(){
             console.log("checking the queue" + Math.random());
-            service.action(queue);
+            service.action();
         },1000);
     };
 
