@@ -67,13 +67,19 @@ module.exports = function() {
     };
 
     self.setID = function(input) {
-        var buffer;
-        buffer = new Buffer(16);
-        if(typeof input === 'string') {
-            buffer.write(input);
+
+        //input should ONLY BE 12 LENGTH from Resource Manager + MongoDB. Tack LMAO onto the end
+
+        input += "LMAO";
+
+        var bytes = [];
+
+        for (var i = 0; i < input.length; ++i)
+        {
+            bytes.push(input.charCodeAt(i));
         }
-        var id = new ID(buffer);
-        id1 = id;
+
+        id1 = new ID(bytes);
     };
 
     self.getMaximumPacketSizeInBytes = function() {
