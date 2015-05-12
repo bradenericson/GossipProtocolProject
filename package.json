@@ -21,6 +21,7 @@
   "homepage": "https://github.com/bradenericson/DatagramSender",
   "dependencies": {
     "messenger": "0.0.9",
+    "mongoose": "^4.0.2",
     "secure-random": "^1.1.1"
   }
 }
