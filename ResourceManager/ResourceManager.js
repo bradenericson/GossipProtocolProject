@@ -3,6 +3,9 @@
  */
 
 var UDP = require("../DatagramSenderReceiver/UDP/UDPMessage.js");
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/test');
 
 process.on('message', function (m) {
     //m = UDP obj
@@ -26,8 +29,9 @@ process.on('message', function (m) {
                 var UDPmsg = m;
                 UDPmsg.swapID();
                 var message = new Buffer(UDPmsg.getMaximumPacketSizeInBytes());
-                messasge.write();
+                message.write();
 
+                
 
                 //resourceID is 12 bytes long
                 //put data[i]
