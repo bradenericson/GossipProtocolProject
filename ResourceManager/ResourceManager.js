@@ -60,14 +60,13 @@ function getFromDatabase(tags, callback) {
 Resource.find({
         'tags': { $in: tags}
     }, function(err, docs){
-        if(err){
-            console.log(err);
-            return [];
-        }else{
-            return docs;
+        if(err)
+        {
+            callback(err, []);
         }
+        callback(null, docs);
     });
-    callback(null, [{_id: "23958203948", mimeType: "type/text", location: "/resources/file.txt", description: "This is a description for our really cool file.", size: 1024, fileName: "file.txt"}]);
+    //callback(null, [{_id: "23958203948", mimeType: "type/text", location: "/resources/file.txt", description: "This is a description for our really cool file.", size: 1024, fileName: "file.txt"}]);
 }
 
 
