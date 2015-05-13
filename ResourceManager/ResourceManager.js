@@ -3,6 +3,18 @@
  */
 
 var UDP = require("../DatagramSenderReceiver/UDP/UDPMessage.js");
+mainSpeaker = messenger.createSpeaker(8000);//speaking to ResourceManager
+server = messenger.createListener(8002); //listens for messages on port 8000
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/gossip');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (callback) {
+    // yay!
+    console.log('successful connection')
+});
+
+var Resource = require('./models/Resource/Resource.js');
 
 process.on('message', function (m) {
     //m = UDP obj

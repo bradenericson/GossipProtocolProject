@@ -5,8 +5,9 @@
 
 var datagramPacket = require('dgram');
 var messenger = require('messenger');
-transceiverChild = messenger.createSpeaker(8001);
-server = messenger.createListener(8000);
+transceiverChild = messenger.createSpeaker(8001);//speaking to transceiver
+resourceManagerChild = messenger.createSpeaker(8002);//speaking to ResourceManager
+server = messenger.createListener(8000); //listens for messages on port 8000
 var childProcess = require("child_process");
 
 
@@ -45,6 +46,7 @@ process.on('message', function (m) {
             console.log("Multicasted the join message to 224.1.1.1:5007!");
         });
         //process.send({message: "hello dad"});
+        //instead we should use messanger package
 
     }
 });
@@ -57,6 +59,10 @@ server.on('transceiver-to-main', function(message, data){
         //could be a dead packet
         //could be a packet we need to send on
         //could be a resource that is being built
+});
+
+server.on('resourceManager-to-main', function(message,data){
+    //
 });
 
 
