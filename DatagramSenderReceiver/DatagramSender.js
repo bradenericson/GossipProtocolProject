@@ -8,7 +8,7 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
 
     var service = new DatagramSenderReceiver(datagramSocket, incomingPacketQueue, packetSize);
     service.action = function(){
-        console.log("queue size:", service.queue.length());
+        //console.log("queue size:", service.queue.length());
         if(service.queue.length() > 0){
             var message = service.queue.remove();
            // console.log(message.mes);
@@ -20,7 +20,7 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
                 console.log("message send 2");
             })
         }else{
-            console.log('nothing in the send queue');
+            //console.log('nothing in the send queue');
         }
     };
 

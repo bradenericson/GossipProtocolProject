@@ -52,7 +52,7 @@ process.on('message', function (m) {
 
 server.on('transceiver-to-main', function(message, data){
    //data = UDP message
-    console.log("got UDP message");
+    //console.log("got UDP message");
     //code that handles what to do with the packet
         //could be a response to one of our packets
         //could be a dead packet
