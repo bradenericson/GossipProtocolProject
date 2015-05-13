@@ -3,11 +3,15 @@
  */
 
 var UDP = require("../DatagramSenderReceiver/UDP/UDPMessage.js");
+var messenger = require("messenger");
+var mongoose = require('mongoose');
+
 mainSpeaker = messenger.createSpeaker(8000);//speaking to ResourceManager
 server = messenger.createListener(8002); //listens for messages on port 8000
-var mongoose = require('mongoose');
+
 mongoose.connect('mongodb://localhost/gossip');
 var db = mongoose.connection;
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
     // yay!
@@ -15,6 +19,22 @@ db.once('open', function (callback) {
 });
 
 var Resource = require('./models/Resource/Resource.js');
+
+//Generates bogus data
+/*
+for(var i = 0; i < 10; i++) {
+    Resource.create({
+        name: "Test " + i,
+        description: "Test Description " + i,
+        tags: ["test", "cat", "dog", "water", "fire", "earth", "air", "all", "changed", "when", "fire", "nation", "attacked"],
+        location: "C://",
+        mimeType: "image/jpeg",
+        size: 1024
+    });
+
+    console.log("Created Test " + i + " in the database!");
+};
+*/
 
 process.on('message', function (m) {
     //m = UDP obj
