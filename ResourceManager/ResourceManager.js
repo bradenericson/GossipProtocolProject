@@ -56,6 +56,17 @@ process.on('message', function (m) {
 
 function getFromDatabase(tags, callback) {
   //mongo code
+
+Resource.find({
+        'tags': { $in: tags}
+    }, function(err, docs){
+        if(err){
+            console.log(err);
+            return [];
+        }else{
+            return docs;
+        }
+    });
     callback(null, [{_id: "23958203948", mimeType: "type/text", location: "/resources/file.txt", description: "This is a description for our really cool file.", size: 1024, fileName: "file.txt"}]);
 }
 
