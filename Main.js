@@ -1,4 +1,3 @@
-/// <reference path="typings/node/node.d.ts"/>
 /**
  * Created by Chad Luangrath on 4/28/2015.
  */

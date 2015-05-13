@@ -7,6 +7,11 @@ process.stdin.setEncoding('utf8');
 var util = require('util');
 var main = require("./Main.js");
 var childProcess = require("child_process");
+var config = require('./Config.js');
+
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/test');
 
 console.log("Welcome to the JS P2P system!\n");
 console.log("Please enter a command:");
