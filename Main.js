@@ -66,5 +66,8 @@ server.on('resourceManager-to-main', function(message,data){
 });
 */
 
+//server.on('ui-resource-renew', function(message, data) {
+//    console.log('received message in Main.js');
+//});
 
 //process.send({ foo: 'bar' });
