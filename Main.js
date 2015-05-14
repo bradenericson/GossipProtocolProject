@@ -5,9 +5,10 @@
 var datagramPacket = require('dgram');
 
 var messenger = require('messenger');
- transceiverChild = messenger.createSpeaker(10001);//speaking to transceiver
- resourceManagerChild = messenger.createSpeaker(10002);//speaking to ResourceManager
- server = messenger.createListener(10000); //listens for messages on port 8000
+var transceiverChild = messenger.createSpeaker(10001);//speaking to transceiver
+var resourceManagerChild = messenger.createSpeaker(10002);//speaking to ResourceManager
+var server = messenger.createListener(10000); //listens for messages on port 8000
+var UIChild = messenger.createSpeaker(10003);
 var childProcess = require("child_process");
 
 
@@ -55,16 +56,29 @@ server.on('transceiver-to-main', function(message, data){
    //data = UDP message
     //console.log("got UDP message");
     //code that handles what to do with the packet
-        //could be a response to one of our packets
 
-        //could be a dead packet
-        //could be a packet we need to send on
-        //could be a resource that is being built
+
+    //if we are building a resource
+    resourceManagerChild.request('main-to-resourceManager', {message: 'data'}, function(data) {
+        console.log('main to resource manager data: ' + data);
+    });
+
+    //in response to a 'cats' query or what have you
+    //could be a response to one of our packets
+    UIChild.request('main-to-UI', {message: 'data'}, function(data) {
+        console.log('main to UI data: ' + data);
+    });
+
+    //sending back to transceiver
+    //could be a packet we need to send on
+    transceiverChild.request('main-to-transceiver', {message: 'data'}, function(data){
+        console.log('main back to transceiver data: ' + data);
+    });
+
+    //could be a dead packet
 });
 
-server.on('resourceManager-to-main', function(message,data){
-    //
-});
+
 
 
 //server.on('ui-resource-renew', function(message, data) {

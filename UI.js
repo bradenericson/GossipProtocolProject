@@ -148,3 +148,8 @@ function help() {
     console.log("quit | Quit the P2P network");
     console.log("help | See a list of available commands");
 }
+
+server.on('main-to-UI', function(message,data){
+    console.log('Message received');
+    //message received, could be used to build resource
+});

@@ -6,8 +6,8 @@ var UDP = require("../DatagramSenderReceiver/UDP/UDPMessage.js");
 var messenger = require("messenger");
 var mongoose = require('mongoose');
 
- mainSpeaker = messenger.createSpeaker(10000);//speaking to ResourceManager
- server = messenger.createListener(10002); //listens for messages on port 8000
+var mainSpeaker = messenger.createSpeaker(10000);//speaking to ResourceManager
+var server = messenger.createListener(10002); //listens for messages on port 8000
 var mongoose = require('mongoose');
 var fs = require('fs');
 var path = require('path');
@@ -222,6 +222,10 @@ function editName(resourceName, newName, callback){
 
 }
 
+server.on('main-to-resourceManager', function(message,data){
+    console.log('Message received');
+    //message received, could be used to build resource
+});
 
 
 
