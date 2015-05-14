@@ -16,8 +16,8 @@ var Spinner = require('cli-spinner').Spinner;
 var spinner = new Spinner('processing.. %s');
 spinner.setSpinnerString('|/-\\');
 
-server = messenger.createListener(10003);
-mainSpeaker = messenger.createSpeaker(10000);
+var server = messenger.createListener(10003);
+var mainSpeaker = messenger.createSpeaker(10000);
 
 
 var mongoose = require('mongoose');

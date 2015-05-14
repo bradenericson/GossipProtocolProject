@@ -1,5 +1,45 @@
 /**
  * Created by Chad on 4/23/15.
+ *
+ *      Class Variables:
+ *          idQueue
+ *              holds all of the generated IDs
+ *
+ *          idLength
+ *              length of the IDs
+ *
+ *          queueSizeLimit
+ *              maximum size of the queue
+ *
+ *      Methods:
+ *          self.idFactory = function()
+ *              returns id if there is an id in the queue, otherwise creates a new id
+ *
+ *          self.generateId = function()
+ *              creates an id and puts in into the queue
+ *
+ *          self.getLengthInBytes = function()
+ *              get the length of the id in bytes
+ *
+ *          self.getMaxQueueLength = function()
+ *              returns the max queue length of the queue
+ *
+ *          self.setMaxQueueLength = function(newQueueLength)
+ *              sets the max queue length of the id queue
+ *
+ *          self.getQueueLength = function()
+ *              return the current length of the queue
+ *
+ *          self.getZeroID = function()
+ *              creates a zeroID
+ *
+ *          self.setLengthInBytes = function(lengthInBytes)
+ *              TODO
+ *
+ *      Version History
+ *          Original Version
+ *              April 23 2015
+ *
  */
 
 var ID = require("./ID.js");
@@ -15,6 +55,7 @@ module.exports = function() {
     var queueSizeLimit = 500;
 
     /* Public Methods */
+    //returns id if there is an id in the queue, otherwise creates a new id
     self.idFactory = function() {
         if (idQueue.length > 0) {
             return idQueue.pop();
@@ -25,20 +66,24 @@ module.exports = function() {
         }
     };
 
+    //creates an id and puts in into the queue
     self.generateId = function() {
         var byteIdArray = secureRandom(16, { type: 'Array' });
 
         idQueue.push(new ID(byteIdArray));
     };
 
+    //get the length of the id in bytes
     self.getLengthInBytes = function() {
         return idLength;
     };
 
+    //returns the max queue length of the queue
     self.getMaxQueueLength = function() {
         return queueSizeLimit;
     };
 
+    //sets the max queue length of the id queue
     self.setMaxQueueLength = function(newQueueLength) {
         if (isNaN(newQueueLength)) {
             throw new Error("Passed newQueueLength parameter is not a number!");
@@ -46,14 +91,17 @@ module.exports = function() {
         queueSizeLimit = newQueueLength;
     };
 
+    //return the current length of the queue
     self.getQueueLength = function() {
         return idQueue.length;
     };
 
+    //creates a zeroID
     self.getZeroID = function() {
         return createZeroID();
     };
 
+    //TODO
     self.setLengthInBytes = function(lengthInBytes) {
         if (isNaN(lengthInBytes)) {
             throw new Error("Passed lengthInBytes parameter is not a number!");

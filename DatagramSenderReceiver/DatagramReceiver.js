@@ -1,5 +1,15 @@
 /**
  * Created by braden on 4/23/15.
+ *
+ *      Class Variables:
+ *          var service
+ *              creates a new DatagramSenderReceiver object
+
+ *      Method:
+ *          service.run = function()
+ *          service.stop = function()
+ *          service.action = function()
+ *
  */
 
 var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
