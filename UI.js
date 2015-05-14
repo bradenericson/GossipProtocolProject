@@ -17,7 +17,7 @@ var spinner = new Spinner('processing.. %s');
 spinner.setSpinnerString('|/-\\');
 
 server = messenger.createListener(10003);
-mainSpekaer = messenger.createSpeaker(10000);
+mainSpeaker = messenger.createSpeaker(10000);
 
 
 var mongoose = require('mongoose');
