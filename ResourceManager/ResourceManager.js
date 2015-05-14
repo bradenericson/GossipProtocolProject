@@ -198,7 +198,10 @@ function addTags(resourceName, tags, callback){
     description: the String description that will be attached to the file's entry in mongo
  */
 function editDescription(resourceName, description, callback){
-
+    var query = Resource.find({name: resourceName}).limit(1);
+    query.exec(function(err, resource){
+        if(err){callback(err)}
+    })
 }
 
 /*
@@ -206,7 +209,32 @@ function editDescription(resourceName, description, callback){
     tags: An Array of tags to remove from the list
  */
 function removeTags(resourceName, tags, callback){
+    var query = Resource.find({name: resourceName}).limit(1);
+    query.exec(function(err, resource){
+        if(err){
+            callback(err, null)
+        }else{
+            resource = resource[0];
+            for(var i=0;i<resource.tags;i++){
+                if(resource.tags.indexOf(tags[i]) > -1){ //if a tag we're removing is in our resource array of tags
+                    //remove that tag
+                    resource.tags.splice(resource.tags.indexOf(tags[i]),1); //removes that tag from the array
+                }
+            }
+            resource.markModified('tags');
+            resource.save(function(err){
+                if(err){
+                    callback(err,null);
+                }
+                 else{
+                    callback(null, "success");
+                }
 
+            })
+        }
+
+
+    });
 }
 
 /*
