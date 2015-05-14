@@ -5,9 +5,9 @@
 var datagramPacket = require('dgram');
 
 var messenger = require('messenger');
- transceiverChild = messenger.createSpeaker(8001);//speaking to transceiver
- resourceManagerChild = messenger.createSpeaker(8002);//speaking to ResourceManager
- server = messenger.createListener(8000); //listens for messages on port 8000
+ transceiverChild = messenger.createSpeaker(10001);//speaking to transceiver
+ resourceManagerChild = messenger.createSpeaker(10002);//speaking to ResourceManager
+ server = messenger.createListener(10000); //listens for messages on port 8000
 var childProcess = require("child_process");
 
 
@@ -50,12 +50,13 @@ process.on('message', function (m) {
 
     }
 });
-/*
+
 server.on('transceiver-to-main', function(message, data){
    //data = UDP message
     //console.log("got UDP message");
     //code that handles what to do with the packet
         //could be a response to one of our packets
+
         //could be a dead packet
         //could be a packet we need to send on
         //could be a resource that is being built
@@ -64,7 +65,7 @@ server.on('transceiver-to-main', function(message, data){
 server.on('resourceManager-to-main', function(message,data){
     //
 });
-*/
+
 
 //server.on('ui-resource-renew', function(message, data) {
 //    console.log('received message in Main.js');
