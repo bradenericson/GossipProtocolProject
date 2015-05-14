@@ -3,10 +3,11 @@
  */
 
 var datagramPacket = require('dgram');
+
 var messenger = require('messenger');
-transceiverChild = messenger.createSpeaker(8001);//speaking to transceiver
-resourceManagerChild = messenger.createSpeaker(8002);//speaking to ResourceManager
-server = messenger.createListener(8000); //listens for messages on port 8000
+ transceiverChild = messenger.createSpeaker(8001);//speaking to transceiver
+ resourceManagerChild = messenger.createSpeaker(8002);//speaking to ResourceManager
+ server = messenger.createListener(8000); //listens for messages on port 8000
 var childProcess = require("child_process");
 
 
@@ -49,7 +50,7 @@ process.on('message', function (m) {
 
     }
 });
-
+/*
 server.on('transceiver-to-main', function(message, data){
    //data = UDP message
     //console.log("got UDP message");
@@ -63,7 +64,7 @@ server.on('transceiver-to-main', function(message, data){
 server.on('resourceManager-to-main', function(message,data){
     //
 });
-
+*/
 
 
 //process.send({ foo: 'bar' });

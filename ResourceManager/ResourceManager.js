@@ -6,8 +6,8 @@ var UDP = require("../DatagramSenderReceiver/UDP/UDPMessage.js");
 var messenger = require("messenger");
 var mongoose = require('mongoose');
 
-//var mainSpeaker = messenger.createSpeaker(8000);//speaking to ResourceManager
-//var server = messenger.createListener(8002); //listens for messages on port 8000
+ mainSpeaker = messenger.createSpeaker(10000);//speaking to ResourceManager
+ server = messenger.createListener(10002); //listens for messages on port 8000
 var mongoose = require('mongoose');
 var fs = require('fs');
 var path = require('path');
@@ -98,8 +98,11 @@ Resource.find({
 };
 
 function getAll() {
-  return Resource.find();
-};
+  return Resource.find().exec(function(err, all){
+      if(err){return err;}
+      return all;
+  });
+}
 
 function indexResourceFiles(){
     console.log("hello");
@@ -157,9 +160,7 @@ function deleteResource(resourceName){
                 }
             });
         }
-    } );
-
-
+    });
 }
 
 

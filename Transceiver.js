@@ -7,8 +7,8 @@ var DatagramReceiver = require('./DatagramSenderReceiver/DatagramReceiver.js');
 var PacketQueue = require('./Queue/DatagramQueue.js');
 var DatagramSocket = require('./DatagramSenderReceiver/DatagramSocket.js');
 var messenger = require('messenger');
-client = messenger.createSpeaker(8000);
-server = messenger.createListener(8001);
+ mainSpeaker = messenger.createSpeaker(10000);
+ server = messenger.createListener(10001);
 
 //////////
 var portNumber = 12345;
@@ -24,7 +24,7 @@ var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize)
 receiver.start();
 //console.log('before sender start');
 sender.start();
-
+/*
 server.on('main-to-transceiver', function (messageToSend) {
     outgoingPacketQueue.add(messageToSend);
 });
@@ -42,4 +42,4 @@ var interval = setInterval(function(){
 },2000);
 
 
-
+*/

@@ -4,8 +4,10 @@
 
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
+
 var util = require('util');
 var main = require("./Main.js");
+var messenger = require('messenger');
 var childProcess = require("child_process");
 var config = require('./Config.js');
 var Resource = require('./ResourceManager/models/Resource/Resource.js');
@@ -13,6 +15,10 @@ var Spinner = require('cli-spinner').Spinner;
 
 var spinner = new Spinner('processing.. %s');
 spinner.setSpinnerString('|/-\\');
+
+server = messenger.createListener(10003);
+mainSpekaer = messenger.createSpeaker(10000);
+
 
 var mongoose = require('mongoose');
 
