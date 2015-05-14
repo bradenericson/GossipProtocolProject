@@ -21,6 +21,7 @@ var _idFactory = new idFactory();
 
 
 childProcess.fork(__dirname + "/Transceiver.js");
+childProcess.fork(__dirname + "/ResourceManager/ResourceManager.js");
 
 process.on('message', function (m) {
     if (m === "join") {
@@ -81,8 +82,15 @@ server.on('transceiver-to-main', function(message, data){
 
 
 
-//server.on('ui-resource-renew', function(message, data) {
-//    console.log('received message in Main.js');
-//});
+server.on('ui-resource-rename', function(message, data) {
+    //console.log("data: ", data);
+    console.log("Received payload from UI.js. About to send payload to ResourceManager.js");
+
+    resourceManagerChild.request("ui-resource-rename", data, function(status) {
+        message.reply(status);
+    });
+
+    console.log("Sent payload to ResourceManager");
+});
 
 //process.send({ foo: 'bar' });
