@@ -148,15 +148,15 @@ function indexResourceFiles(){
 
     the deleteResource function deletes the file from mongo and the filesystem
  */
-function deleteResource(resourceName){
+function deleteResource(resourceName, callback){
     Resource.find({ name:resourceName }).remove(function(err){
-        if(err){return {error: err, msg: "trouble removing from mongodb"};}
+        if(err){callback({error: err, msg: "trouble removing from mongodb"}, null);}
         else{
             fs.unlink(RESOURCE_PATH + resourceName, function(err){
                 if(err){
-                    return {error: err, msg: "error trying to delete fill from filesystem"};
+                    callback({error: err, msg: "error trying to delete fill from filesystem"}, null);
                 }else{
-                    return {error: null, msg: "success"}; //we're good
+                    callback(null, "success");  //we're good
                 }
             });
         }
@@ -170,15 +170,27 @@ function deleteResource(resourceName){
 
     the addTags function takes an array of tags, and adds them to the array of tags stored in Mongo
  */
-function addTags(resourceName, tags){
-
+function addTags(resourceName, tags, callback){
+    var query = Resource.find({name: resourceName}).limit(1);
+    query.exec(function(err, resource){
+        if(err){
+            callback(err, null);
+        }else{
+            resource = resource[0];
+            resource.tags.concat(tags);
+            resource.markModified('tags');
+            resource.save(function(){
+              callback(null, "success");
+            });
+        }
+    });
 }
 
 /*
     resourceName: the name of the file
     description: the String description that will be attached to the file's entry in mongo
  */
-function editDescription(resourceName, description){
+function editDescription(resourceName, description, callback){
 
 }
 
@@ -186,7 +198,7 @@ function editDescription(resourceName, description){
     resourceName: the name of the file
     tags: An Array of tags to remove from the list
  */
-function removeTags(resourceName, tags){
+function removeTags(resourceName, tags, callback){
 
 }
 
@@ -196,7 +208,7 @@ function removeTags(resourceName, tags){
     The addResource function takes a path to a resource and
     moves it to the /resource folder, and then indexes it into the database
  */
-function addResource(pathToNewResource){
+function addResource(pathToNewResource, callback){
 
 }
 
@@ -206,7 +218,7 @@ function addResource(pathToNewResource){
 
     The editName function renames a file in mongo and the filesystem. It will also modfiy the mime/type to match the new type
  */
-function editName(resourceName, newName){
+function editName(resourceName, newName, callback){
 
 }
 
