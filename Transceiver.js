@@ -20,9 +20,9 @@ var receiver = new DatagramReceiver(datagramSocket, incomingPacketQueue, packetS
 var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize);
 
 //receiver.action();
-console.log('before receiver start');
+//console.log('before receiver start');
 receiver.start();
-console.log('before sender start');
+//console.log('before sender start');
 sender.start();
 
 server.on('main-to-transceiver', function (messageToSend) {
@@ -35,7 +35,7 @@ var interval = setInterval(function(){
     var udp = receiver.action();
     if(udp){
         client.request('transceiver-to-main', udp, function(data){
-            console.log('message received by main');
+            //console.log('message received by main');
         });
     }
 

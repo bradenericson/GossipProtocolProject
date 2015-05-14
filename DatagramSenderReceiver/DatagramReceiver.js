@@ -22,7 +22,7 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
     };
 
     service.action = function(){
-      console.log('listening for packets');
+      //console.log('listening for packets');
        if(service.queue.length() > 0){
            var udp = service.queue.remove();
            /*console.log("The message:",udp.getMessage());
@@ -33,7 +33,7 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
            return udp;
 
        }else{
-           console.log("no new packets have been received");
+           //console.log("no new packets have been received");
            return null;
        }
     };
