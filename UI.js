@@ -82,11 +82,6 @@ process.stdin.on('data', function (text) {
     }
     if (text === 'join') {
         //join the P2P system
-        var mainProcess = childProcess.fork(__dirname + "/Main.js");
-        mainProcess.send("join");
-        mainProcess.on("message", function(m){
-            console.log(m);
-        });
     }
     if (text.indexOf("resource") >= 0) {
         if (text.indexOf("show") >= 0) {
@@ -95,7 +90,7 @@ process.stdin.on('data', function (text) {
             console.log("\n");
 
             for(var i = 0; i < resources.length; i++) {
-                var resourceDetailString = resources[i].name + " | " + resources[i].description + " | tags: ";
+                var resourceDetailString = "Filename: " + resources[i].name + " | " + "Description: " + resources[i].description + " | tags: ";
 
                 for(var j = 0; j < resources[i].tags.length; j++) {
                     resourceDetailString += resources[i].tags[j] + " ";
@@ -105,7 +100,30 @@ process.stdin.on('data', function (text) {
             }
         }
         else if (text.indexOf("rename") >= 0) {
-            console.log("renaming resource");
+            //console.log(text);
+
+            var firstDashes = text.indexOf("--");
+            var secondDashes = text.indexOf("--", firstDashes + 1);
+
+            //console.log("firstDashes: " + firstDashes);
+            //console.log("secondDashes: " + secondDashes);
+
+            var oldName = text.substring(firstDashes, secondDashes).replace("--", "").trim();
+            var newName = text.substring(secondDashes).replace("--", "").trim();
+            //console.log("oldName: " + oldName);
+            //console.log("newName: " + newName);
+
+            var renameResourcePayload = {
+                oldResourceName: oldName,
+                newResourceName: newName
+            };
+
+            console.log("Sending payload to Main.js");
+            mainSpeaker.request('ui-resource-rename', renameResourcePayload, function(status) {
+                console.log("Status from renaming: " + status);
+            });
+            console.log("Sent payload to Main.js");
+
         }
         else if (text.indexOf("description") >= 0) {
             console.log("changing description");

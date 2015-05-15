@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 
 var mainSpeaker = messenger.createSpeaker(10000);//speaking to ResourceManager
 var server = messenger.createListener(10002); //listens for messages on port 8000
-var mongoose = require('mongoose');
+
 var fs = require('fs');
 var path = require('path');
 var Mime = require('mime'); //used for indexing new files
@@ -82,6 +82,13 @@ process.on('message', function (m) {
     })
 });
 
+server.on('ui-resource-rename', function(message, data) {
+    console.log("received data from Main to ResourceManager...", data);
+    editName(data.oldResourceName, data.newResourceName, function(error, status) {
+        message.reply(status);
+    });
+});
+
 function getFromDatabase(tags, callback) {
   //mongo code
 
@@ -105,7 +112,7 @@ function getAll() {
 }
 
 function indexResourceFiles(){
-    console.log("hello");
+    //console.log("hello");
     fs.readdir(RESOURCE_PATH,function(err,files){
         if(err){ throw err}
 
@@ -135,7 +142,7 @@ function indexResourceFiles(){
                         });
                         console.log("Indexed "+ file);
                     }
-                  console.log(file + " is already indexed");
+                  //console.log(file + " is already indexed");
                 }
 
             });
@@ -191,7 +198,10 @@ function addTags(resourceName, tags, callback){
     description: the String description that will be attached to the file's entry in mongo
  */
 function editDescription(resourceName, description, callback){
-
+    var query = Resource.find({name: resourceName}).limit(1);
+    query.exec(function(err, resource){
+        if(err){callback(err)}
+    })
 }
 
 /*
@@ -199,7 +209,32 @@ function editDescription(resourceName, description, callback){
     tags: An Array of tags to remove from the list
  */
 function removeTags(resourceName, tags, callback){
+    var query = Resource.find({name: resourceName}).limit(1);
+    query.exec(function(err, resource){
+        if(err){
+            callback(err, null)
+        }else{
+            resource = resource[0];
+            for(var i=0;i<resource.tags;i++){
+                if(resource.tags.indexOf(tags[i]) > -1){ //if a tag we're removing is in our resource array of tags
+                    //remove that tag
+                    resource.tags.splice(resource.tags.indexOf(tags[i]),1); //removes that tag from the array
+                }
+            }
+            resource.markModified('tags');
+            resource.save(function(err){
+                if(err){
+                    callback(err,null);
+                }
+                 else{
+                    callback(null, "success");
+                }
 
+            })
+        }
+
+
+    });
 }
 
 /*
@@ -219,6 +254,21 @@ function addResource(pathToNewResource, callback){
     The editName function renames a file in mongo and the filesystem. It will also modfiy the mime/type to match the new type
  */
 function editName(resourceName, newName, callback){
+    var query = Resource.find({name: resourceName}).limit(1);
+    query.exec(function(error, resource) {
+        if (error) {
+            callback(error, null);
+        }
+        else {
+            fs.rename(RESOURCE_PATH + resourceName, RESOURCE_PATH + newName, function(error) {
+                if (error) { callback(error, null); }
+                resource = resource[0];
+                resource.name = newName;
+                resource.save();//resource might be an array with one value in it. It is when I add the .limit to it at least... so usually I add resource = resource[0] when I know it's going to be one value back
+                callback(null, "success");
+            });
+        }
+    });
 
 }
 
