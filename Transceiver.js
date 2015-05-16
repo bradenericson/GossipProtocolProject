@@ -27,12 +27,12 @@ receiver.start();
 //console.log('before sender start');
 sender.start();
 
-server.on('main-to-transceiver', function (messageToSend) {
+server.on('main-to-transceiver', function (message, messageToSend) {
     //console.log("messageToSend UDPMessage: ", messageToSend);
     //outgoingPacketQueue.add(messageToSend);
 
     outgoingPacketQueue.add(messageToSend);
-
+    message.reply("success");
 });
 /*
 incomingPacketQueue.add({udp: "new udp"});

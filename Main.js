@@ -17,6 +17,8 @@ var idFactory = require('./DatagramSenderReceiver/UDP/ID/IDFactory.js');
 
 var _idFactory = new idFactory();
 
+var searchRequestIds = new Array();
+
 
 childProcess.fork(__dirname + "/Transceiver.js");
 childProcess.fork(__dirname + "/ResourceManager/ResourceManager.js");
@@ -131,14 +133,15 @@ server.on('ui-resource-search', function(message, searchPhrase) {
     var searchUdpMessage = udpMessage.createForFindRequest(id1, id2, ttl, searchPhrase);
 
     console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1());
-    console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2());
-    console.log("searchUdpMessage's timeToLive: ", searchUdpMessage.getTimeToLive().get());
-    console.log("searchUdpMessage's message: ", searchUdpMessage.getMessage());
-
-    //console.log(searchUdpMessage);
+    //console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2());
+    //console.log("searchUdpMessage's timeToLive: ", searchUdpMessage.getTimeToLive().get());
+    //console.log("searchUdpMessage's message: ", searchUdpMessage.getMessage());
 
     transceiverChild.request('main-to-transceiver', searchUdpMessage.createUdpPacket(), function(status) {
-
+        if (status === "success") {
+            searchRequestIds.push(id1); //ID1 is the request ID from originating peer (us). Store that onto the array
+            console.log("Just pushed id1 onto the searchRequestIds array: ", id1);
+        }
     });
 });
 

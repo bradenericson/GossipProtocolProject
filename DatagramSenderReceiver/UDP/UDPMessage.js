@@ -176,12 +176,13 @@ module.exports = function() {
     };
 
     self.createUdpPacket = function() {
-        var id1Buffer = new Buffer(self.getID1().id); //we need to keep track of this ID because it is our Request ID
-        var id2Buffer = new Buffer(self.getID2().id);
+
+        var id1Buffer = new Buffer(self.getID1()); //we need to keep track of this ID because it is our Request ID
+        var id2Buffer = new Buffer(self.getID2());
         var timeToLiveBuffer = new Buffer(self.getTimeToLive().get());
         var messageBuffer = new Buffer(self.getMessage());
 
-        var udpPacket = Buffer.concat(id1Buffer, id2Buffer, timeToLiveBuffer, messageBuffer);
+        var udpPacket = Buffer.concat([id1Buffer, id2Buffer, timeToLiveBuffer, messageBuffer]);
 
         return udpPacket;
     };
