@@ -46,7 +46,7 @@ process.on('message', function (m) {
             console.log("Multicasted the join message to 224.1.1.1:5007!");
         });
         //process.send({message: "hello dad"});
-        //instead we should use messanger package
+        //instead we should use messenger package
 
     }
 });
