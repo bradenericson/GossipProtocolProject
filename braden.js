@@ -9,7 +9,7 @@ var DatagramSocket = require('./DatagramSenderReceiver/DatagramSocket.js');
 /*
 Testing purposes
  */
-var idFactory = require("./DatagramSenderReceiver/UDP/ID/IDFactory.js");
+var idFactory = require("./UDP/ID/IDFactory.js");
 
 
 

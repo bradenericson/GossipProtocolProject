@@ -34,9 +34,9 @@ server.on('main-to-transceiver', function (message, messageToSend) {
     outgoingPacketQueue.add(messageToSend);
     message.reply("success");
 });
-/*
-incomingPacketQueue.add({udp: "new udp"});
 
+
+//not sure if this should be here, but couldn't figure out a cleaner way to do it.
 var interval = setInterval(function(){
     var udp = receiver.action();
     if(udp){
@@ -48,4 +48,4 @@ var interval = setInterval(function(){
 },2000);
 
 
-*/
+

@@ -11,9 +11,9 @@ var server = messenger.createListener(10000); //listens for messages on port 800
 var UIChild = messenger.createSpeaker(10003);
 var childProcess = require("child_process");
 
-var timeToLive = require('./DatagramSenderReceiver/UDP/TimeToLive.js');
-var UDPMessage = require('./DatagramSenderReceiver/UDP/UDPMessage.js');
-var idFactory = require('./DatagramSenderReceiver/UDP/ID/IDFactory.js');
+var timeToLive = require('./UDP/TimeToLive.js');
+var UDPMessage = require('./UDP/UDPMessage.js');
+var idFactory = require('./UDP/ID/IDFactory.js');
 
 var _idFactory = new idFactory();
 
