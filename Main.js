@@ -94,20 +94,30 @@ server.on('UI-to-main', function(message, data) {
     transceiverChild.request('main-to-transceiver', {message: 'data'}, function (data) {
         console.log('data sending from transceiver to main: ' + data);
     });
-};
-
-
-
+});
 
 server.on('ui-resource-rename', function(message, data) {
-    //console.log("data: ", data);
-    console.log("Received payload from UI.js. About to send payload to ResourceManager.js");
-
     resourceManagerChild.request("ui-resource-rename", data, function(status) {
         message.reply(status);
     });
+});
 
-    console.log("Sent payload to ResourceManager");
+server.on('ui-resource-description', function(message, data) {
+    resourceManagerChild.request('ui-resource-description', data, function(status) {
+        message.reply(status);
+    });
+});
+
+server.on('ui-resource-add-tags', function(message, data) {
+    resourceManagerChild.request('ui-resource-add-tags', data, function(status) {
+        message.reply(status);
+    });
+});
+
+server.on('ui-resource-remove-tags', function(message, data) {
+    resourceManagerChild.request('ui-resource-remove-tags', data, function(status) {
+        message.reply(status);
+    });
 });
 
 //process.send({ foo: 'bar' });

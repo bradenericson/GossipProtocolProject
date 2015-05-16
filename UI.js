@@ -85,9 +85,7 @@ process.stdin.on('data', function (text) {
     }
     if (text.indexOf("resource") >= 0) {
         if (text.indexOf("show") >= 0) {
-            console.log("I have " + resources.length + " resources in my collection!");
-            //spinner.start();
-            console.log("\n");
+            console.log("I have " + resources.length + " resources in my collection!\n");
 
             for(var i = 0; i < resources.length; i++) {
                 var resourceDetailString = "Filename: " + resources[i].name + " | " + "Description: " + resources[i].description + " | tags: ";
@@ -126,13 +124,59 @@ process.stdin.on('data', function (text) {
 
         }
         else if (text.indexOf("description") >= 0) {
-            console.log("changing description");
+            //console.log("changing description");
+
+            var firstDashes = text.indexOf("--");
+            var secondDashes = text.indexOf("--", firstDashes + 1);
+
+            var resourceName = text.substring(firstDashes, secondDashes).replace("--", "").trim();
+            var description = text.substring(secondDashes).replace("--", "").trim();
+
+            var descriptionPayload = {
+                resourceName: resourceName,
+                description: description
+            };
+
+            console.log("descriptionPayload: ", descriptionPayload);
+            mainSpeaker.request('ui-resource-description', descriptionPayload, function(status) {
+               console.log("Status from description: ", status);
+            });
         }
         else if (text.indexOf("tags add") >= 0) {
-            console.log("adding tags");
+            var firstDashes = text.indexOf("--");
+            var secondDashes = text.indexOf("--", firstDashes + 1);
+
+            var resourceName = text.substring(firstDashes, secondDashes).replace("--", "").trim();
+            var tagString = text.substring(secondDashes).replace("--", "").trim();
+
+            var tagsToAdd = tagString.split(',');
+
+            var tagAddPayload = {
+                resourceName: resourceName,
+                tagsToAdd: tagsToAdd
+            };
+
+            mainSpeaker.request('ui-resource-add-tags', tagAddPayload, function(status) {
+                console.log("Status from adding tags: ", status);
+            });
         }
         else if (text.indexOf("tags remove") >= 0) {
-            console.log("removing tags");
+            var firstDashes = text.indexOf("--");
+            var secondDashes = text.indexOf("--", firstDashes + 1);
+
+            var resourceName = text.substring(firstDashes, secondDashes).replace("--", "").trim();
+            var tagString = text.substring(secondDashes).replace("--", "").trim();
+
+            var tagsToRemove = tagString.split(',');
+
+            var tagRemovePayload = {
+                resourceName: resourceName,
+                tagsToRemove: tagsToRemove
+            };
+
+            mainSpeaker.request('ui-resource-remove-tags', tagRemovePayload, function(status) {
+                console.log("Status from removing tags: ", status);
+            });
         }
         else {
             console.log("You did not enter a valid command. Please enter a valid command.");

@@ -26,10 +26,10 @@ db.once('open', function (callback) {
 
 var Resource = require('./models/Resource/Resource.js');
 
-//indexResourceFiles();
-editDescription("test.txt", "Saturday morning finals are unethical and should be canceled", function(err, msg){
-   console.log(err, msg);
-});
+indexResourceFiles();
+//editDescription("test.txt", "Saturday morning finals are unethical and should be canceled", function(err, msg){
+//   console.log(err, msg);
+//});
 
 //deleteResource("test.txt");
 //Generates bogus data
@@ -89,6 +89,25 @@ process.on('message', function (m) {
 server.on('ui-resource-rename', function(message, data) {
     console.log("received data from Main to ResourceManager...", data);
     editName(data.oldResourceName, data.newResourceName, function(error, status) {
+        message.reply(status);
+    });
+});
+
+server.on('ui-resource-description', function(message, data) {
+    console.log("received data from Main to ResourceManager...", data);
+    editDescription(data.resourceName, data.description, function(error, status) {
+        message.reply(status);
+    });
+});
+
+server.on('ui-resource-add-tags', function(message, data) {
+    addTags(data.resourceName, data.tagsToAdd, function(error, status) {
+        message.reply(status);
+    });
+});
+
+server.on('ui-resource-remove-tags', function(message, data) {
+    removeTags(data.resourceName, data.tagsToRemove, function(error, status) {
         message.reply(status);
     });
 });
