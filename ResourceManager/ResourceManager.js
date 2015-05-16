@@ -26,7 +26,11 @@ db.once('open', function (callback) {
 
 var Resource = require('./models/Resource/Resource.js');
 
-indexResourceFiles();
+//indexResourceFiles();
+editDescription("test.txt", "Saturday morning finals are unethical and should be canceled", function(err, msg){
+   console.log(err, msg);
+});
+
 //deleteResource("test.txt");
 //Generates bogus data
 /*
@@ -184,7 +188,8 @@ function addTags(resourceName, tags, callback){
             callback(err, null);
         }else{
             resource = resource[0];
-            resource.tags.concat(tags);
+            //var resourceTags = resource.tags;
+            resource.tags = resource.tags.concat(tags);
             resource.markModified('tags');
             resource.save(function(){
               callback(null, "success");
@@ -200,8 +205,14 @@ function addTags(resourceName, tags, callback){
 function editDescription(resourceName, description, callback){
     var query = Resource.find({name: resourceName}).limit(1);
     query.exec(function(err, resource){
-        if(err){callback(err)}
-    })
+        if(err){callback(err)}else{
+            resource = resource[0];
+            resource.description = description;
+            resource.save(function(err){
+                callback(err, "success");
+            });
+        }
+    });
 }
 
 /*
@@ -215,10 +226,12 @@ function removeTags(resourceName, tags, callback){
             callback(err, null)
         }else{
             resource = resource[0];
-            for(var i=0;i<resource.tags;i++){
+            var tempArray = resource.tags;
+            for(var i=0;i<resource.tags.length;i++){
                 if(resource.tags.indexOf(tags[i]) > -1){ //if a tag we're removing is in our resource array of tags
                     //remove that tag
                     resource.tags.splice(resource.tags.indexOf(tags[i]),1); //removes that tag from the array
+                    i--;
                 }
             }
             resource.markModified('tags');
