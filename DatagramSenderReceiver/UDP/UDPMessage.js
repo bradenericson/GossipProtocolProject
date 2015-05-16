@@ -79,9 +79,15 @@ module.exports = function() {
             throw new Error("The UDP message class did not receive a datagram");
         }
     };
+
     //TODO
     self.createForFindRequest = function(id1, id2, ttl, message){
+        self.setId1(id1);
+        self.setId2(id2);
+        self.setTimeToLive(ttl);
+        self.setMessage(convertStringToByteArray(message));
 
+        return self;
     }
 
     //TODO
@@ -147,6 +153,18 @@ module.exports = function() {
         id1 = new ID(bytes);
     };
 
+    self.setId1 = function(idToSet) {
+        id1 = idToSet;
+    };
+
+    self.setId2 = function(idToSet) {
+        id2 = idToSet;
+    };
+
+    self.setTimeToLive = function(ttlToSet) {
+        timeToLive = ttlToSet;
+    };
+
     //return the maximum packet size
     self.getMaximumPacketSizeInBytes = function() {
         return packetSize;
@@ -157,5 +175,26 @@ module.exports = function() {
         return packetSize;
     };
 
+    self.createUdpPacket = function() {
+        var id1Buffer = new Buffer(self.getID1().id); //we need to keep track of this ID because it is our Request ID
+        var id2Buffer = new Buffer(self.getID2().id);
+        var timeToLiveBuffer = new Buffer(self.getTimeToLive().get());
+        var messageBuffer = new Buffer(self.getMessage());
+
+        var udpPacket = Buffer.concat(id1Buffer, id2Buffer, timeToLiveBuffer, messageBuffer);
+
+        return udpPacket;
+    };
+
     return self;
+};
+
+function convertStringToByteArray(stringToConvert) {
+    var bytes = [];
+
+    for (var i = 0; i < stringToConvert.length; ++i) {
+        bytes.push(stringToConvert.charCodeAt(i));
+    }
+
+    return bytes;
 };

@@ -27,7 +27,7 @@
  *
  */
 
-module.exports = function() {
+module.exports = function(timeToLive_in) {
 
     var timeToLive;
 

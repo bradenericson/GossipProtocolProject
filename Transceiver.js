@@ -8,8 +8,8 @@ var PacketQueue = require('./Queue/DatagramQueue.js');
 var DatagramSocket = require('./DatagramSenderReceiver/DatagramSocket.js');
 var AddressBook = require('./DatagramSenderReceiver/AddressBook.js');
 var messenger = require('messenger');
- mainSpeaker = messenger.createSpeaker(10000);
- server = messenger.createListener(10001);
+var mainSpeaker = messenger.createSpeaker(10000);
+var server = messenger.createListener(10001);
 
 //////////
 var portNumber = 12345;
@@ -26,11 +26,15 @@ var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize,
 receiver.start();
 //console.log('before sender start');
 sender.start();
-/*
-server.on('main-to-transceiver', function (messageToSend) {
-    outgoingPacketQueue.add(messageToSend);
-});
 
+server.on('main-to-transceiver', function (messageToSend) {
+    //console.log("messageToSend UDPMessage: ", messageToSend);
+    //outgoingPacketQueue.add(messageToSend);
+
+    outgoingPacketQueue.add(messageToSend);
+
+});
+/*
 incomingPacketQueue.add({udp: "new udp"});
 
 var interval = setInterval(function(){
