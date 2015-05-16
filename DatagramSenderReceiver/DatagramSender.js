@@ -1,5 +1,19 @@
 /**
- * Created by braden on 4/23/15.
+ *      Braden, Chad, Matt
+ *
+ *      Class Variables:
+ *          service
+ *              creates a new datagramSenderReceiver object
+ *
+ *      Methods:
+ *          service.action = function()
+ *              sends a datagram message off TODO
+ *
+ *      Modification History:
+ *          Original Version
+ *              April 23, 2015
+ *
+ *
  */
 
 var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
@@ -7,6 +21,8 @@ var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
 module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
 
     var service = new DatagramSenderReceiver(datagramSocket, incomingPacketQueue, packetSize);
+
+    //sends a datagram message off TODO
     service.action = function(){
         //console.log("queue size:", service.queue.length());
         if(service.queue.length() > 0){

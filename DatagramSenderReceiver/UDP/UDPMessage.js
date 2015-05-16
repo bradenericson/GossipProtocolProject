@@ -1,4 +1,5 @@
-/** Created by matt on 4/23/15.
+/**
+ *      Braden, Chad, Matt
  *
  *      Class Variables:
  *          id1

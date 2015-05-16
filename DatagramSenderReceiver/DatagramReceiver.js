@@ -1,5 +1,5 @@
 /**
- * Created by braden on 4/23/15.
+ *      Braden, Chad, Matt
  *
  *      Class Variables:
  *          var service
@@ -7,9 +7,17 @@
 
  *      Method:
  *          service.run = function()
- *          service.stop = function()
- *          service.action = function()
+ *              TODO
  *
+ *          service.stop = function()
+ *              closes the socket
+ *
+ *          service.action = function()
+ *              TODO
+ *
+ *       Modification History
+ *          Original Version
+ *              April 23, 2015
  */
 
 var DatagramSenderReceiver = require('./DatagramSenderReceiver.js');
@@ -27,10 +35,12 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
         });
     };
 
+    //closes the socket
     service.stop = function(){
         service.socket.close();
     };
 
+    //TODO
     service.action = function(){
       //console.log('listening for packets');
        if(service.queue.length() > 0){
