@@ -6,6 +6,7 @@ var DatagramSender = require('./DatagramSenderReceiver/DatagramSender.js');
 var DatagramReceiver = require('./DatagramSenderReceiver/DatagramReceiver.js');
 var PacketQueue = require('./Queue/DatagramQueue.js');
 var DatagramSocket = require('./DatagramSenderReceiver/DatagramSocket.js');
+var AddressBook = require('./DatagramSenderReceiver/AddressBook.js');
 var messenger = require('messenger');
  mainSpeaker = messenger.createSpeaker(10000);
  server = messenger.createListener(10001);
@@ -16,8 +17,9 @@ var packetSize = 32;
 var incomingPacketQueue = new PacketQueue();
 var outgoingPacketQueue = new PacketQueue();
 var datagramSocket = new DatagramSocket();
+var addressBook = new AddressBook();
 var receiver = new DatagramReceiver(datagramSocket, incomingPacketQueue, packetSize);
-var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize);
+var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize, addressBook);
 
 //receiver.action();
 //console.log('before receiver start');

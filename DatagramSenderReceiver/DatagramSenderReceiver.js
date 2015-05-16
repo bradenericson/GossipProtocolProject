@@ -35,7 +35,6 @@ module.exports = function(datagramSocketInput, packetQueue, packetSizeInput) {
     service.run = function(){
         //create the sub service
         intervalObject = setInterval(function(){
-            //console.log("checking the queue" + Math.random());
             service.action();
         },1000);
     };
@@ -50,7 +49,7 @@ module.exports = function(datagramSocketInput, packetQueue, packetSizeInput) {
         datagramSocket.close();
     };
 
-    service.getAddress = function(){
+    service.getAddress = function(index){
       return 'localhost';
     };
 
