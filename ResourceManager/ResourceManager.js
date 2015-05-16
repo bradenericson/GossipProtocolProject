@@ -1,5 +1,45 @@
-/**
- * Created by braden on 4/23/15.
+/** TODO <-- this will need to be updated at the very end, I assume more variables will be added
+ * Chad, Braden, Matt
+ *
+ *      Class Variables
+ *          mainSpeaker
+ *              messenger that speaks to main
+ *          server
+ *              messenger that listens on port 10002
+ *          db
+ *              TODO
+ *
+ *      Methods
+ *           getFromDatabase(tags, callback)
+ *              retrieve information from database based on the tags the user enters
+ *
+ *           getAll()
+ *              TODO
+ *
+ *           indexResourceFiles()
+ *              index each resource we do not have in the database
+ *
+ *           deleteResource(resourceName, callback)
+ *              delete a resource from the database
+ *
+ *           addTags(resourceName, tags, callback)
+ *              add tags to a resource in the databse
+ *
+ *           editDescription(resourceName, description, callback)
+ *              edit a resource's description in the database
+ *
+ *           removeTags(resourceName, tags, callback)
+ *              remove tags from a resource in the database
+ *
+ *           addResource(pathToNewResource, callback)
+ *              add a resource to the database
+ *
+ *           editName(resourceName, newName, callback)
+ *              edit the name of a resource in the database
+ *
+ *      Modification History
+ *          Original Version
+ *              April 23 2015
  */
 
 var UDP = require("./UDPMessage.js");
@@ -48,15 +88,14 @@ for(var i = 0; i < 10; i++) {
 };
 */
 
+//on meesasge parse it for keywords, get the resource from the database and swap the IDs
 process.on('message', function (m) {
     //m = UDP obj
     var msg = m.getMessage();
     var tags = msg.split(" ");
     var badWords = ["the", "and", "a", "an", "on", "of", "from", "that", "this", "is", "really", "our"];
-    var i;
-    var y;
-    for (i = 0; i < tags.length; i++) {
-        for (y = 0; y < badWords.length; y++) {
+    for (var i = 0; i < tags.length; i++) {
+        for (var y = 0; y < badWords.length; y++) {
             if (tags[i] === badWords[y]) {
                 tags.splice(i);
             }
@@ -112,6 +151,7 @@ server.on('ui-resource-remove-tags', function(message, data) {
     });
 });
 
+//get resources from the database that contain the tags
 function getFromDatabase(tags, callback) {
   //mongo code
 
@@ -127,6 +167,7 @@ Resource.find({
     //callback(null, [{_id: "23958203948", mimeType: "type/text", location: "/resources/file.txt", description: "This is a description for our really cool file.", size: 1024, fileName: "file.txt"}]);
 };
 
+//return all resources with tags
 function getAll() {
   return Resource.find().exec(function(err, all){
       if(err){return err;}
@@ -134,6 +175,7 @@ function getAll() {
   });
 }
 
+//index resources we do not have
 function indexResourceFiles(){
     //console.log("hello");
     fs.readdir(RESOURCE_PATH,function(err,files){
@@ -177,7 +219,9 @@ function indexResourceFiles(){
     resourceName: the name of the file
 
     the deleteResource function deletes the file from mongo and the filesystem
- */
+*/
+
+//delete a resource from the databse
 function deleteResource(resourceName, callback){
     Resource.find({ name:resourceName }).remove(function(err){
         if(err){callback({error: err, msg: "trouble removing from mongodb"}, null);}
@@ -200,6 +244,8 @@ function deleteResource(resourceName, callback){
 
     the addTags function takes an array of tags, and adds them to the array of tags stored in Mongo
  */
+
+//add tags to a resource in the database
 function addTags(resourceName, tags, callback){
     var query = Resource.find({name: resourceName}).limit(1);
     query.exec(function(err, resource){
@@ -221,6 +267,8 @@ function addTags(resourceName, tags, callback){
     resourceName: the name of the file
     description: the String description that will be attached to the file's entry in mongo
  */
+
+//edit the description of a resource in the database
 function editDescription(resourceName, description, callback){
     var query = Resource.find({name: resourceName}).limit(1);
     query.exec(function(err, resource){
@@ -238,6 +286,8 @@ function editDescription(resourceName, description, callback){
     resourceName: the name of the file
     tags: An Array of tags to remove from the list
  */
+
+//remove tag(s) from a resource in the database
 function removeTags(resourceName, tags, callback){
     var query = Resource.find({name: resourceName}).limit(1);
     query.exec(function(err, resource){
@@ -275,6 +325,8 @@ function removeTags(resourceName, tags, callback){
     The addResource function takes a path to a resource and
     moves it to the /resource folder, and then indexes it into the database
  */
+
+//add a resource to the database TODO
 function addResource(pathToNewResource, callback){
 
 }
@@ -285,6 +337,8 @@ function addResource(pathToNewResource, callback){
 
     The editName function renames a file in mongo and the filesystem. It will also modfiy the mime/type to match the new type
  */
+
+//edit the name of a resource in the database
 function editName(resourceName, newName, callback){
     var query = Resource.find({name: resourceName}).limit(1);
     query.exec(function(error, resource) {

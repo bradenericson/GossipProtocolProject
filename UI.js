@@ -205,5 +205,6 @@ function help() {
 
 server.on('main-to-UI', function(message,data){
     console.log('Message received');
+    mainSpeaker.messager
     //message received, could be used to build resource
 });

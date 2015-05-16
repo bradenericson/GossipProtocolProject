@@ -1,5 +1,10 @@
 /**
- * Created by braden on 5/7/15.
+ *      Chad, Braden, Matt
+ *
+ *      Class Variables
+ *
+ *
+ *
  */
 
 var DatagramSender = require('./DatagramSenderReceiver/DatagramSender.js');
