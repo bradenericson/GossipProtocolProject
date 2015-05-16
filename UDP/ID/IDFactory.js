@@ -57,13 +57,19 @@ module.exports = function() {
     /* Public Methods */
     //returns id if there is an id in the queue, otherwise creates a new id
     self.idFactory = function() {
+
+        var idToReturn;
+
         if (idQueue.length > 0) {
-            return idQueue.pop();
+            idToReturn = idQueue.pop();
         }
         else {
-            return new ID(secureRandom(16, { type: 'Array' }));
+            idToReturn = new ID(secureRandom(16, { type: 'Array' }));
             //throw new Error("Queue Underflow Exception. There are no IDs in the idQueue right now!");
         }
+
+        //console.log("Returning ID: ", idToReturn);
+        return idToReturn;
     };
 
     //creates an id and puts in into the queue

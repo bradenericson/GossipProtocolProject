@@ -2,7 +2,7 @@
  * Created by braden on 5/16/15.
  */
 
-module.exports = function(integer){
+module.exports = function(){
   var addresses = [];
 
     var service = {};

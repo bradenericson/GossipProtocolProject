@@ -24,13 +24,12 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize, addre
     //sends a datagram message off TODO
     service.action = function(){
         //console.log("queue size:", service.queue.length());
+        var addresses = service.getAddresses();
         if(service.queue.length() > 0){
             var message = service.queue.remove();
            // console.log(message.mes);
-            var buffer = new Buffer(message);
-            var addresses = service.getAddresses();
             for(var i=0; i<addresses.length; i++){
-                service.socket.send(buffer, 0, buffer.length, service.getPort(), address[i], function(){
+                service.socket.send(message, 0, message.length, service.getPort(), addresses[i], function(){
                     console.log("message sent");
                 });
             }

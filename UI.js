@@ -19,7 +19,6 @@ spinner.setSpinnerString('|/-\\');
 var server = messenger.createListener(10003);
 var mainSpeaker = messenger.createSpeaker(10000);
 
-
 var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/gossip');
@@ -39,9 +38,6 @@ console.log("---------------------------------");
 help();
 
 process.stdin.on('data', function (text) {
-
-    //spinner.start();
-
     text = text.toLowerCase().trim();
 
     if (text !== 'quit' &&
@@ -68,7 +64,7 @@ process.stdin.on('data', function (text) {
             return;
         }
 
-        var searchPhrase = text.substring(text.indexOf('--') + 2, text.length - 1);
+        var searchPhrase = text.substring(text.indexOf('--') + 2, text.length);
         search(searchPhrase);
     }
     if (text.indexOf('request') >= 0) {
@@ -98,18 +94,12 @@ process.stdin.on('data', function (text) {
             }
         }
         else if (text.indexOf("rename") >= 0) {
-            //console.log(text);
 
             var firstDashes = text.indexOf("--");
             var secondDashes = text.indexOf("--", firstDashes + 1);
 
-            //console.log("firstDashes: " + firstDashes);
-            //console.log("secondDashes: " + secondDashes);
-
             var oldName = text.substring(firstDashes, secondDashes).replace("--", "").trim();
             var newName = text.substring(secondDashes).replace("--", "").trim();
-            //console.log("oldName: " + oldName);
-            //console.log("newName: " + newName);
 
             var renameResourcePayload = {
                 oldResourceName: oldName,
@@ -124,7 +114,6 @@ process.stdin.on('data', function (text) {
 
         }
         else if (text.indexOf("description") >= 0) {
-            //console.log("changing description");
 
             var firstDashes = text.indexOf("--");
             var secondDashes = text.indexOf("--", firstDashes + 1);
@@ -192,6 +181,9 @@ function done() {
 
 function search(searchPhrase) {
     console.log("you searched for " + searchPhrase);
+    mainSpeaker.request('ui-resource-search', searchPhrase, function(status) {
+
+    });
 }
 
 function requestResource(resourceName) {
@@ -202,7 +194,7 @@ function help() {
     console.log("search --searchPhrase | Search for resources using the searchPhrase");
     console.log("request --resourceName | Request a resource by the resource name");
     console.log("resource show | Show and manage my resources");
-    console.log("resource rename --resourceName --newResourceName | Rename one of your resources");
+    console.log("resource rename --resourceName --newReso nurceName | Rename one of your resources");
     console.log("resource description --resourceName --newDescription | Change the description of --resourceName");
     console.log("resource tags add --resourceName --tag1, tag2, tag3, tag4 | Add new tags to --resourceName");
     console.log("resource tags remove --resourceName --tag1, tag2, tag3, tag4 | Remove tags from --resourceName");

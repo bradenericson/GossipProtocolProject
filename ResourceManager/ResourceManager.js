@@ -2,7 +2,7 @@
  * Created by braden on 4/23/15.
  */
 
-var UDP = require("../DatagramSenderReceiver/UDP/UDPMessage.js");
+var UDP = require("./UDPMessage.js");
 var messenger = require("messenger");
 var mongoose = require('mongoose');
 
