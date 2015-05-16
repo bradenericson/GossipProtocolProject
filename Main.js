@@ -79,6 +79,23 @@ server.on('transceiver-to-main', function(message, data){
     //could be a dead packet
 });
 
+//listener from resource manager
+server.on('resourceManager-to-main', function(message, data) {
+    //get something from resource manager usually goes to transceiver
+    transceiverChild.request('main-to-transceiver', {message: 'data'}, function(data) {
+        console.log('data sending from transceiver to main: ' + data);
+    });
+});
+
+//listener from UI
+server.on('UI-to-main', function(message, data) {
+    //could go to resourceManager
+    //can also go to transceiver
+    transceiverChild.request('main-to-transceiver', {message: 'data'}, function (data) {
+        console.log('data sending from transceiver to main: ' + data);
+    });
+};
+
 
 
 
