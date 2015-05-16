@@ -2,7 +2,7 @@
  * Created by Chad Luangrath on 4/28/2015.
  */
 
-var datagramPacket = require('dgram');
+//var datagramPacket = require('dgram'); //don't need - all communication done through transceiver
 
 var messenger = require('messenger');
 var transceiverChild = messenger.createSpeaker(10001);//speaking to transceiver
@@ -26,7 +26,7 @@ childProcess.fork(__dirname + "/ResourceManager/ResourceManager.js");
 process.on('message', function (m) {
     if (m === "join") {
         //Joiner multicasts the UDP Message to everyone
-        console.log("Creating the join datagram packet");
+       /* console.log("Creating the join datagram packet");
 
         var socket = datagramPacket.createSocket('udp4');
 
@@ -49,7 +49,7 @@ process.on('message', function (m) {
         });
         //process.send({message: "hello dad"});
         //instead we should use messenger package
-
+*/
     }
 });
 
@@ -57,6 +57,8 @@ server.on('transceiver-to-main', function(message, data){
    //data = UDP message
     //console.log("got UDP message");
     //code that handles what to do with the packet
+    var udp = new UDPMessage();
+    udp.createFromDatagramPacket(data);
 
     //if we are building a resource
     resourceManagerChild.request('main-to-resourceManager', {message: 'data'}, function(data) {
@@ -74,7 +76,7 @@ server.on('transceiver-to-main', function(message, data){
     transceiverChild.request('main-to-transceiver', {message: 'data'}, function(data){
         console.log('main back to transceiver data: ' + data);
     });
-
+    message.reply({message: "success"});
     //could be a dead packet
 });
 
