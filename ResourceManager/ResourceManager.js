@@ -137,7 +137,7 @@ function indexResourceFiles(){
                                 Resource.create({
                                     name: file,
                                     description: "",
-                                    tags: [""],
+                                    tags: [],
                                     location: file,
                                     mimeType: mime,
                                     size: size
