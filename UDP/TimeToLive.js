@@ -59,6 +59,10 @@ module.exports = function(timeToLive_in) {
         return timeToLive;
     };
 
+    self.setTimeToLive = function(ttl){
+        timeToLive = ttl;
+    };
+
     //get the ttl live bytes out of a UDP message
     self.getBytes = function() {
        return timeToLive.toString("utf8", 32, 47);

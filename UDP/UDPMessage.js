@@ -110,10 +110,19 @@ module.exports = function() {
         return self;
     };
 
+    self.createForFindResponse = function(resourceId, ttl, message){
+        self.setId2(new ID(convertStringToByteArray(resourceId+"LMAO")));//append extra characters to make it fit the correct size
+        self.swapID();//swap the IDs
+        self.setTimeToLive(ttl);//reset the timeToLive
+        self.setMessage(convertStringToByteArray(idFactory.idFactory().id + message));//set the message to a randomID and our string shit
+
+        return self;
+    };
+
     //TODO
     self.createForGetRequest = function(resourceId, partNumber, timeToLive) {
         var id1 = idFactory.idFactory();
-        var id2 = new ID(resourceId);
+        var id2 = new ID(convertStringToByteArray(resourceId));
         var id3 = idFactory.idFactory(); //garbage ID
         self.setId1(id1);
         self.setId2(id2);

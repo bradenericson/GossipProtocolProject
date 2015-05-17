@@ -54,7 +54,7 @@ var fs = require('fs');
 var path = require('path');
 var Mime = require('mime'); //used for indexing new files
 var RESOURCE_PATH = __dirname + "/../resources/";
-
+var badWords = ["the", "and", "a", "an", "on", "of", "from", "that", "this", "is", "really", "our"];
 
 mongoose.connect('mongodb://localhost/gossip');
 var db = mongoose.connection;
@@ -101,38 +101,7 @@ for(var i = 0; i < 10; i++) {
 //on meesasge parse it for keywords, get the resource from the database and swap the IDs
 process.on('message', function (m) {
     //m = UDP obj
-    var msg = m.getMessage();
-    var tags = msg.split(" ");
-    var badWords = ["the", "and", "a", "an", "on", "of", "from", "that", "this", "is", "really", "our"];
-    for (var i = 0; i < tags.length; i++) {
-        for (var y = 0; y < badWords.length; y++) {
-            if (tags[i] === badWords[y]) {
-                tags.splice(i);
-            }
-        }
-    }
-    getFromDatabase(tags, function(err, data){
-        if(err){console.error(err);}
-        else{
-            for(var i=0; i < data.length; i++) {
-                //flip IDs
-                var UDPmsg = m;
-                UDPmsg.swapID();
-                var message = new Buffer(UDPmsg.getMaximumPacketSizeInBytes());
-                messasge.write();
 
-
-                //resourceID is 12 bytes long
-                //put data[i]
-                //create byte array, put info in it,
-                // setMessage() *new function*
-                //end of loop send new UDP to main
-                //braden will add sending to main
-
-            }
-
-        }
-    })
 });
 
 server.on('ui-resource-rename', function(message, data) {
@@ -379,7 +348,54 @@ server.on('main-to-resourceManager', function(message,udpData){
             doForward = false;
         }
 
-        
+        var msg = udp.getMessage();
+        var delimiter = msg.substring(0,1);
+
+        msg = msg.substring(1);//grabs everything but the first character
+        var tags = msg.split(delimiter);
+
+        for (var i = 0; i < tags.length; i++) {
+            for (var y = 0; y < badWords.length; y++) {
+                if (tags[i] === badWords[y]) {
+                    tags.splice(i,1);
+                }
+            }
+        }
+        getFromDatabase(tags, function(err, data){
+            if(err){
+                console.error(err);
+                console.log("BUT WE'RE STILL SENDING THE ORIGINAL PACKET FORWARD");
+            }
+            else{
+                var UdpCopy;
+                var string;
+                for(var i=0; i < data.length; i++) {
+                    //copy ID
+                    UdpCopy = udp;
+                    string = "|"+data[i].mimeType+"|"+data[i].size+"|"+data[i].description;
+                    udpCopy.createForFindResponse(data[i]._id,5,string);
+
+                    mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
+                       //we don't care
+                    });
+                    //resourceID is 12 bytes long
+                    //put data[i]
+                    //create byte array, put info in it,
+                    // setMessage() *new function*
+                    //end of loop send new UDP to main
+                    //braden will add sending to main
+                }
+            }
+            if(doForward){
+                mainSpeaker.request('resourceManager-to-main', udp.createUdpPacket(), function(){
+                    //we don't care
+                });
+            }
+
+            //forward on original packet
+        })
+
+
 
 
 
