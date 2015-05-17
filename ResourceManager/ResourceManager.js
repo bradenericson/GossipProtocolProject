@@ -358,6 +358,17 @@ function editName(resourceName, newName, callback){
 }
 
 server.on('main-to-resourceManager', function(message,udpData){
+    var udp = new UDP().createFromDatagramPacket(udpData);
+
+    console.log('Message received');
+    //message received, could be used to build resource
+});
+
+
+server.on('main-to-resourceManager-build', function(message,udpData){
+    //at this point, we know that it's a response to something we're building
+    var udp = new UDP().createForGetResponse(udpData);
+
 
     console.log('Message received');
     //message received, could be used to build resource

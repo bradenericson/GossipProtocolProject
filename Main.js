@@ -16,6 +16,7 @@ var UDPMessage = require('./UDP/UDPMessage.js');
 var IdFactory = require('./UDP/ID/IDFactory.js');
 
 var idFactory = new IdFactory();
+var ID = require('./UDP/ID/ID.js');
 
 var searchRequestIds = [];
 var getRequestIds = []; //seperated out the GET requests because our ResourceManager will be
@@ -63,7 +64,8 @@ server.on('transceiver-to-main', function(message, data){
     var udp = new UDPMessage();
 
     if (data != null) {
-        var id2 = new ID(data.slice(16, 33));
+        var tempData = data.data;
+        var id2 = new ID(tempData.slice(16, 33));
         var resource;
 
         //Response to Find Matching Resources Request
@@ -109,12 +111,25 @@ server.on('transceiver-to-main', function(message, data){
                     bytesFromResource: udp.getMessage()
                 };
 
-                resourceManagerChild.request('main-to-resourceManager', resource, function (data) {
+                resourceManagerChild.request('main-to-resourceManager-build', resource, function (data) {
                     console.log('main to resource manager data: ' + data);
                 });
             }
         }
+
+        else{
+            //pass it to resourceManager to deal with
+            resourceManagerChild.request('main-to-resourceManager', data, function(){
+                console.log("sent to resourceManager successful")
+            })
+        }
+        //
+        // passing it on
+        //
+
     }
+
+
 
     console.log("ID1: ", udp.getID1().id);
     console.log("ID2: ", udp.getID2().id);

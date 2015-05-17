@@ -52,6 +52,9 @@
  *          self.getMinimumPacketSizeInBytes = function()
  *              return minimum packet size ... same as max for right now
  *
+ *
+ *  //TODO: move IdFactory outside of Main and into here
+ *
  * */
 
 var ID = require("./ID/ID.js");
@@ -127,10 +130,10 @@ module.exports = function() {
             timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,4)));
 
             //ignore the next 16 bytes because it's just extra padding (a random ID)
-            var id3 = datagramPacket_in.splice(0,16); //garbage ID
+            message = datagramPacket_in.splice(0,16); //garbage ID
             self.partNumber = convertByteArraytoInteger(datagramPacket_in.splice(0,4));
-
-            message = new Buffer(datagramPacket_in).toString("utf8", 0, datagramPacket_in.length);
+            self.bytesFromResource = datagramPacket_in;
+            //message = new Buffer(datagramPacket_in).toString("utf8", 0, datagramPacket_in.length);
         }
         else {
             throw new Error("The UDP message class did not receive a datagram");
