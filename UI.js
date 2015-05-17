@@ -13,7 +13,7 @@ var config = require('./Config.js');
 var Resource = require('./ResourceManager/models/Resource/Resource.js');
 var Spinner = require('cli-spinner').Spinner;
 
-var spinner = new Spinner('processing.. %s');
+var spinner = new Spinner();
 spinner.setSpinnerString('|/-\\');
 
 var server = messenger.createListener(10003);
@@ -180,9 +180,12 @@ function done() {
 }
 
 function search(searchPhrase) {
-    console.log("you searched for " + searchPhrase);
-    mainSpeaker.request('ui-resource-search', searchPhrase, function(status) {
-
+    spinner.start();
+    mainSpeaker.request('ui-resource-search', searchPhrase, function(listOfResources, status) {
+        setTimeout(function() {
+            spinner.stop();
+            console.log("The following is a list of resources found: ");
+        }, 1500);
     });
 }
 
@@ -205,6 +208,6 @@ function help() {
 
 server.on('main-to-UI', function(message,data){
     console.log('Message received');
-    mainSpeaker.messager
+    console.log("Received data from Main: ", data);
     //message received, could be used to build resource
 });

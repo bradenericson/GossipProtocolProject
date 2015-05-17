@@ -45,7 +45,7 @@ server.on('main-to-transceiver', function (message, messageToSend) {
 var interval = setInterval(function(){
     var udp = receiver.action();
     if(udp){
-        client.request('transceiver-to-main', udp, function(data){
+        mainSpeaker.request('transceiver-to-main', udp, function(data){
             //console.log('message received by main');
         });
     }

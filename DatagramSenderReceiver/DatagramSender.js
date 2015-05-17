@@ -34,7 +34,7 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize, addre
                 });
             }
         }else{
-            console.log('nothing in the send queue');
+            //console.log('nothing in the send queue');
         }
     };
 

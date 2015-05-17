@@ -71,8 +71,12 @@ module.exports = function() {
     //create a UDP message from a datagram packet
     self.createFromDatagramPacket = function(datagramPacket_in) {
         if (typeof datagramPacket_in != "undefined") {
-            id1 = new ID(datagramPacket_in.toString("utf8", 0, 15));
-            id2 = new ID(datagramPacket_in.toString("utf8", 16, 31));
+            //id1 = new ID(datagramPacket_in.toString("utf8", 0, 15));
+            //id2 = new ID(datagramPacket_in.toString("utf8", 16, 31));
+
+            id1 = new ID(datagramPacket_in.splice(0, 16));
+            id2 = new ID(datagramPacket_in.splice(17, 32));
+
             timeToLive = new TTL(datagramPacket_in.toString("utf8", 32, 35));
             message = datagramPacket_in.toString("utf8", 36, datagramPacket_in.length);
         }

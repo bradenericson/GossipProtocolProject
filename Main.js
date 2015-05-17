@@ -11,11 +11,11 @@ var server = messenger.createListener(10000); //listens for messages on port 800
 var UIChild = messenger.createSpeaker(10003);
 var childProcess = require("child_process");
 
-var timeToLive = require('./UDP/TimeToLive.js');
+var TimeToLive = require('./UDP/TimeToLive.js');
 var UDPMessage = require('./UDP/UDPMessage.js');
-var idFactory = require('./UDP/ID/IDFactory.js');
+var IdFactory = require('./UDP/ID/IDFactory.js');
 
-var _idFactory = new idFactory();
+var idFactory = new IdFactory();
 
 var searchRequestIds = new Array();
 
@@ -35,9 +35,9 @@ process.on('message', function (m) {
             socket.setMulticastTTL(128);
         });
 
-        var newBuffer = new Buffer(_idFactory.idFactory());
-        var zeroIdBuffer = new Buffer(_idFactory.getZeroID());
-        var ttlBuffer = new Buffer(new timeToLive(0));
+        var newBuffer = new Buffer(idFactory.idFactory());
+        var zeroIdBuffer = new Buffer(idFactory.getZeroID());
+        var ttlBuffer = new Buffer(new TimeToLive(0));
 
         var testBuffer = new Buffer("message");
 
@@ -53,6 +53,7 @@ process.on('message', function (m) {
     }
 });
 
+//WHERE SHIT HAPPENS
 server.on('transceiver-to-main', function(message, data){
    //data = UDP message
     //console.log("got UDP message");
@@ -125,25 +126,23 @@ server.on('ui-resource-remove-tags', function(message, data) {
 server.on('ui-resource-search', function(message, searchPhrase) {
 
     var udpMessage = new UDPMessage();
-    var ttl = new timeToLive(3);
+    var ttl = new TimeToLive(3);
 
-    var id1 = _idFactory.idFactory().id;
-    var id2 = _idFactory.idFactory().id;
-
-    console.log("id1: ", id1);
-    console.log("id2: ", id2);
+    var id1 = idFactory.idFactory().id;
+    var id2 = idFactory.idFactory().id;
 
     var searchUdpMessage = udpMessage.createForFindRequest(id1, id2, ttl, searchPhrase);
 
-    console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1());
+    //console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1());
     //console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2());
-    //console.log("searchUdpMessage's timeToLive: ", searchUdpMessage.getTimeToLive().get());
+    //console.log("searchUdpMessage's TimeToLive: ", searchUdpMessage.getTimeToLive().get());
     //console.log("searchUdpMessage's message: ", searchUdpMessage.getMessage());
 
     transceiverChild.request('main-to-transceiver', searchUdpMessage.createUdpPacket(), function(status) {
         if (status === "success") {
             searchRequestIds.push(id1); //ID1 is the request ID from originating peer (us). Store that onto the array
-            console.log("Just pushed id1 onto the searchRequestIds array: ", id1);
+            //console.log("Just pushed id1 onto the searchRequestIds array: ", id1);
+            message.reply("success");
         }
     });
 });

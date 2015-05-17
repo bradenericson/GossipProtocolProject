@@ -4,10 +4,10 @@
 //var IDFactory = require('./DatagramSenderReceiver/UDP/ID/IDFactory.js');
 //
 //var test = new IDFactory();
-//var idFactory = new IDFactory();
+//var IdFactory = new IDFactory();
 //
-//idFactory.generateId();
-//var newId = idFactory.idFactory();
+//IdFactory.generateId();
+//var newId = IdFactory.IdFactory();
 //
 //console.log(newId.id);
 

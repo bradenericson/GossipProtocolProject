@@ -42,7 +42,7 @@
  *              April 23 2015
  */
 
-var UDP = require("./UDPMessage.js");
+var UDP = require("../UDP/UDPMessage.js");
 var messenger = require("messenger");
 var mongoose = require('mongoose');
 
