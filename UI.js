@@ -189,13 +189,16 @@ function search(searchPhrase) {
     });
 }
 
-function requestResource(resourceName) {
-    console.log("you requested " + resourceName);
+function requestResource(resourceId) {
+    console.log("you requested " + resourceId);
+    mainSpeaker.request('ui-resource-get-request', resourceId, function(status) {
+
+    });
 }
 
 function help() {
     console.log("search --searchPhrase | Search for resources using the searchPhrase");
-    console.log("request --resourceName | Request a resource by the resource name");
+    console.log("request --resourceId | Request a resource by the resource id");
     console.log("resource show | Show and manage my resources");
     console.log("resource rename --resourceName --newReso nurceName | Rename one of your resources");
     console.log("resource description --resourceName --newDescription | Change the description of --resourceName");
