@@ -74,6 +74,7 @@ module.exports = function() {
     var self = {};
 
     //create a UDP message from a datagram packet
+    //THIS IS USED FOR PACKETS THAT WE DIDN"T REQUEST FOR
     self.createFromDatagramPacket = function(datagramPacket_in) {
 
         if (typeof datagramPacket_in != "undefined") {
@@ -92,7 +93,7 @@ module.exports = function() {
             var id3 = datagramPacket_in.splice(0,16); //garbage ID
             //console.log("ID3: ",id3);
             //ignore the next 16 bytes because it's just extra padding (a random ID)
-            message = new Buffer(datagramPacket_in).toString("utf8", 0, datagramPacket_in.length);
+            message = new Buffer(datagramPacket_in);
         }
         else {
             throw new Error("The UDP message class did not receive a datagram");

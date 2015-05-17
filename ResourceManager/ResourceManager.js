@@ -368,7 +368,27 @@ function editName(resourceName, newName, callback){
 }
 
 server.on('main-to-resourceManager', function(message,udpData){
+    //this is for every packet that is not a response to something we asked for
+    //we need to look at the request ID, see if we have the resource
     var udp = new UDP().createFromDatagramPacket(udpData);
+    var doForward = true;
+    //first we check and see if the packet TTL has expired
+    if(typeof udp.getTimeToLive().get() === 'number' && udp.getTimeToLive().get() > 0){
+        if(udp.getTimeToLive.get() === 0){
+            //make sure we don't forward dead packets
+            doForward = false;
+        }
+
+        
+
+
+
+
+
+    }
+        //If we have the resource, we need to constuct a response to Find Matching Resource, and forward on the original packet
+        //else, we just forward on the original packet
+
 
     console.log('Message received');
     //message received, could be used to build resource
