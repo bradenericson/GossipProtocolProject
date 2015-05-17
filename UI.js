@@ -73,8 +73,37 @@ process.stdin.on('data', function (text) {
             return;
         }
 
-        var requestText = text.substring(text.indexOf('--') + 2, text.length - 1);
-        requestResource(requestText);
+        var firstDashes = text.indexOf("--");
+        var secondDashes = text.indexOf("--", firstDashes + 1);
+        var requestId;
+        var ttl;
+
+        if (secondDashes > 0) {
+            //there's a time to live number provided by the user
+            requestId = text.substring(firstDashes + 2, secondDashes).trim();
+            ttl = parseInt(text.substring(secondDashes + 2).trim());
+        }
+        else {
+            requestId = text.substring(firstDashes, text.length - 1);
+        }
+
+        if (requestId == "" || requestId == null) {
+            console.log("There was no resource request. Did you format the query correctly?");
+            return;
+        }
+
+        var resourceRequest = {
+            resourceId: requestId
+        };
+
+        if (ttl != null && typeof ttl == "number") {
+            resourceRequest.timeToLive = ttl;
+        }
+        else {
+            resourceRequest.timeToLive = 5;
+        }
+
+        requestResource(resourceRequest);
     }
     if (text === 'join') {
         //join the P2P system
@@ -189,16 +218,22 @@ function search(searchPhrase) {
     });
 }
 
-function requestResource(resourceId) {
-    console.log("you requested " + resourceId);
-    mainSpeaker.request('ui-resource-get-request', resourceId, function(status) {
+function requestResource(resourceRequest) {
+    /*
+        resourceRequest.resourceId : Resource ID that we're requesting
+        resourceRequest.timeToLive: Optional time to live parameter passed by user
+    */
+
+    console.log("resourceRequest: ", resourceRequest);
+
+    mainSpeaker.request('ui-resource-get-request', resourceRequest, function(status) {
 
     });
 }
 
 function help() {
     console.log("search --searchPhrase | Search for resources using the searchPhrase");
-    console.log("request --resourceId | Request a resource by the resource id");
+    console.log("request --resourceId --timeToLive (optional integer) | Request a resource by the resource id with the timeToLive (how long to wait for response from peers)");
     console.log("resource show | Show and manage my resources");
     console.log("resource rename --resourceName --newReso nurceName | Rename one of your resources");
     console.log("resource description --resourceName --newDescription | Change the description of --resourceName");
