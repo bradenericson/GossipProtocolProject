@@ -199,10 +199,16 @@ server.on('ui-resource-get-request', function(message, data) {
     var partNumber = 0; //we're searching for the very first piece
     var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
 
-
-    transceiverChild.request('main-to-transceiver', udp.createUdpPacket(), function (data) {
-        console.log('data sending from transceiver to main: ' + data);
+    resourceManagerChild.request('start-stream', data, function(reply){
+        if(reply){
+            //only send the request to peers IF the stream opens successfully
+            transceiverChild.request('main-to-transceiver', udp.createUdpPacket(), function (data) {
+                console.log('data sending from transceiver to main: ' + data);
+            });
+        }
     });
+
+
 });
 
 //listening for rename of resource coming from UI

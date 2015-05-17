@@ -64,6 +64,12 @@ db.once('open', function (callback) {
     console.log('successful connection')
 });
 
+var stream;
+
+var isFileDone = true;
+var fileChunk;
+var interval;
+
 var Resource = require('./models/Resource/Resource.js');
 
 indexResourceFiles();
@@ -374,10 +380,35 @@ server.on('main-to-resourceManager-build', function(message,udpData){
     //message received, could be used to build resource
 });
 
+server.on('main-to-resourceManager-build', function(message, resourcePart) {
+    //add whatever resourcePart is to fileChunk
+    if (resourcePart !== null) {
+        fileChunk.concat(resourcePart);
+    }
+    else {
+        fileChunk = resourcePart;
+    }
 
 
+});
 
+server.on('start-stream', function(message, fileName) {
+    stream = fs.createWriteStream("resources/" + fileName);
+    stream.once('open', function(fd) {
+        isFileDone = false;
+        interval = setInterval(function() {
+            if (fileChunk !== null) {
+                stream.write(fileChunk);
+                fileChunk = null;
+            }
 
+            if (isFileDone) {
+                stream.end(); //close the stream
+                clearInterval(interval);
+                fileChunk = null;
+            }
+        }, 1000);
+    });
 
-
-
+    message.reply("success");
+});
