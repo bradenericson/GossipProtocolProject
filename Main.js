@@ -147,9 +147,7 @@ server.on('ui-resource-get-request', function(message, data) {
     var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
 
 
-
-
-    transceiverChild.request('main-to-transceiver', {message: 'data'}, function (data) {
+    transceiverChild.request('main-to-transceiver', udp.createUdpPacket(), function (data) {
         console.log('data sending from transceiver to main: ' + data);
     });
 });
