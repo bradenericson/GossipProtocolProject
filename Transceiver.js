@@ -2,9 +2,34 @@
  *      Chad, Braden, Matt
  *
  *      Class Variables
+ *          portNumber
+ *              port number being used
+ *          packetSize
+ *              TODO why 32?
+ *          incomingPacketQueue
+ *              new queue for incoming packets
+ *          outgoingPacketQueue
+ *              new queue for packets being sent
+ *          datagramSocket
+ *              new socket connection
+ *          addressBook
+ *              queue for addresses
+ *          receiver
+ *              new datagramReceiver object
+ *          sender
+ *              new datagramSender object
  *
+ *      Methods:
+ *          server.on('main-to-transceiver', function (message, messageToSend)
+ *              listening for messages coming from main
+ *          var interval = setInterval(function()
+ *              send a message to main if the we recieve a message, run every 2 seconds
+ *          process.on('exit',function()
+ *              on exit, kill sender and receiver process
  *
- *
+ *      Modification History
+ *          Original Version
+ *              April 23 2015
  */
 
 var DatagramSender = require('./DatagramSenderReceiver/DatagramSender.js');
@@ -32,6 +57,7 @@ receiver.start();
 //console.log('before sender start');
 sender.start();
 
+//listening for messages coming from main
 server.on('main-to-transceiver', function (message, messageToSend) {
     //console.log("messageToSend UDPMessage: ", messageToSend);
     //outgoingPacketQueue.add(messageToSend);
@@ -41,7 +67,7 @@ server.on('main-to-transceiver', function (message, messageToSend) {
 });
 
 
-//not sure if this should be here, but couldn't figure out a cleaner way to do it.
+//send a message to main if the we recieve a message, run every 2 seconds
 var interval = setInterval(function(){
     var udp = receiver.action();
     if(udp){
@@ -52,6 +78,7 @@ var interval = setInterval(function(){
 
 },2000);
 
+//on exit, kill sender and receiver process
 process.on('exit',function(){
     //stop the interval
    clearInterval(interval);
