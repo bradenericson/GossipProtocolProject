@@ -70,7 +70,10 @@ var isFileDone = true;
 var fileChunk;
 var interval;
 
+var packetsReceived = 0;
+
 var Resource = require('./models/Resource/Resource.js');
+
 
 indexResourceFiles();
 //editDescription("test.txt", "Saturday morning finals are unethical and should be canceled", function(err, msg){
@@ -382,33 +385,44 @@ server.on('main-to-resourceManager-build', function(message,udpData){
 
 server.on('main-to-resourceManager-build', function(message, resourcePart) {
     //add whatever resourcePart is to fileChunk
-    if (resourcePart !== null) {
+    if (fileChunk !== null) {
         fileChunk.concat(resourcePart);
     }
     else {
         fileChunk = resourcePart;
     }
 
-
+    packetsReceived++;
 });
 
-server.on('start-stream', function(message, fileName) {
-    stream = fs.createWriteStream("resources/" + fileName);
-    stream.once('open', function(fd) {
-        isFileDone = false;
-        interval = setInterval(function() {
-            if (fileChunk !== null) {
-                stream.write(fileChunk);
-                fileChunk = null;
-            }
+server.on('start-stream', function(message, data) {
 
-            if (isFileDone) {
-                stream.end(); //close the stream
-                clearInterval(interval);
-                fileChunk = null;
-            }
-        }, 1000);
-    });
+    var numFileParts = Math.ceil(data.resourceSize / 456);
+    if (stream === null) {
+        if (resourceFromCollection != null) {
+            stream = fs.createWriteStream("resources/" + data.targetResourceName);
+            stream.once('open', function(fd) {
+                isFileDone = false;
+                interval = setInterval(function() {
+                    if (fileChunk !== null) {
+                        stream.write(fileChunk);
+                        fileChunk = null;
+                    }
 
-    message.reply("success");
+                    if (isFileDone) {
+                        stream.end(); //close the stream
+                        clearInterval(interval);
+                        fileChunk = null;
+                    }
+                }, 1000);
+            });
+            message.reply("success");
+        }
+        else {
+            message.reply("resourceId wasn't a valid ID");
+        }
+    }
+    else {
+        message.reply("stream is already open");
+    }
 });

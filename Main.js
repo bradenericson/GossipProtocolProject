@@ -64,6 +64,8 @@ var ID = require('./UDP/ID/ID.js');
 var searchRequestIds = [];
 var getRequestIds = []; //seperated out the GET requests because our ResourceManager will be
 
+var listOfReceivedResources = new Array();
+var resourceFromCollection;
 
 childProcess.fork(__dirname + "/Transceiver.js");
 childProcess.fork(__dirname + "/ResourceManager/ResourceManager.js");
@@ -132,14 +134,15 @@ server.on('transceiver-to-main', function(message, data){
                     description: data[2]
                 };
 
-                UIChild.request('main-to-UI', resource, function(data) {
+                UIChild.request('main-to-UI', resource, function (data) {
                     console.log('main to UI data: ' + data);
+                    listOfReceivedResources.push(resource);
                 });
             }
         }
 
         //if we are building a resource
-        else if(getRequestIds.indexOf(id2.toString() >= 0)) {
+        else if (getRequestIds.indexOf(id2.toString() >= 0)) {
 
             udp.createForGetResponse(data);
 
@@ -158,16 +161,14 @@ server.on('transceiver-to-main', function(message, data){
             }
         }
 
-        else{
+        else {
             //pass it to resourceManager to deal with
-            resourceManagerChild.request('main-to-resourceManager', data, function(){
+            resourceManagerChild.request('main-to-resourceManager', data, function () {
                 console.log("sent to resourceManager successful")
             })
         }
 
     }
-
-
 
     console.log("ID1: ", udp.getID1().id);
     console.log("ID2: ", udp.getID2().id);
@@ -195,9 +196,20 @@ server.on('resourceManager-to-main', function(message, data) {
 //listening to messages coming in from UI
 server.on('ui-resource-get-request', function(message, data) {
     //could go to resourceManager also go to transceiver
-    //data: {resourceId, timeToLive} <String>
+    //data: {resourceId, targetResourceName, timeToLive} <String>
     var partNumber = 0; //we're searching for the very first piece
     var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
+
+    for(var i = 0; i < listOfReceivedResources; i++) {
+        if (listOfReceivedResources[i].resourceId === data.resourceId) {
+            resourceFromCollection = listOfReceivedResources[i];
+            break;
+        }
+    }
+
+    for(var prop in resourceFromCollection) {
+        data[prop] = resourceFromCollection[prop];
+    }
 
     resourceManagerChild.request('start-stream', data, function(reply){
         if(reply){

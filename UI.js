@@ -115,7 +115,7 @@ process.stdin.on('data', function (text) {
 
         console.log("resourceRequest: ", resourceRequest);
 
-        //requestResource(resourceRequest);
+        requestResource(resourceRequest);
     }
     if (text === 'join') {
         //join the P2P system
@@ -233,6 +233,7 @@ function search(searchPhrase) {
 function requestResource(resourceRequest) {
     /*
         resourceRequest.resourceId : Resource ID that we're requesting
+        resourceRequest.targetResourceName: Desired resource name for the file requested
         resourceRequest.timeToLive: Optional time to live parameter passed by user
     */
 
@@ -258,6 +259,7 @@ function help() {
 
 server.on('main-to-UI', function(message, resourceObject){
     console.log("Received resource: ", resourceObject.resourceId + " | " + resourceObject.mimeType + " | " + resourceObject.resourceSize + " | " + resourceObject.description);
+    message.reply("sucksess aj was here");
 });
 
 server.on('main-to-UI-received-resource', function(message, resourceUpdate) {
