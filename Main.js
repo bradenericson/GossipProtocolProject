@@ -17,7 +17,8 @@ var IdFactory = require('./UDP/ID/IDFactory.js');
 
 var idFactory = new IdFactory();
 
-var searchRequestIds = new Array();
+var searchRequestIds = [];
+var getRequestIds = []; //seperated out the GET requests because our ResourceManager will be
 
 
 childProcess.fork(__dirname + "/Transceiver.js");
@@ -66,13 +67,19 @@ server.on('transceiver-to-main', function(message, data){
     console.log("message: ", udp.getMessage());
 
     //if we are building a resource
-    resourceManagerChild.request('main-to-resourceManager', {message: 'data'}, function(data) {
-        console.log('main to resource manager data: ' + data);
-    });
+    if(getRequestIds.indexOf(udp.getID2().id >= 0)) {
+        var resource = {
+            resourceId: udp.getID1().id,
+            data: udp.getMessage()
+        };
 
+        resourceManagerChild.request('main-to-resourceManager', resource, function (data) {
+            console.log('main to resource manager data: ' + data);
+        });
+    }
     //in response to a 'cats' query or what have you
     //could be a response to one of our packets
-    if(searchRequestIds.indexOf(udp.getID2().id) >= 0 || true ){
+    if(searchRequestIds.indexOf(udp.getID2().id) >= 0){
         console.log("Sending to UI: ", udp);
 
         var delimiter = udp.getMessage().substring(0, 1);

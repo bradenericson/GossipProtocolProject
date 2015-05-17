@@ -33,11 +33,9 @@ module.exports = function(timeToLive_in) {
 
     var self = {};
 
-    if (typeof timeToLive_in != "undefined") {
-        timeToLive_in = new Buffer(timeToLive_in).toString("utf8");
-
+    if (typeof timeToLive_in != "undefined" && typeof timeToLive_in === "number") {
+        //timeToLive_in = new Buffer(timeToLive_in).toString("utf8");
        timeToLive = timeToLive_in;
-
     }
 
 

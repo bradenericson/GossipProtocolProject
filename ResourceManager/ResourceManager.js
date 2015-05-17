@@ -358,7 +358,8 @@ function editName(resourceName, newName, callback){
 
 }
 
-server.on('main-to-resourceManager', function(message,data){
+server.on('main-to-resourceManager', function(message,udpData){
+
     console.log('Message received');
     //message received, could be used to build resource
 });

@@ -52,6 +52,9 @@ var udpPacket = Buffer.concat([id1, id2, ttl, randomIdBuffer, message]);
 
 //console.log("udpPacket: ", udpPacket);
 
+client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.44", function(err) {
+    client.close();
+});
 //client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.220", function(err) {
 //    client.close();
 //});

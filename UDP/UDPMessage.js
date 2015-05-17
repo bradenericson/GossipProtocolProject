@@ -81,8 +81,8 @@ module.exports = function() {
             //console.log(buffer);
             //id1 = new ID(reader.nextString(16));
             //id2 = new ID(reader.nextString(16));
-
-            timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,5)));
+           // console.log("the packet before TTL splice: ",datagramPacket_in.splice(0,4));
+            timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,4)));
             var id3 = datagramPacket_in.splice(0,16); //garbage ID
             //console.log("ID3: ",id3);
             //ignore the next 16 bytes because it's just extra padding (a random ID)
@@ -214,13 +214,14 @@ function convertStringToByteArray(stringToConvert) {
 };
 
 function convertByteArraytoInteger(byteArray) {
-    x = 0;
-
+    var x = 0;
+    console.log("array coming into function: ",byteArray);
     for(var i = 0; i < byteArray.length; i++) {
         x = x << 8;
         x = x | (byteArray[i] & 0xff);
     }
 
+    console.log("returning from function: ", x);
     return x;
 }
 
