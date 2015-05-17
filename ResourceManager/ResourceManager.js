@@ -45,6 +45,7 @@
 var UDP = require("../UDP/UDPMessage.js");
 var messenger = require("messenger");
 var mongoose = require('mongoose');
+var nodeMime = require('node-mime');
 
 var mainSpeaker = messenger.createSpeaker(10000);//speaking to ResourceManager
 var server = messenger.createListener(10002); //listens for messages on port 8000
@@ -398,18 +399,26 @@ server.on('main-to-resourceManager-build', function(message, resourcePart) {
 server.on('start-stream', function(message, data) {
 
     var numFileParts = Math.ceil(data.resourceSize / 456);
+    var fileExtension = mimeType.extension(data.mimeType);
+
     if (stream === null) {
         if (resourceFromCollection != null) {
-            stream = fs.createWriteStream("resources/" + data.targetResourceName);
+            stream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
             stream.once('open', function(fd) {
                 isFileDone = false;
                 interval = setInterval(function() {
                     if (fileChunk !== null) {
                         stream.write(fileChunk);
+
+                        if (packetsReceived == numFileParts) {
+                            isFileDone = true;
+                        }
+
                         fileChunk = null;
                     }
 
                     if (isFileDone) {
+
                         stream.end(); //close the stream
                         clearInterval(interval);
                         fileChunk = null;
