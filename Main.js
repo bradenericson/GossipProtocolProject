@@ -59,47 +59,67 @@ server.on('transceiver-to-main', function(message, data){
    //data = UDP message
     //console.log("got UDP message");
     //code that handles what to do with the packet
+
     var udp = new UDPMessage();
-    udp.createFromDatagramPacket(data);
+
+    if (data != null) {
+        var id2 = new ID(data.slice(16, 33));
+        var resource;
+
+        //Response to Find Matching Resources Request
+        if (searchRequestIds.indexOf((id2.toString()) > 0)) {
+            //if the second id is the same as our original request ID, it's a 'Response to Find Matching Resources Request'
+            udp.createFromDatagramPacket(data);
+
+            if (udp.getTimeToLive() > 0) {
+                udp.getTimeToLive().decrement();
+
+                console.log("Sending to UI: ", udp);
+
+                var delimiter = udp.getMessage().substring(0, 1);
+
+                var data = udp.getMessage().substring(1).split(delimiter);
+
+                console.log("data in main: ", data);
+
+                resource = {
+                    resourceId: udp.getID1().id,
+                    mimeType: data[0],
+                    resourceSize: data[1],
+                    description: data[2]
+                };
+
+                UIChild.request('main-to-UI', resource, function(data) {
+                    console.log('main to UI data: ' + data);
+                });
+            }
+        }
+
+        //if we are building a resource
+        else if(getRequestIds.indexOf(id2.toString() >= 0)) {
+
+            udp.createForGetResponse(data);
+
+            if (udp.getTimeToLive() > 0) {
+                udp.getTimeToLive().decrement();
+
+                resource = {
+                    resourceId: udp.getID1().id,
+                    partNumber: udp.partNumber,
+                    bytesFromResource: udp.getMessage()
+                };
+
+                resourceManagerChild.request('main-to-resourceManager', resource, function (data) {
+                    console.log('main to resource manager data: ' + data);
+                });
+            }
+        }
+    }
+
     console.log("ID1: ", udp.getID1().id);
     console.log("ID2: ", udp.getID2().id);
     console.log("TTL: ", udp.getTimeToLive().get());
     console.log("message: ", udp.getMessage());
-
-    //if we are building a resource
-    if(getRequestIds.indexOf(udp.getID2().id >= 0)) {
-        var resource = {
-            resourceId: udp.getID1().id,
-            data: udp.getMessage()
-        };
-
-        resourceManagerChild.request('main-to-resourceManager', resource, function (data) {
-            console.log('main to resource manager data: ' + data);
-        });
-    }
-    //in response to a 'cats' query or what have you
-    //could be a response to one of our packets
-    if(searchRequestIds.indexOf(udp.getID2().id) >= 0){
-        console.log("Sending to UI: ", udp);
-
-        var delimiter = udp.getMessage().substring(0, 1);
-
-        var data = udp.getMessage().substring(1).split(delimiter);
-
-        console.log("data in main: ", data);
-
-        var resource = {
-            resourceId: udp.getID1().id,
-            mimeType: data[0],
-            resourceSize: data[1],
-            description: data[2]
-        };
-
-        UIChild.request('main-to-UI', resource, function(data) {
-            console.log('main to UI data: ' + data);
-        });
-    }
-
 
     //sending back to transceiver
     //could be a packet we need to send on
@@ -157,10 +177,10 @@ server.on('ui-resource-search', function(message, searchPhrase) {
     var udpMessage = new UDPMessage();
     var ttl = new TimeToLive(3);
 
-    var id1 = idFactory.idFactory().id;
-    var id2 = idFactory.idFactory().id;
+    var id1 = idFactory.idFactory();
+    var id2 = idFactory.idFactory();
 
-    var searchUdpMessage = udpMessage.createForFindRequest(id1, id2, ttl, searchPhrase);
+    var searchUdpMessage = udpMessage.createForFindRequest(id1.id, id2.id, ttl, searchPhrase);
 
     //console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1());
     //console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2());
@@ -169,7 +189,7 @@ server.on('ui-resource-search', function(message, searchPhrase) {
 
     transceiverChild.request('main-to-transceiver', searchUdpMessage.createUdpPacket(), function(status) {
         if (status === "success") {
-            searchRequestIds.push(id1); //ID1 is the request ID from originating peer (us). Store that onto the array
+            searchRequestIds.push(id1.toString()); //ID1 is the request ID from originating peer (us). Store that onto the array
             //console.log("Just pushed id1 onto the searchRequestIds array: ", id1);
             message.reply("success");
         }

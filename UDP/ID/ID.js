@@ -95,7 +95,7 @@ module.exports = function(byteArray) {
     //return true if ID is resource id
     self.isResourceID = function() {
         return false;
-    }
+    };
 
     /* Helper Functions */
 

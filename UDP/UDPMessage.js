@@ -75,6 +75,7 @@ module.exports = function() {
             datagramPacket_in = datagramPacket_in.data;
 
             //console.log("datagramPacket_in is buffer? ", Buffer.isBuffer(buffer));
+
             id1 = new ID(datagramPacket_in.splice(0,16));
             id2 = new ID(datagramPacket_in.splice(0,16));
 
@@ -101,7 +102,7 @@ module.exports = function() {
         self.setMessage(convertStringToByteArray(message));
 
         return self;
-    }
+    };
 
     //TODO
     self.createForGetRequest = function(id1, id2, ttl, byte) {
@@ -109,6 +110,27 @@ module.exports = function() {
         self.setId2(id2);
         self.setTimeToLive(ttl);
         self.setMessage(byte);
+    };
+
+    self.createForGetResponse = function(datagramPacket_in) {
+        if (typeof datagramPacket_in != "undefined") {
+            datagramPacket_in = datagramPacket_in.data;
+
+            id1 = new ID(datagramPacket_in.splice(0,16));
+            id2 = new ID(datagramPacket_in.splice(0,16));
+            timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,4)));
+
+            //ignore the next 16 bytes because it's just extra padding (a random ID)
+            var id3 = datagramPacket_in.splice(0,16); //garbage ID
+            var partNumber = convertByteArraytoInteger(datagramPacket_in.splice(0,4));
+
+            self.partNumber = partNumber;
+
+            message = new Buffer(datagramPacket_in).toString("utf8", 0, datagramPacket_in.length);
+        }
+        else {
+            throw new Error("The UDP message class did not receive a datagram");
+        }
     };
 
     //return the datagram packet

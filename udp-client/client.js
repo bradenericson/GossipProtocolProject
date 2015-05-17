@@ -37,14 +37,18 @@ for(var i = byteArray.length - 1; i >= 0; i--) {
     timeToLive = Math.floor(x/256);
 };
 
+console.log("ttl byteArray: ", byteArray);
+
 var ttl = new Buffer(byteArray, 'utf8');
+
+console.log("ttl: ", ttl);
 
 var randomId = idFactory.idFactory();
 var randomIdBuffer = new Buffer(randomId.id, 'utf8');
 
 var message = new Buffer("|image/jpeg|1002092|super cute cats all over Braden", 'utf8');
 
-console.log("randomId: ", randomId.id);
+//console.log("randomId: ", randomId.id);
 
 var udpPacket = Buffer.concat([id1, id2, ttl, randomIdBuffer, message]);
 
@@ -52,13 +56,6 @@ var udpPacket = Buffer.concat([id1, id2, ttl, randomIdBuffer, message]);
 
 //console.log("udpPacket: ", udpPacket);
 
-client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.44", function(err) {
+client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.220", function(err) {
     client.close();
 });
-//client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.220", function(err) {
-//    client.close();
-//});
-
-//client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.220", function(err) {
-//    client.close();
-//});
