@@ -140,9 +140,15 @@ server.on('resourceManager-to-main', function(message, data) {
 });
 
 //listening to messages coming in from UI
-server.on('UI-to-main', function(message, data) {
-    //could go to resourceManager
-    //can also go to transceiver
+server.on('ui-resource-get-request', function(message, data) {
+    //could go to resourceManager also go to transceiver
+    //data: {resourceId, timeToLive} <String>
+    var partNumber = 0; //we're searching for the very first piece
+    var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
+
+
+
+
     transceiverChild.request('main-to-transceiver', {message: 'data'}, function (data) {
         console.log('data sending from transceiver to main: ' + data);
     });

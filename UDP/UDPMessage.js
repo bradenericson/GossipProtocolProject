@@ -55,8 +55,10 @@
  * */
 
 var ID = require("./ID/ID.js");
+var IdFactory = require('./ID/IDFactory.js');
 var TTL = require("./TimeToLive.js");
-var BufferReader = require('buffer-reader');
+
+var idFactory = new IdFactory();
 /** need to figure out multiple constructors */
 module.exports = function() {
 
@@ -105,11 +107,15 @@ module.exports = function() {
     };
 
     //TODO
-    self.createForGetRequest = function(id1, id2, ttl, byte) {
+    self.createForGetRequest = function(resourceId, partNumber, timeToLive) {
+        var id1 = idFactory.idFactory();
+        var id2 = new ID(resourceId);
+        var id3 = idFactory.idFactory(); //garbage ID
         self.setId1(id1);
         self.setId2(id2);
-        self.setTimeToLive(ttl);
-        self.setMessage(byte);
+        self.setTimeToLive(new TTL(timeToLive));
+        self.partNumber = partNumber;
+        self.setMessage(id3.id);
     };
 
     self.createForGetResponse = function(datagramPacket_in) {
@@ -122,9 +128,7 @@ module.exports = function() {
 
             //ignore the next 16 bytes because it's just extra padding (a random ID)
             var id3 = datagramPacket_in.splice(0,16); //garbage ID
-            var partNumber = convertByteArraytoInteger(datagramPacket_in.splice(0,4));
-
-            self.partNumber = partNumber;
+            self.partNumber = convertByteArraytoInteger(datagramPacket_in.splice(0,4));
 
             message = new Buffer(datagramPacket_in).toString("utf8", 0, datagramPacket_in.length);
         }
