@@ -75,16 +75,21 @@ process.stdin.on('data', function (text) {
 
         var firstDashes = text.indexOf("--");
         var secondDashes = text.indexOf("--", firstDashes + 1);
+        var thirdDashes = text.indexOf("--", secondDashes + 1);
+
         var requestId;
+        var desiredResourceName;
         var ttl;
 
-        if (secondDashes > 0) {
+        if (thirdDashes > 0) {
             //there's a time to live number provided by the user
             requestId = text.substring(firstDashes + 2, secondDashes).trim();
-            ttl = parseInt(text.substring(secondDashes + 2).trim());
+            desiredResourceName = text.substring(secondDashes + 2, thirdDashes).trim();
+            ttl = parseInt(text.substring(thirdDashes + 2).trim());
         }
         else {
             requestId = text.substring(firstDashes, text.length - 1);
+            desiredResourceName = text.substring(secondDashes);
         }
 
         if (requestId == "" || requestId == null) {
@@ -93,7 +98,8 @@ process.stdin.on('data', function (text) {
         }
 
         var resourceRequest = {
-            resourceId: requestId
+            resourceId: requestId,
+            targetResourceName: desiredResourceName
         };
 
         if (ttl != null && typeof ttl == "number") {
@@ -103,7 +109,9 @@ process.stdin.on('data', function (text) {
             resourceRequest.timeToLive = 5;
         }
 
-        requestResource(resourceRequest);
+        console.log("resourceRequest: ", resourceRequest);
+
+        //requestResource(resourceRequest);
     }
     if (text === 'join') {
         //join the P2P system
@@ -224,7 +232,7 @@ function requestResource(resourceRequest) {
         resourceRequest.timeToLive: Optional time to live parameter passed by user
     */
 
-    console.log("resourceRequest: ", resourceRequest);
+    //console.log("resourceRequest: ", resourceRequest);
 
     mainSpeaker.request('ui-resource-get-request', resourceRequest, function(status) {
 
@@ -233,7 +241,7 @@ function requestResource(resourceRequest) {
 
 function help() {
     console.log("search --searchPhrase | Search for resources using the searchPhrase");
-    console.log("request --resourceId --timeToLive (optional integer) | Request a resource by the resource id with the timeToLive (how long to wait for response from peers)");
+    console.log("request --resourceId --desiredResourceName --timeToLive (optional integer) | Request a resource by the resource id with the timeToLive (how long to wait for response from peers) \n\t\tand the desired resource name.");
     console.log("resource show | Show and manage my resources");
     console.log("resource rename --resourceName --newReso nurceName | Rename one of your resources");
     console.log("resource description --resourceName --newDescription | Change the description of --resourceName");
