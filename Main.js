@@ -188,7 +188,7 @@ server.on('transceiver-to-main', function(message, data){
 server.on('resourceManager-to-main', function(message, data) {
 
     //get something from resource manager usually goes to transceiver
-    transceiverChild.request('main-to-transceiver', {message: 'data'}, function(data) {
+    transceiverChild.request('main-to-transceiver', data, function(data) {
         console.log('data sending from main to transceiver: ' + data);
     });
 });

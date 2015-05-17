@@ -248,7 +248,7 @@ function help() {
     console.log("search --searchPhrase | Search for resources using the searchPhrase");
     console.log("request --resourceId --desiredResourceName --timeToLive (optional integer) | Request a resource by the resource id with the timeToLive (how long to wait for response from peers) \n\t\tand the desired resource name.");
     console.log("resource show | Show and manage my resources");
-    console.log("resource rename --resourceName --newReso nurceName | Rename one of your resources");
+    console.log("resource rename --resourceName --newResourceName | Rename one of your resources");
     console.log("resource description --resourceName --newDescription | Change the description of --resourceName");
     console.log("resource tags add --resourceName --tag1, tag2, tag3, tag4 | Add new tags to --resourceName");
     console.log("resource tags remove --resourceName --tag1, tag2, tag3, tag4 | Remove tags from --resourceName");
