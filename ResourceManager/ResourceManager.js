@@ -177,7 +177,6 @@ function getAll() {
 
 //index resources we do not have
 function indexResourceFiles(){
-    //console.log("hello");
     fs.readdir(RESOURCE_PATH,function(err,files){
         if(err){ throw err}
 
@@ -207,7 +206,7 @@ function indexResourceFiles(){
                         });
                         console.log("Indexed "+ file);
                     }
-                  //console.log(file + " is already indexed");
+
                 }
 
             });
