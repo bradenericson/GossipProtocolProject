@@ -105,8 +105,11 @@ module.exports = function() {
 
     //TODO
     self.createForGetRequest = function(id1, id2, ttl, byte) {
-
-    }
+        self.setId1(id1);
+        self.setId2(id2);
+        self.setTimeToLive(ttl);
+        self.setMessage(byte);
+    };
 
     //return the datagram packet
     self.getDatagramPacket = function() {

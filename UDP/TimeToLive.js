@@ -54,7 +54,7 @@ module.exports = function(timeToLive_in) {
     };
 
     //set TTL to decrement
-    self.set = function(timeToLive) {
+    self.decrement = function() {
         timeToLive = timeToLive - 1;
         return timeToLive;
     };
