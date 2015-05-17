@@ -56,7 +56,7 @@
 
 var ID = require("./ID/ID.js");
 var TTL = require("./TimeToLive.js");
-
+var BufferReader = require('buffer-reader');
 /** need to figure out multiple constructors */
 module.exports = function() {
 
@@ -70,15 +70,19 @@ module.exports = function() {
 
     //create a UDP message from a datagram packet
     self.createFromDatagramPacket = function(datagramPacket_in) {
+
         if (typeof datagramPacket_in != "undefined") {
-            //id1 = new ID(datagramPacket_in.toString("utf8", 0, 15));
-            //id2 = new ID(datagramPacket_in.toString("utf8", 16, 31));
+            datagramPacket_in = datagramPacket_in.data;
 
-            id1 = new ID(datagramPacket_in.splice(0, 16));
-            id2 = new ID(datagramPacket_in.splice(17, 32));
+            //console.log("datagramPacket_in is buffer? ", Buffer.isBuffer(buffer));
+            id1 = new ID(datagramPacket_in.slice(0,16));
+            id2 = new ID(datagramPacket_in.slice(16,32));
+            //console.log(buffer);
+            //id1 = new ID(reader.nextString(16));
+            //id2 = new ID(reader.nextString(16));
 
-            timeToLive = new TTL(datagramPacket_in.toString("utf8", 32, 35));
-            message = datagramPacket_in.toString("utf8", 36, datagramPacket_in.length);
+            timeToLive = new TTL(datagramPacket_in.slice(32,37));
+            message = datagramPacket_in.toString("utf8", 37, datagramPacket_in.length);
         }
         else {
             throw new Error("The UDP message class did not receive a datagram");

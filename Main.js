@@ -60,6 +60,10 @@ server.on('transceiver-to-main', function(message, data){
     //code that handles what to do with the packet
     var udp = new UDPMessage();
     udp.createFromDatagramPacket(data);
+    console.log("ID1: ", udp.getID1().id);
+    console.log("ID2: ", udp.getID2().id);
+    console.log("TTL: ", udp.getTimeToLive().get());
+    console.log("message: ", udp.getMessage());
 
     //if we are building a resource
     resourceManagerChild.request('main-to-resourceManager', {message: 'data'}, function(data) {

@@ -52,5 +52,14 @@ var interval = setInterval(function(){
 
 },2000);
 
+process.on('exit',function(){
+    //stop the interval
+   clearInterval(interval);
+    receiver.stop();
+    sender.stop();
+
+    process.exit();
+});
+
 
 
