@@ -437,6 +437,9 @@ server.on('start-stream', function(message, data) {
     var numFileParts = Math.ceil(data.resourceSize / 456);
     var fileExtension = mimeType.extension(data.mimeType);
 
+    data.targetResourceName = data.targetResourceName.substring(0, data.targetResourceName.indexOf(".")); //get rid of any supplied extensions from the user
+    console.log("Beginning to write file named: " + data.targetResourceName + "." + fileExtension);
+
     if (stream === null) {
         if (resourceFromCollection != null) {
             stream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
@@ -465,6 +468,8 @@ server.on('start-stream', function(message, data) {
         }
         else {
             message.reply("resourceId wasn't a valid ID");
+            stream.end();
+            clearInterval(interval);
         }
     }
     else {
