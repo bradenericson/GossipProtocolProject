@@ -255,12 +255,17 @@ server.on('ui-resource-remove-tags', function(message, data) {
 server.on('ui-resource-search', function(message, searchPhrase) {
 
     var udpMessage = new UDPMessage();
-    var ttl = new TimeToLive(3);
+    var ttl = new TimeToLive(5);
 
     var id1 = idFactory.idFactory();
     var id2 = idFactory.idFactory();
 
-    var searchUdpMessage = udpMessage.createForFindRequest(id1.id, id2.id, ttl, searchPhrase);
+    //console.log("id1: ", id1.id);
+    //console.log("id2: ", id2.id);
+    //console.log("ttl: ", ttl.get());
+    //console.log("search phrase: ", searchPhrase);
+
+    var searchUdpMessage = udpMessage.createForFindRequest(id1, id2, ttl, searchPhrase);
 
     //console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1());
     //console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2());

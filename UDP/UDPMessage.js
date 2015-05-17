@@ -223,6 +223,9 @@ module.exports = function() {
 
     self.createUdpPacket = function() {
 
+        //console.log("self.getID1().id: ", self.getID1().id);
+        //console.log("self.getID2().id: ", self.getID2().id);
+
         var id1Buffer = new Buffer(self.getID1().id); //we need to keep track of this ID because it is our Request ID
         var id2Buffer = new Buffer(self.getID2().id);
         var timeToLiveBuffer = new Buffer(self.getTimeToLive().get());
