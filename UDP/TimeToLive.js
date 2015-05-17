@@ -34,8 +34,13 @@ module.exports = function(timeToLive_in) {
     var self = {};
 
     if (typeof timeToLive_in != "undefined") {
-        timeToLive = timeToLive_in;
+        timeToLive_in = new Buffer(timeToLive_in).toString("utf8");
+
+       timeToLive = timeToLive_in;
+
     }
+
+
     else {
         throw new Error("Invalid parameter was entered!");
     }

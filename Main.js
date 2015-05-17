@@ -72,9 +72,13 @@ server.on('transceiver-to-main', function(message, data){
 
     //in response to a 'cats' query or what have you
     //could be a response to one of our packets
-    UIChild.request('main-to-UI', {message: 'data'}, function(data) {
-        console.log('main to UI data: ' + data);
-    });
+    if(searchRequestIds.indexOf(udp.getID2().id) >= 0 || true ){
+        console.log("Sending to UI: ", udp);
+        UIChild.request('main-to-UI', {data: JSON.stringify(udp)}, function(data) {
+            console.log('main to UI data: ' + data);
+        });
+    }
+
 
     //sending back to transceiver
     //could be a packet we need to send on

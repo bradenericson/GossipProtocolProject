@@ -208,11 +208,11 @@ function help() {
 
 server.on('main-to-UI', function(message, udpData){
     console.log('Message received');
-    console.log("Received data from Main: ", data);
+    console.log("Received data from Main: ", message);
+    udpData = JSON.parse(udpData.data);
+    var delimiter = udpData.getMessage().splice(0, 1);
 
-    var delimiter = udpData.message.splice(0, 1);
-
-    var data = udpData.message.split(delimiter);
+    var data = udpData.getMessage().split(delimiter);
 
     //data[0] = mime type
     //data[1] = size in bytes

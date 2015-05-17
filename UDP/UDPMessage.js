@@ -75,14 +75,18 @@ module.exports = function() {
             datagramPacket_in = datagramPacket_in.data;
 
             //console.log("datagramPacket_in is buffer? ", Buffer.isBuffer(buffer));
-            id1 = new ID(datagramPacket_in.slice(0,16));
-            id2 = new ID(datagramPacket_in.slice(16,32));
+            id1 = new ID(datagramPacket_in.splice(0,16));
+            id2 = new ID(datagramPacket_in.splice(0,16));
+
             //console.log(buffer);
             //id1 = new ID(reader.nextString(16));
             //id2 = new ID(reader.nextString(16));
 
-            timeToLive = new TTL(datagramPacket_in.slice(32,37));
-            message = datagramPacket_in.toString("utf8", 37, datagramPacket_in.length);
+            timeToLive = new TTL(datagramPacket_in.splice(0,1));
+            var id3 = datagramPacket_in.splice(0,16); //garbage ID
+            //console.log("ID3: ",id3);
+            //ignore the next 16 bytes because it's just extra padding (a random ID)
+            message = new Buffer(datagramPacket_in).toString("utf8", 0, datagramPacket_in.length);
         }
         else {
             throw new Error("The UDP message class did not receive a datagram");
