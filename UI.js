@@ -206,18 +206,17 @@ function help() {
     console.log("help | See a list of available commands");
 }
 
-server.on('main-to-UI', function(message, udpData){
+server.on('main-to-UI', function(message, resourceObject){
     console.log('Message received');
-    console.log("Received data from Main: ", message);
-    udpData = JSON.parse(udpData.data);
-    var delimiter = udpData.getMessage().splice(0, 1);
+    //console.log("Received data from Main: ", udpData);
+    //var delimiter = udpData.getMessage().splice(0, 1);
 
-    var data = udpData.getMessage().split(delimiter);
+    //var data = udpData.getMessage().split(delimiter);
 
     //data[0] = mime type
     //data[1] = size in bytes
     //data[2] = description
     //udpMessage.getID1().id = Resource ID from peer
-    console.log("Received resource: ", udpMessage.getID1().id + " | " + data[0] + " | " + data[1] + " | " + data[2]);
+    console.log("Received resource: ", resourceObject.resourceId + " | " + resourceObject.mimeType + " | " + resourceObject.resourceSize + " | " + resourceObject.description);
     //message received, could be used to build resource
 });

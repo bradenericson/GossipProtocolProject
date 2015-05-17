@@ -74,7 +74,21 @@ server.on('transceiver-to-main', function(message, data){
     //could be a response to one of our packets
     if(searchRequestIds.indexOf(udp.getID2().id) >= 0 || true ){
         console.log("Sending to UI: ", udp);
-        UIChild.request('main-to-UI', udp, function(data) {
+
+        var delimiter = udp.getMessage().substring(0, 1);
+
+        var data = udp.getMessage().substring(1).split(delimiter);
+
+        console.log("data in main: ", data);
+
+        var resource = {
+            resourceId: udp.getID1().id,
+            mimeType: data[0],
+            resourceSize: data[1],
+            description: data[2]
+        };
+
+        UIChild.request('main-to-UI', resource, function(data) {
             console.log('main to UI data: ' + data);
         });
     }
