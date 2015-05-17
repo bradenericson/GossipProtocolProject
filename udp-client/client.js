@@ -27,7 +27,17 @@ console.log("id2 id: ", id2.id);
 
 var id1 = new Buffer(id1.id, 'utf8');
 var id2 = new Buffer(id2.id, 'utf8');
-var ttl = new Buffer('5', 'utf8');
+
+var x = 5;
+var byteArray = new Array(4);
+var timeToLive = Math.floor(x);
+
+for(var i = byteArray.length - 1; i >= 0; i--) {
+    byteArray[i] = timeToLive % 256;
+    timeToLive = Math.floor(x/256);
+};
+
+var ttl = new Buffer(byteArray, 'utf8');
 
 var randomId = idFactory.idFactory();
 var randomIdBuffer = new Buffer(randomId.id, 'utf8');
@@ -38,13 +48,13 @@ console.log("randomId: ", randomId.id);
 
 var udpPacket = Buffer.concat([id1, id2, ttl, randomIdBuffer, message]);
 
-console.log("ttl: ", ttl.toString('utf8'));
+//console.log("ttl: ", ttl.toString('utf8'));
 
 //console.log("udpPacket: ", udpPacket);
 
-client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.220", function(err) {
-    client.close();
-});
+//client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.220", function(err) {
+//    client.close();
+//});
 
 //client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.220", function(err) {
 //    client.close();

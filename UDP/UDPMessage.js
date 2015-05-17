@@ -82,7 +82,7 @@ module.exports = function() {
             //id1 = new ID(reader.nextString(16));
             //id2 = new ID(reader.nextString(16));
 
-            timeToLive = new TTL(datagramPacket_in.splice(0,1));
+            timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,5)));
             var id3 = datagramPacket_in.splice(0,16); //garbage ID
             //console.log("ID3: ",id3);
             //ignore the next 16 bytes because it's just extra padding (a random ID)
@@ -212,3 +212,14 @@ function convertStringToByteArray(stringToConvert) {
 
     return bytes;
 };
+
+function convertByteArraytoInteger(byteArray) {
+    x = 0;
+
+    for(var i = 0; i < byteArray.length; i++) {
+        x = x << 8;
+        x = x | (byteArray[i] & 0xff);
+    }
+
+    return x;
+}

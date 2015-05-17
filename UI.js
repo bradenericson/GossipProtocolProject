@@ -220,3 +220,7 @@ server.on('main-to-UI', function(message, resourceObject){
     console.log("Received resource: ", resourceObject.resourceId + " | " + resourceObject.mimeType + " | " + resourceObject.resourceSize + " | " + resourceObject.description);
     //message received, could be used to build resource
 });
+
+server.on('main-to-UI-received-resource', function(message, resourceUpdate) {
+
+});
