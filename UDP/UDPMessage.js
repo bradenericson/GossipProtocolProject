@@ -223,3 +223,16 @@ function convertByteArraytoInteger(byteArray) {
 
     return x;
 }
+
+function convertIntegerToByteArray(integer) {
+
+    var byteArray = new Array(4);
+    var timeToLive = Math.floor(integer);
+
+    for(var i = byteArray.length - 1; i >= 0; i--) {
+        byteArray[i] = timeToLive % 256;
+        timeToLive = Math.floor(integer/256);
+    }
+
+    return byteArray;
+}
