@@ -1,5 +1,9 @@
 /**
  * Created by Chad Luangrath on 4/28/2015.
+ *
+ *  Chad, Braden, Matt
+ *
+ *      Class Variables
  */
 
 process.stdin.resume();

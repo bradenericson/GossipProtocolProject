@@ -229,7 +229,7 @@ function deleteResource(resourceName, callback){
                 if(err){
                     callback({error: err, msg: "error trying to delete fill from filesystem"}, null);
                 }else{
-                    callback(null, "success");  //we're good
+                      callback(null, "success");  //we're good
                 }
             });
         }

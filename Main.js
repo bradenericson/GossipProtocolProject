@@ -1,5 +1,48 @@
 /**
  * Created by Chad Luangrath on 4/28/2015.
+ *
+ *      Chad, Braden, Matt
+ *
+ *      Class Variables:
+ *          transceiverChild
+ *              speaker to transceiver
+ *          resourceManagerChild
+ *              speaker to resource manager
+ *          server
+ *              main listener
+ *          UIChild
+ *              speaker to UI
+ *          idFactory
+ *              creates a new idFactory objecy
+ *          searchRequestIds
+ *              stores all our request ids that we have sent out
+ *          getRequestIds
+ *              same thing but holds ids of get requests we send
+ *
+ *      Methods:
+ *          server.on('transceiver-to-main', function(message, data)
+ *              listening from transceiver
+ *          server.on('resourceManager-to-main', function(message, data)
+ *              listening from resource manager
+ *          server.on('ui-resource-get-request', function(message, data)
+ *              listening for get request from UI
+ *          server.on('ui-resource-rename', function(message, data)
+ *              listening for rename of resource coming from UI
+ *          server.on('ui-resource-description', function(message, data)
+ *              listening for resource description coming from UI
+ *          resourceManagerChild.request('ui-resource-description', data, function(status)
+ *              sending request to resource manager, passing it from UI
+ *          server.on('ui-resource-add-tags', function(message, data)
+ *              listening for request to add tags to a specific resource, coming from UI
+ *          server.on('ui-resource-remove-tags', function(message, data)
+ *              listening for request to remove tags from a specific resource, coming from UI
+ *          server.on('ui-resource-search', function(message, searchPhrase)
+ *              listening for a search request for a resource, coming from UI
+ *
+ *      Modification History
+ *          Original Version
+ *              April 28 2013
+ *
  */
 
 //var datagramPacket = require('dgram'); //don't need - all communication done through transceiver
@@ -56,11 +99,9 @@ process.on('message', function (m) {
 });
 
 //WHERE SHIT HAPPENS
+//^I'm leaving this - Matt TODO
 server.on('transceiver-to-main', function(message, data){
-   //data = UDP message
-    //console.log("got UDP message");
     //code that handles what to do with the packet
-
     var udp = new UDPMessage();
 
     if (data != null) {
@@ -123,9 +164,6 @@ server.on('transceiver-to-main', function(message, data){
                 console.log("sent to resourceManager successful")
             })
         }
-        //
-        // passing it on
-        //
 
     }
 
@@ -142,7 +180,7 @@ server.on('transceiver-to-main', function(message, data){
         console.log('main back to transceiver data: ' + data);
     });
     message.reply({message: "success"});
-    //could be a dead packet
+
 });
 
 //listening to messages coming in from resource manager
@@ -167,30 +205,35 @@ server.on('ui-resource-get-request', function(message, data) {
     });
 });
 
+//listening for rename of resource coming from UI
 server.on('ui-resource-rename', function(message, data) {
     resourceManagerChild.request("ui-resource-rename", data, function(status) {
         message.reply(status);
     });
 });
 
+//listening for resource description coming from UI
 server.on('ui-resource-description', function(message, data) {
     resourceManagerChild.request('ui-resource-description', data, function(status) {
         message.reply(status);
     });
 });
 
+//listening for request to add tags to a specific resource, coming from UI
 server.on('ui-resource-add-tags', function(message, data) {
     resourceManagerChild.request('ui-resource-add-tags', data, function(status) {
         message.reply(status);
     });
 });
 
+//listening for request to remove tags from a specific resource, coming from UI
 server.on('ui-resource-remove-tags', function(message, data) {
     resourceManagerChild.request('ui-resource-remove-tags', data, function(status) {
         message.reply(status);
     });
 });
 
+//listening for a search request for a resource, coming from UI
 server.on('ui-resource-search', function(message, searchPhrase) {
 
     var udpMessage = new UDPMessage();
