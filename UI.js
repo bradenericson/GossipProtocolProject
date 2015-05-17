@@ -206,8 +206,18 @@ function help() {
     console.log("help | See a list of available commands");
 }
 
-server.on('main-to-UI', function(message,data){
+server.on('main-to-UI', function(message, udpData){
     console.log('Message received');
     console.log("Received data from Main: ", data);
+
+    var delimiter = udpData.message.splice(0, 1);
+
+    var data = udpData.message.split(delimiter);
+
+    //data[0] = mime type
+    //data[1] = size in bytes
+    //data[2] = description
+    //udpMessage.getID1().id = Resource ID from peer
+    console.log("Received resource: ", udpMessage.getID1().id + " | " + data[0] + " | " + data[1] + " | " + data[2]);
     //message received, could be used to build resource
 });
