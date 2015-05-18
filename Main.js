@@ -205,7 +205,6 @@ server.on('ui-resource-get-request', function(message, data) {
     //could go to resourceManager also go to transceiver
     //data: {resourceId, targetResourceName, timeToLive} <String>
     var partNumber = 0; //we're searching for the very first piece
-    if(!data.hasOwnProperty("timeToLive")){data.timeToLive = 5;}//set timeToLive to 5 if one isn't passed
     var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
 
     for(var i = 0; i < listOfReceivedResources; i++) {
@@ -218,7 +217,7 @@ server.on('ui-resource-get-request', function(message, data) {
     for(var prop in resourceFromCollection) {
         data[prop] = resourceFromCollection[prop];
     }
-
+/*
     resourceManagerChild.request('start-stream', data, function(reply){
         if(reply){
             //only send the request to peers IF the stream opens successfully
@@ -227,7 +226,7 @@ server.on('ui-resource-get-request', function(message, data) {
             });
         }
     });
-
+*/
 
 });
 
