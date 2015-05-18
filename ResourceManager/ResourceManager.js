@@ -390,9 +390,9 @@ server.on('main-to-resourceManager', function(message,udpData){
                            }
                            //readFile = fd;
                            var buffer = new Buffer(456);
-                           fs.read(fd, buffer, 0, 456, (udp.partNumber*456), function(err, num) {
+                           fs.read(fd, buffer, 0, 455, (udp.partNumber*456), function(err, num) {
                                //console.log(buffer.toString('utf-8', 0, num));
-                               udp.bytesFromResource = buffer.toJSON().data;
+                               udp.bytesFromResource = buffer.splice(0,num).toJSON().data;
                                //console.log("hey cool, a byte array: ",buffer.toJSON().data);
                                udp.setId2(udp.getID1()); //switch requestId to second ID
                                udp.setId1(new ID(resource.gossipID)); //switch resourceId to first ID

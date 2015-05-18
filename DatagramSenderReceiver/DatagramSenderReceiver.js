@@ -78,7 +78,7 @@ module.exports = function(datagramSocketInput, packetQueue, packetSizeInput) {
         intervalObject = setInterval(function(){
 
             service.action();
-        },1000);
+        },2);
     };
 
     //begins service.run
