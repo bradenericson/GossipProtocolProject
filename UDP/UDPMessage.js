@@ -111,8 +111,10 @@ module.exports = function() {
     };
 
     self.createForFindResponse = function(resourceId, ttl, message){
-        self.setId2(new ID(convertStringToByteArray(resourceId+"LMAO")));//append extra characters to make it fit the correct size
+        self.setId2(new ID(convertStringToByteArray(resourceId)));//append extra characters to make it fit the correct size
         self.swapID();//swap the IDs
+        console.log("ID1: ", self.getID1().id);
+        console.log("ID2: ", self.getID2().id);
         self.setTimeToLive(new TTL(ttl));//reset the timeToLive
         self.setMessage(convertStringToByteArray(idFactory.idFactory().id + message));//set the message to a randomID and our string shit
 
@@ -196,7 +198,7 @@ module.exports = function() {
 
         //input should ONLY BE 12 LENGTH from Resource Manager + MongoDB. Tack LMAO onto the end
 
-        input += "LMAO";
+        //input += "LMAO";
 
         var bytes = [];
 
@@ -237,9 +239,9 @@ module.exports = function() {
 
         var id1Buffer = new Buffer(self.getID1().id); //we need to keep track of this ID because it is our Request ID
         var id2Buffer = new Buffer(self.getID2().id);
-        console.log("Looking at ttl in UDPMessage class: ",self.getTimeToLive());
+
         var timeToLiveBuffer = new Buffer(convertIntegerToByteArray(self.getTimeToLive().get()));
-        console.log("timeToliveBuffer: ", timeToLiveBuffer);
+
         var messageBuffer = new Buffer(self.getMessage());
         var bufferArray = [];
         bufferArray.push(id1Buffer);

@@ -112,7 +112,7 @@ server.on('transceiver-to-main', function(message, data){
         var resource;
 console.log("The ID ",id2.id);
         //Response to Find Matching Resources Request
-        console.log("the index of the shit: ", searchRequestIds.indexOf((id2.toString())));
+        console.log("the index of the shit: ", searchRequestIds.indexOf(id2.id));
         if (searchRequestIds.indexOf(id2.id) >= 0) {
 
             //if the second id is the same as our original request ID, it's a 'Response to Find Matching Resources Request'

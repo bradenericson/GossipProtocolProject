@@ -46,7 +46,8 @@ var UDP = require("../UDP/UDPMessage.js");
 var messenger = require("messenger");
 var mongoose = require('mongoose');
 var nodeMime = require('node-mime');
-
+var ID = require('../UDP/ID/ID.js');
+var IdFactory = require('../UDP/ID/IDFactory.js');
 var mainSpeaker = messenger.createSpeaker(10000);//speaking to ResourceManager
 var server = messenger.createListener(10002); //listens for messages on port 8000
 
@@ -55,6 +56,8 @@ var path = require('path');
 var Mime = require('mime'); //used for indexing new files
 var RESOURCE_PATH = __dirname + "/../resources/";
 var badWords = ["the", "and", "a", "an", "on", "of", "from", "that", "this", "is", "really", "our"];
+
+var idFactory = new IdFactory();
 
 mongoose.connect('mongodb://localhost/gossip');
 var db = mongoose.connection;
@@ -183,7 +186,8 @@ function indexResourceFiles(){
                                     tags: [""],
                                     location: file,
                                     mimeType: mime,
-                                    size: size
+                                    size: size,
+                                    gossipID: idFactory.idFactory().id
                                 });
                             }
                         });
@@ -391,7 +395,7 @@ server.on('main-to-resourceManager', function(message,udpData){
                     //copy ID
                     udpCopy = udp;
                     string = "|"+data[i].mimeType+"|"+data[i].size+"|"+data[i].description;
-                    udpCopy.createForFindResponse(data[i]._id,10,string);
+                    udpCopy.createForFindResponse(data[i].gossipID,5,string);
 
                     mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
                        //we don't care

@@ -10,7 +10,8 @@ var ResourceSchema   = new Schema({
     tags: Array,
     location: String,
     mimeType: String,
-    size: Number
+    size: Number,
+    gossipID: Array
 });
 
 module.exports = mongoose.model('Resource', ResourceSchema);
