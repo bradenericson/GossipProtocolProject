@@ -400,6 +400,7 @@ server.on('main-to-resourceManager', function(message,udpData){
                     mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
                        //we don't care
                     });
+                    console.log('sending rsponse to Find Matching Resource Request');
                     //resourceID is 12 bytes long
                     //put data[i]
                     //create byte array, put info in it,

@@ -113,6 +113,7 @@ module.exports = function() {
 
             timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,4)));
             var id3 = datagramPacket_in.splice(0,16); //garbage ID
+            //var id3 = datagramPacket_in.splice(0,16); //garbage ID
             //console.log("ID3: ",id3);
             //ignore the next 16 bytes because it's just extra padding (a random ID)
             message = new Buffer(datagramPacket_in);
@@ -138,8 +139,9 @@ module.exports = function() {
         console.log("ID1: ", self.getID1().id);
         console.log("ID2: ", self.getID2().id);
         self.setTimeToLive(new TTL(ttl));//reset the timeToLive
-        self.setMessage(convertStringToByteArray(idFactory.idFactory().id + message));//set the message to a randomID and our string shit
-
+        var randomID = idFactory.idFactory().id;
+        self.setMessage(randomID.concat(convertStringToByteArray(message)));//set the message to a randomID and our string shit
+        console.log("ID3: ", randomID.toString());
         return self;
     };
 
