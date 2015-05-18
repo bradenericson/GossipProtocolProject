@@ -49,7 +49,7 @@ var outgoingPacketQueue = new PacketQueue();
 var datagramSocket = new DatagramSocket();
 var addressBook = new AddressBook();
 
-//addressBook.addAddress("10.20.51.220"); //Braden
+addressBook.addAddress("10.20.51.220"); //Braden
 
 var receiver = new DatagramReceiver(datagramSocket, incomingPacketQueue, packetSize);
 var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize, addressBook);
@@ -65,6 +65,7 @@ server.on('main-to-transceiver', function (message, messageToSend) {
     //console.log("messageToSend UDPMessage: ", messageToSend);
     //outgoingPacketQueue.add(messageToSend);
 
+    messageToSend = new Buffer(messageToSend);
     outgoingPacketQueue.add(messageToSend);
     message.reply("success");
 });

@@ -28,8 +28,11 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize, addre
         if(service.queue.length() > 0){
             var message = service.queue.remove();
 
+            console.log("message in datagramsender is: ", message.data);
             for(var i=0; i<addresses.length; i++){
-                service.socket.send(message, 0, message.length, service.getPort(), addresses[i], function(){
+                console.log("sending to address: ", addresses[i]);
+                console.log("sending on port: ", service.getPort());
+                service.socket.send(message.data, 0, message.length, service.getPort(), addresses[i], function(){
                     console.log("message sent");
                 });
             }
