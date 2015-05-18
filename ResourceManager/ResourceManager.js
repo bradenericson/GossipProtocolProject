@@ -417,7 +417,7 @@ server.on('main-to-resourceManager', function(message,udpData){
 
 
            }else{
-                   console.log("GOT A FIND REQUEST");
+                   //console.log("GOT A FIND REQUEST");
                    //assuming it's a FIND request
                    var msg = new Buffer(udp.getMessage()).toString();
 

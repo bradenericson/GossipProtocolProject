@@ -180,7 +180,7 @@ module.exports = function() {
 
     self.createForGetResponse = function(datagramPacket_in) {
         if (typeof datagramPacket_in != "undefined") {
-            datagramPacket_in = datagramPacket_in.toJSON().data;
+            datagramPacket_in = datagramPacket_in.data;
 
             id1 = new ID(datagramPacket_in.splice(0,16));
             id2 = new ID(datagramPacket_in.splice(0,16));

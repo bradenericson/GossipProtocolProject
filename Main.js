@@ -149,26 +149,28 @@ server.on('transceiver-to-main', function(message, data){
 
         //if we are building a resource
         else if (getRequestIds.indexOf(id2.id.toString()) >= 0) {
+            //console.log("HORRRRRY SHIT!!!! Data: ", data);
             udp.createForGetResponse(data);
 
-            if (udp.getTimeToLive() > 0) {
+            if (udp.getTimeToLive().get() > 0) {
                 udp.getTimeToLive().decrement();
 
                 resource = {
                     resourceId: udp.getID1().id,
                     partNumber: udp.partNumber,
-                    bytesFromResource: udp.getMessage()
+                    bytesFromResource: udp.bytesFromResource
                 };
 
-                resourceManagerChild.request('main-to-resourceManager-build', resource, function (data) {
-                    //console.log('main to resource manager data: ' + data);
-                });
+                //console.log("resource: ", resource);
+
+                //resourceManagerChild.request('main-to-resourceManager-build', resource, function (data) {
+                //    //console.log('main to resource manager data: ' + data);
+                //});
             }
         }
 
         else {
             //pass it to resourceManager to deal with
-            console.log("data being passed to RM: ", data);
             resourceManagerChild.request('main-to-resourceManager', data, function () {
                 console.log("sent to resourceManager successful")
             })
