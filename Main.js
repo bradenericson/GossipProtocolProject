@@ -205,7 +205,7 @@ server.on('ui-resource-get-request', function(message, data) {
      data.timeToLive: Optional time to live parameter passed by user
      */
 
-    var partNumber = 0; //we're searching for the very first piece
+    var partNumber = 1; //we're searching for the very first piece
 
     //create a UDP object for get Request
     var udp = new UDPMessage();

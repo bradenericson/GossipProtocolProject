@@ -390,7 +390,7 @@ server.on('main-to-resourceManager', function(message,udpData){
                            }
                            //readFile = fd;
                            var buffer = new Buffer(456);
-                           fs.read(fd, buffer, 0, 456, (udp.partNumber*456), function(err, num) {
+                           fs.read(fd, buffer, 0, 456, ((udp.partNumber-1)*456), function(err, num) {
                                //console.log(buffer.toString('utf-8', 0, num));
                                udp.bytesFromResource = buffer.slice(0,num).toJSON().data;
                                //console.log("hey cool, a byte array: ",buffer.toJSON().data);
