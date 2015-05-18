@@ -358,6 +358,8 @@ server.on('main-to-resourceManager', function(message,udpData){
         if(udp.getTimeToLive().get() === 0){
             //make sure we don't forward dead packets
             doForward = false;
+        }else{
+            udp.getTimeToLive().decrement();
         }
 
         /*
