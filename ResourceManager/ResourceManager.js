@@ -73,7 +73,7 @@ var writeStream = null;
 var Resource = require('./models/Resource/Resource.js');
 
 var numFileParts; //the number of file parts a GET resource is going to be
-
+var currentPartNumber;
 indexResourceFiles();
 //editDescription("test.txt", "Saturday morning finals are unethical and should be canceled", function(err, msg){
 //   console.log(err, msg);
@@ -390,7 +390,7 @@ server.on('main-to-resourceManager', function(message,udpData){
                            }
                            //readFile = fd;
                            var buffer = new Buffer(456);
-                           fs.read(fd, buffer, 0, 456, (udp.partNumber*456), function(err, num) {
+                           fs.read(fd, buffer, 0, 456, ((udp.partNumber-1)*456), function(err, num) { //partNumber should NEVER be zero
                                //console.log(buffer.toString('utf-8', 0, num));
                                udp.bytesFromResource = buffer.slice(0,num).toJSON().data;
                                //console.log("hey cool, a byte array: ",buffer.toJSON().data);
@@ -482,24 +482,29 @@ server.on('main-to-resourceManager-build', function(message, resource){
 
     console.log("Writing partNumber: ", resource.partNumber);
     console.log("Writing this number of bytes: ", resource.bytesFromResource.length);
-    writeStream.write(new Buffer(resource.bytesFromResource));
+    if(resource.partNumber === currentPartNumber){
+        writeStream.write(new Buffer(resource.bytesFromResource));
+        currentPartNumber++;
 
-    if (resource.partNumber < numFileParts) {
-        //console.log("in: resource.partNumber < numFileParts");
-        var udpPacket = new UDP();
-        udpPacket.createForGetRequest(resource.resourceId.toString(), resource.partNumber+1, 5, new ID(resource.requestId));
-        //console.log("resource.requestId: ", resource.requestId);
-        //console.log("numFileParts: ", numFileParts);
-        //console.log("typeof resource.partNumber: ", typeof resource.partNumber);
-        mainSpeaker.request('resourceManager-to-main', udpPacket.createUdpPacket(), function(status) {
-            console.log("Received status in ResourceManager: ", status);
-        });
+        if (resource.partNumber < numFileParts) {
+            //console.log("in: resource.partNumber < numFileParts");
+            var udpPacket = new UDP();
+            udpPacket.createForGetRequest(resource.resourceId.toString(), currentPartNumber, 5, new ID(resource.requestId));
+            //console.log("resource.requestId: ", resource.requestId);
+            //console.log("numFileParts: ", numFileParts);
+            //console.log("typeof resource.partNumber: ", typeof resource.partNumber);
+            mainSpeaker.request('resourceManager-to-main', udpPacket.createUdpPacket(), function(status) {
+                console.log("Received status in ResourceManager: ", status);
+            });
+        }
+        else {
+            console.log("Download complete!");
+            writeStream.end(); //close the stream
+            writeStream = null;
+        }
     }
-    else {
-        console.log("Download complete!");
-        writeStream.end(); //close the stream
-        writeStream = null;
-    }
+
+
 
     //function(resourceId, partNumber, timeToLive, requestId) {
 
@@ -510,7 +515,6 @@ server.on('start-writeStream', function(message, data) {
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
     //console.log("data in start-writeStream: ", data);
-
     numFileParts = Math.ceil(data.resourceSize / 456);
     console.log("data.mimeType: ", data.mimeType);
     var fileExtension = Mime.extension(data.mimeType);
@@ -533,6 +537,7 @@ server.on('start-writeStream', function(message, data) {
     if (writeStream === null) {
         if (data !== null) {
             writeStream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
+            currentPartNumber = 1;
             message.reply("success");
         }
         else {

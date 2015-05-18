@@ -156,10 +156,10 @@ server.on('transceiver-to-main', function(message, data){
                 udp.getTimeToLive().decrement();
 
                 resource = {
-                    resourceId: udp.getID1().id,
-                    partNumber: udp.partNumber,
-                    bytesFromResource: udp.bytesFromResource,
-                    requestId: udp.getID2().id
+                    resourceId: udp.getID1().id, //byteArray
+                    partNumber: udp.partNumber,  //1
+                    bytesFromResource: udp.bytesFromResource, //shit ton of bytes
+                    requestId: udp.getID2().id //byteArray
                 };
 
                 //console.log("resource: ", resource);
@@ -205,7 +205,7 @@ server.on('ui-resource-get-request', function(message, data) {
      data.timeToLive: Optional time to live parameter passed by user
      */
 
-    var partNumber = 0; //we're searching for the very first piece
+    var partNumber = 1; //we're searching for the very first piece
 
     //create a UDP object for get Request
     var udp = new UDPMessage();
@@ -234,7 +234,7 @@ server.on('ui-resource-get-request', function(message, data) {
     }
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
-    console.log("data in Main.js: ", data);
+    //console.log("data in Main.js: ", data);
 
     resourceManagerChild.request('start-writeStream', data, function(reply){
         if(reply === "success"){
