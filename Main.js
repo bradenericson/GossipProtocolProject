@@ -159,7 +159,7 @@ server.on('transceiver-to-main', function(message, data){
                     resourceId: udp.getID1().id,
                     partNumber: udp.partNumber,
                     bytesFromResource: new Buffer(udp.bytesFromResource).toString(),
-                    requestId: udp.getID2().id,
+                    requestId: udp.getID2().id
                 };
 
                 //console.log("resource: ", resource);

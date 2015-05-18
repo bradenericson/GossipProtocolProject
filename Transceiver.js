@@ -49,10 +49,10 @@ var outgoingPacketQueue = new PacketQueue();
 var datagramSocket = new DatagramSocket();
 var addressBook = new AddressBook();
 
-addressBook.addAddress("10.20.51.220"); //Braden
-//addressBook.addAddress("10.20.51.44");
-//addressBook.addAddress("10.20.60.75");
-//addressBook.addAddress("140.209.121.104");
+//addressBook.addAddress("10.20.51.220"); //Braden
+addressBook.addAddress("10.20.51.44");
+addressBook.addAddress("10.20.60.75");
+addressBook.addAddress("140.209.121.104");
 var receiver = new DatagramReceiver(datagramSocket, incomingPacketQueue, packetSize);
 var sender = new DatagramSender(datagramSocket, outgoingPacketQueue, packetSize, addressBook);
 

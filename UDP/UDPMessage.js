@@ -300,6 +300,7 @@ module.exports = function() {
 
         //check and see if this is generating a packet for a GET request
         if(self.hasOwnProperty("partNumber")){
+            console.log("sending this part: "+ self.partNumber);
             bufferArray.push(new Buffer(convertIntegerToByteArray(self.partNumber)));
             if(self.hasOwnProperty("bytesFromResource")){
                 //console.log(new Buffer(self.bytesFromResource).toString());
@@ -338,11 +339,11 @@ function convertByteArraytoInteger(byteArray) {
 function convertIntegerToByteArray(integer) {
 
     var byteArray = new Array(4);
-    var timeToLive = Math.floor(integer);
+    var x = Math.floor(integer);
 
     for(var i = byteArray.length - 1; i >= 0; i--) {
-        byteArray[i] = timeToLive % 256;
-        timeToLive = Math.floor(integer/256);
+        byteArray[i] = x & 0xff;
+        x = x >> 8;
     }
 
     return byteArray;
