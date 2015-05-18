@@ -65,7 +65,6 @@ server.on('main-to-transceiver', function (message, messageToSend) {
     //console.log("messageToSend UDPMessage: ", messageToSend);
     //outgoingPacketQueue.add(messageToSend);
 
-    messageToSend = new Buffer(messageToSend);
     outgoingPacketQueue.add(messageToSend);
     message.reply("success");
 });
