@@ -73,6 +73,8 @@ var writeStream = null;
 var Resource = require('./models/Resource/Resource.js');
 
 var numFileParts; //the number of file parts a GET resource is going to be
+var reRequestTimeout; //timeout for re-getting packet
+var lastPart;
 
 indexResourceFiles();
 //editDescription("test.txt", "Saturday morning finals are unethical and should be canceled", function(err, msg){
@@ -484,21 +486,30 @@ server.on('main-to-resourceManager-build', function(message, resource){
     console.log("Writing this number of bytes: ", resource.bytesFromResource.length);
     writeStream.write(new Buffer(resource.bytesFromResource));
 
-    if (resource.partNumber < numFileParts) {
+    if (resource.partNumber <= numFileParts) {
         //console.log("in: resource.partNumber < numFileParts");
         var udpPacket = new UDP();
         udpPacket.createForGetRequest(resource.resourceId.toString(), resource.partNumber+1, 5, new ID(resource.requestId));
+       /*reRequestTimeout = setTimeout(function(){
+            mainSpeaker.request('resourceManager-to-main', udpPacket.createUdpPacket(), function(status) {
+                console.log("Received status in ResourceManager: ", status);
+
+            });
+           console.log("rerequesting packet number: ", udpPacket.partNumber+1);
+        },3000);*/
         //console.log("resource.requestId: ", resource.requestId);
         //console.log("numFileParts: ", numFileParts);
         //console.log("typeof resource.partNumber: ", typeof resource.partNumber);
         mainSpeaker.request('resourceManager-to-main', udpPacket.createUdpPacket(), function(status) {
             console.log("Received status in ResourceManager: ", status);
+
         });
     }
     else {
         console.log("Download complete!");
         writeStream.end(); //close the stream
         writeStream = null;
+        //clearTimeout(reRequestTimeout);
     }
 
     //function(resourceId, partNumber, timeToLive, requestId) {
