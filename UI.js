@@ -238,7 +238,7 @@ function requestResource(resourceRequest) {
     console.log("resourceRequest: ", resourceRequest);
 
     mainSpeaker.request('ui-resource-get-request', resourceRequest, function(status) {
-    
+
     });
 }
 

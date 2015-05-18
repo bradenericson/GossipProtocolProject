@@ -148,10 +148,16 @@ module.exports = function() {
     //TODO
     self.createForGetRequest = function(resourceId, partNumber, timeToLive) {
         var id1 = idFactory.idFactory();
+
+        //console.log("resourceId: ", resourceId);
+
         resourceId = resourceId.trim().split(',');
         for(var i=0;i<resourceId.length; i++){
-            resourceId[i] = Number(resourceId);
+            resourceId[i] = Number(resourceId[i].trim());
         }
+
+        //console.log("resourceId: ", resourceId);
+
         var id2 = new ID(resourceId);//passing in byte array representing resourceId
         var id3 = idFactory.idFactory(); //garbage ID
         self.setId1(id1);
@@ -159,11 +165,12 @@ module.exports = function() {
         self.setTimeToLive(new TTL(timeToLive));
         self.partNumber = partNumber;
         self.setMessage(id3.id);
-        console.log("ID1 :", self.getID1().id);
-        console.log("ID2 :", self.getID2().id);
-        console.log("TTL :", self.getTimeToLive().get());
-        console.log("part :", self.partNumber);
-        console.log("msg :", self.getMessage());
+
+        //console.log("ID1 :", self.getID1().id);
+        //console.log("ID2 :", self.getID2().id);
+        //console.log("TTL :", self.getTimeToLive().get());
+        //console.log("part :", self.partNumber);
+        //console.log("msg :", self.getMessage());
     };
 
     self.createForGetResponse = function(datagramPacket_in) {
