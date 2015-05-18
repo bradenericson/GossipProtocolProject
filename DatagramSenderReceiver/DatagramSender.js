@@ -27,7 +27,7 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize, addre
         var addresses = service.getAddresses();
         if(service.queue.length() > 0){
             var message = service.queue.remove();
-            console.log(service.queue.length());
+            //console.log(service.queue.length());
 
           //  console.log("message in datagramsender is: ", message.data);
             for(var i=0; i<addresses.length; i++){

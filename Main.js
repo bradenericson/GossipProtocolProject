@@ -207,8 +207,15 @@ server.on('ui-resource-get-request', function(message, data) {
     var partNumber = 0; //we're searching for the very first piece
     var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
 
+    //console.log("listOfReceivedResources: ", listOfReceivedResources);
+
     for(var i = 0; i < listOfReceivedResources.length; i++) {
-        if (listOfReceivedResources[i].resourceId === data.resourceId) {
+
+        //console.log("listOfReceivedResources[i].resourceId.toString(): ", listOfReceivedResources[i].resourceId.toString());
+        //console.log("data.resourceId.toString(): ", data.resourceId.toString());
+
+        if (listOfReceivedResources[i].resourceId.toString() === data.resourceId.toString()) {
+            //console.log("Resource found!");
             resourceFromCollection = listOfReceivedResources[i];
             break;
         }
@@ -221,6 +228,8 @@ server.on('ui-resource-get-request', function(message, data) {
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
 
+
+    //console.log("data: ", data);
 /*
     resourceManagerChild.request('start-stream', data, function(reply){
         if(reply){
@@ -264,6 +273,8 @@ server.on('ui-resource-remove-tags', function(message, data) {
 
 //listening for a search request for a resource, coming from UI
 server.on('ui-resource-search', function(message, searchPhrase) {
+
+    //listOfReceivedResources = []; //reset the listOfReceivedResources array to an empty array when we initiate a new search
 
     var udpMessage = new UDPMessage();
     var ttl = new TimeToLive(5);

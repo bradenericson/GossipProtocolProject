@@ -392,7 +392,7 @@ server.on('main-to-resourceManager', function(message,udpData){
             else{
                 var udpCopy;
                 var string;
-                console.log(data.length, data);
+                //console.log(data.length, data);
                 for(var i=0; i < data.length; i++) {
                     //copy ID
                     console.log("looping for the ith time: ", i);
@@ -403,7 +403,7 @@ server.on('main-to-resourceManager', function(message,udpData){
                     mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
                        //we don't care
                     });
-                    console.log('sending rsponse to Find Matching Resource Request');
+                    console.log('sending response to Find Matching Resource Request');
                     //resourceID is 12 bytes long
                     //put data[i]
                     //create byte array, put info in it,
