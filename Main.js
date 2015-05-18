@@ -271,10 +271,10 @@ server.on('ui-resource-search', function(message, searchPhrase) {
 
     var searchUdpMessage = udpMessage.createForFindRequest(id1, id2, ttl, searchPhrase);
 
-    //console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1());
-    //console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2());
-    //console.log("searchUdpMessage's TimeToLive: ", searchUdpMessage.getTimeToLive().get());
-    //console.log("searchUdpMessage's message: ", searchUdpMessage.getMessage());
+    console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1().id);
+    console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2().id);
+    console.log("searchUdpMessage's TimeToLive: ", searchUdpMessage.getTimeToLive().get());
+    console.log("searchUdpMessage's message: ", searchUdpMessage.getMessage());
 
     transceiverChild.request('main-to-transceiver', searchUdpMessage.createUdpPacket(), function(status) {
         if (status === "success") {

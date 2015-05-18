@@ -237,7 +237,8 @@ module.exports = function() {
 
         var id1Buffer = new Buffer(self.getID1().id); //we need to keep track of this ID because it is our Request ID
         var id2Buffer = new Buffer(self.getID2().id);
-        var timeToLiveBuffer = new Buffer(self.getTimeToLive().get());
+        var timeToLiveBuffer = new Buffer(convertIntegerToByteArray(self.getTimeToLive().get()));
+        console.log("timeToliveBuffer: ", timeToLiveBuffer);
         var messageBuffer = new Buffer(self.getMessage());
         var bufferArray = [];
         bufferArray.push(id1Buffer);
