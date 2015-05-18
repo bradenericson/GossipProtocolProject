@@ -300,7 +300,7 @@ module.exports = function() {
 
         //check and see if this is generating a packet for a GET request
         if(self.hasOwnProperty("partNumber")){
-            console.log("sending this part: "+ self.partNumber);
+            //console.log("sending this part: "+ self.partNumber);
             bufferArray.push(new Buffer(convertIntegerToByteArray(self.partNumber)));
             if(self.hasOwnProperty("bytesFromResource")){
                 //console.log(new Buffer(self.bytesFromResource).toString());

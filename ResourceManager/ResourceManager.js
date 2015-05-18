@@ -480,6 +480,8 @@ server.on('main-to-resourceManager-build', function(message, resource){
     //    resourceId, partNumber, bytesFromResource, requestId
     //};
 
+    console.log("Writing partNumber: ", resource.partNumber);
+    console.log("Writing this number of bytes: ", resource.bytesFromResource.length);
     writeStream.write(new Buffer(resource.bytesFromResource));
 
     if (resource.partNumber < numFileParts) {
