@@ -113,7 +113,7 @@ module.exports = function() {
     self.createForFindResponse = function(resourceId, ttl, message){
         self.setId2(new ID(convertStringToByteArray(resourceId+"LMAO")));//append extra characters to make it fit the correct size
         self.swapID();//swap the IDs
-        self.setTimeToLive(ttl);//reset the timeToLive
+        self.setTimeToLive(new TTL(ttl));//reset the timeToLive
         self.setMessage(convertStringToByteArray(idFactory.idFactory().id + message));//set the message to a randomID and our string shit
 
         return self;
@@ -237,6 +237,7 @@ module.exports = function() {
 
         var id1Buffer = new Buffer(self.getID1().id); //we need to keep track of this ID because it is our Request ID
         var id2Buffer = new Buffer(self.getID2().id);
+        console.log("Looking at ttl in UDPMessage class: ",self.getTimeToLive());
         var timeToLiveBuffer = new Buffer(convertIntegerToByteArray(self.getTimeToLive().get()));
         console.log("timeToliveBuffer: ", timeToLiveBuffer);
         var messageBuffer = new Buffer(self.getMessage());

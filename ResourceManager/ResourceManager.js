@@ -346,7 +346,7 @@ server.on('main-to-resourceManager', function(message,udpData){
     //this is for every packet that is not a response to something we asked for
     //we need to look at the request ID, see if we have the resource
     var udp = new UDP();
-    console.log("here i am: ", udpData);
+    //console.log("here i am: ", udpData);
     udp.createFromDatagramPacket(udpData);
     console.log("ID1: ", udp.getID1().id);
     console.log("ID2: ", udp.getID2().id);
@@ -389,9 +389,9 @@ server.on('main-to-resourceManager', function(message,udpData){
                 var string;
                 for(var i=0; i < data.length; i++) {
                     //copy ID
-                    UdpCopy = udp;
+                    udpCopy = udp;
                     string = "|"+data[i].mimeType+"|"+data[i].size+"|"+data[i].description;
-                    udpCopy.createForFindResponse(data[i]._id,5,string);
+                    udpCopy.createForFindResponse(data[i]._id,10,string);
 
                     mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
                        //we don't care
