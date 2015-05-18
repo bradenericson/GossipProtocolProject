@@ -230,10 +230,8 @@ server.on('ui-resource-get-request', function(message, data) {
     }
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
+    //console.log("data in Main.js: ", data);
 
-
-    //console.log("data: ", data);
-/*
     resourceManagerChild.request('start-stream', data, function(reply){
         if(reply){
             //only send the request to peers IF the stream opens successfully
@@ -242,7 +240,7 @@ server.on('ui-resource-get-request', function(message, data) {
             });
         }
     });
-*/
+
 
 });
 

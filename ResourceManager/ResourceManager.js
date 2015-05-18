@@ -45,7 +45,6 @@
 var UDP = require("../UDP/UDPMessage.js");
 var messenger = require("messenger");
 var mongoose = require('mongoose');
-var nodeMime = require('node-mime');
 var ID = require('../UDP/ID/ID.js');
 var IdFactory = require('../UDP/ID/IDFactory.js');
 var mainSpeaker = messenger.createSpeaker(10000);//speaking to ResourceManager
@@ -54,6 +53,7 @@ var server = messenger.createListener(10002); //listens for messages on port 800
 var fs = require('fs');
 var path = require('path');
 var Mime = require('mime'); //used for indexing new files
+
 var RESOURCE_PATH = __dirname + "/../resources/";
 var badWords = ["the", "and", "a", "an", "on", "of", "from", "that", "this", "is", "really", "our"];
 
@@ -456,45 +456,50 @@ server.on('main-to-resourceManager-build', function(message, resourcePart) {
 
 server.on('start-stream', function(message, data) {
 
-    var numFileParts = Math.ceil(data.resourceSize / 456);
-    var fileExtension = mimeType.extension(data.mimeType);
+    //console.log("data in start-stream: ", data);
 
-    data.targetResourceName = data.targetResourceName.substring(0, data.targetResourceName.indexOf(".")); //get rid of any supplied extensions from the user
+    var numFileParts = Math.ceil(data.resourceSize / 456);
+    var fileExtension = Mime.extension(data.mimeType);
+
+    if (data.targetResourceName.indexOf('.') > 0) {
+        data.targetResourceName = data.targetResourceName.substring(0, data.targetResourceName.indexOf(".")); //get rid of any supplied extensions from the user
+    }
+
     //console.log("Beginning to write file named: " + data.targetResourceName + "." + fileExtension);
 
-    if (stream === null) {
-        if (resourceFromCollection != null) {
-            stream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
-            stream.once('open', function(fd) {
-                isFileDone = false;
-                interval = setInterval(function() {
-                    if (fileChunk !== null) {
-                        stream.write(fileChunk);
-
-                        if (packetsReceived == numFileParts) {
-                            isFileDone = true;
-                        }
-
-                        fileChunk = null;
-                    }
-
-                    if (isFileDone) {
-
-                        stream.end(); //close the stream
-                        clearInterval(interval);
-                        fileChunk = null;
-                    }
-                }, 1000);
-            });
-            message.reply("success");
-        }
-        else {
-            message.reply("resourceId wasn't a valid ID");
-            stream.end();
-            clearInterval(interval);
-        }
-    }
-    else {
-        message.reply("stream is already open");
-    }
+    //if (stream === null) {
+    //    if (resourceFromCollection != null) {
+    //        stream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
+    //        stream.once('open', function(fd) {
+    //            isFileDone = false;
+    //            interval = setInterval(function() {
+    //                if (fileChunk !== null) {
+    //                    stream.write(fileChunk);
+    //
+    //                    if (packetsReceived == numFileParts) {
+    //                        isFileDone = true;
+    //                    }
+    //
+    //                    fileChunk = null;
+    //                }
+    //
+    //                if (isFileDone) {
+    //
+    //                    stream.end(); //close the stream
+    //                    clearInterval(interval);
+    //                    fileChunk = null;
+    //                }
+    //            }, 1000);
+    //        });
+    //        message.reply("success");
+    //    }
+    //    else {
+    //        message.reply("resourceId wasn't a valid ID");
+    //        stream.end();
+    //        clearInterval(interval);
+    //    }
+    //}
+    //else {
+    //    message.reply("stream is already open");
+    //}
 });
