@@ -187,6 +187,10 @@ server.on('transceiver-to-main', function(message, data){
 //listening to messages coming in from resource manager
 server.on('resourceManager-to-main', function(message, data) {
 
+    //This listener will listen for packets that we're forwarding as well. Send those back to transceiver in order to be forwarded on.
+        //--ResourceManager was needed to distinguish what type of packets we received. Those that we CANNOT FULFILL, we just pass onto transceiver
+        //--from here.
+
     //get something from resource manager usually goes to transceiver
     transceiverChild.request('main-to-transceiver', data, function(data) {
         console.log('data sending from main to transceiver: ' + data);
