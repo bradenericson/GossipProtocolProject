@@ -449,7 +449,7 @@ server.on('main-to-resourceManager', function(message,udpData){
                                mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
                                    //we don't care
                                });
-                               console.log('sending response to Find Matching Resource Request');
+                               //.console.log('sending response to Find Matching Resource Request');
                                //resourceID is 12 bytes long
                                //put data[i]
                                //create byte array, put info in it,
@@ -523,7 +523,7 @@ server.on('start-writeStream', function(message, data) {
     //console.log("data in start-writeStream: ", data);
 
     numFileParts = Math.ceil(data.resourceSize / 456);
-    console.log("data.mimeType: ", data.mimeType);
+    //console.log("data.mimeType: ", data.mimeType);
     var fileExtension = Mime.extension(data.mimeType);
 
     if (data.targetResourceName.indexOf('.') > 0) {

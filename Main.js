@@ -234,7 +234,7 @@ server.on('ui-resource-get-request', function(message, data) {
     }
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
-    console.log("data in Main.js: ", data);
+    //console.log("data in Main.js: ", data);
 
     resourceManagerChild.request('start-writeStream', data, function(reply){
         if(reply === "success"){
@@ -245,7 +245,7 @@ server.on('ui-resource-get-request', function(message, data) {
             //console.log("udp.createUdpPacket: ", udpPacket);
 
             transceiverChild.request('main-to-transceiver', udpPacket, function (data) {
-                console.log('data sending from transceiver to main: ' + data);
+                //console.log('data sending from transceiver to main: ' + data);
                 if (data === "success") {
                     getRequestIds.push(udp.getID1().id.toString());
                     //console.log("getRequestIds after pushing new GET Request ID onto it: ", getRequestIds);
@@ -294,7 +294,7 @@ server.on('ui-resource-search', function(message, searchPhrase) {
     //listOfReceivedResources = []; //reset the listOfReceivedResources array to an empty array when we initiate a new search
 
     var udpMessage = new UDPMessage();
-    var ttl = new TimeToLive(5);
+    var ttl = new TimeToLive(3);
 
     var id1 = idFactory.idFactory();
     var id2 = idFactory.idFactory();
