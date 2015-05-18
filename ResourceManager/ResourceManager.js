@@ -68,11 +68,11 @@ db.once('open', function (callback) {
     console.log('successful connection')
 });
 
-var stream = null;
-
+var writeStream = null;
+var readFile = null;
 var isFileDone = true;
 var fileChunk;
-var interval;
+
 
 var packetsReceived = 0;
 
@@ -372,19 +372,54 @@ server.on('main-to-resourceManager', function(message,udpData){
         */
 
 
-        console.log("before callback");
+
         getFileFromDB(udp.getID2().id, function(err, resources){
-            console.log("aftercallback");
            if(err){
                console.log("MONGO ERROR: ", err);
            }else{
                if(resources.length > 0){
                    //this is a request to GET resource
                    var resource = resources[0];
-                   console.log("The resource we get from mongo GET: ",resource);
-               }else{
+                   //console.log("The resource we get from mongo GET: ",resource);
+                   // { _id, name, description, location, mimeType, size, __v, gossipID, tags }
+                   console.log("UDP: ", udp.getMessage());
+                   //udp.getMessage().splice(0,16); //removes random ID
+                   udp.setPartNumber(udp.getMessage().splice(16,20));
+                   console.log("partNumber: ", udp.partNumber);
+                   var packet;
+                  // if(Number(udp.partNumber) === 0){
+                       fs.open(RESOURCE_PATH + resource.location, 'r', function(status, fd) {
+                           if (status) {
+                               console.log(status.message);
+                               return;
+                           }
+                           //readFile = fd;
+                           var buffer = new Buffer(456);
+                           fs.read(fd, buffer, 0, 456, (udp.partNumber*456), function(err, num) {
+                               //console.log(buffer.toString('utf-8', 0, num));
+                               udp.bytesFromResource = buffer.toJSON().data;
+                               //console.log("hey cool, a byte array: ",buffer.toJSON().data);
+                               udp.setId2(udp.getID1()); //switch requestId to second ID
+                               udp.setId1(new ID(resource.gossipID)); //switch resourceId to first ID
+
+
+                               packet = udp.createUdpPacket();
+                                mainSpeaker.request('resourceManager-to-main', packet, function(reply){
+                                    //nothing here
+                                })
+                           });
+                       });
+                  // }else{
+                       //readStream.read()
+                  // }
+
+                   //return the chunk
+
+
+           }else{
+                   console.log("GOT A FIND REQUEST");
                    //assuming it's a FIND request
-                   var msg = udp.getMessage().toString();
+                   var msg = new Buffer(udp.getMessage()).toString();
 
                    var tags = msg.split(" ");
 
@@ -395,7 +430,9 @@ server.on('main-to-resourceManager', function(message,udpData){
                            }
                        }
                    }
+
                    var requestID = udp.getID1().id;
+
                    getFromDatabase(tags, function(err, data){
                        if(err){
                            console.error(err);
@@ -462,10 +499,10 @@ server.on('main-to-resourceManager-build', function(message, resourcePart) {
     packetsReceived++;
 });
 
-server.on('start-stream', function(message, data) {
+server.on('start-writeStream', function(message, data) {
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
-    //console.log("data in start-stream: ", data);
+    //console.log("data in start-writeStream: ", data);
 
     var numFileParts = Math.ceil(data.resourceSize / 456);
     var fileExtension = Mime.extension(data.mimeType);
@@ -476,8 +513,8 @@ server.on('start-stream', function(message, data) {
 
     //console.log("Beginning to write file named: " + data.targetResourceName + "." + fileExtension);
 
-    //console.log("is stream null? ", stream === null);
-    //console.log("stream: ", stream);
+    //console.log("is writeStream null? ", writeStream === null);
+    //console.log("writeStream: ", writeStream);
     //console.log("is data null? ", data === null);
 
     //var byteArray1 = [66,114,97,100,101,110,32,108,105,107,101,115,32,98,111,111,98,105,101,115,32,92,114,92,110];
@@ -485,9 +522,9 @@ server.on('start-stream', function(message, data) {
 
     //var bradensBuffer = new Buffer(byteArray1.concat(byteArray2));
 
-    if (stream === null) {
+    if (writeStream === null) {
         if (data !== null) {
-            stream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
+            writeStream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
             message.reply("success");
         }
         else {
@@ -495,7 +532,7 @@ server.on('start-stream', function(message, data) {
         }
     }
     else {
-        message.reply("stream is already open");
+        message.reply("writeStream is already open");
     }
 });
 

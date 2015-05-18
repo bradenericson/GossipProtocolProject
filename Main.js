@@ -232,9 +232,9 @@ server.on('ui-resource-get-request', function(message, data) {
 
     //console.log("data in Main.js: ", data);
 
-    resourceManagerChild.request('start-stream', data, function(reply){
+    resourceManagerChild.request('start-writeStream', data, function(reply){
         if(reply === "success"){
-            //only send the request to peers IF the stream opens successfully
+            //only send the request to peers IF the writeStream opens successfully
 
             var udpPacket = udp.createUdpPacket();
 

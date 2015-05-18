@@ -93,12 +93,17 @@ module.exports = function() {
             //var id3 = datagramPacket_in.splice(0,16); //garbage ID
             //console.log("ID3: ",id3);
             //ignore the next 16 bytes because it's just extra padding (a random ID)
-            message = new Buffer(datagramPacket_in);
+            message = datagramPacket_in; //LEAVE THIS AS A BUFFER IDIOT
         }
         else {
             throw new Error("The UDP message class did not receive a datagram");
         }
     };
+
+    self.setPartNumber = function(byteArray){
+        self.partNumber = convertByteArraytoInteger(byteArray);
+    };
+
 
     self.createForReceivingFindRequest = function(datagramPacket_in) {
 
@@ -175,14 +180,14 @@ module.exports = function() {
 
     self.createForGetResponse = function(datagramPacket_in) {
         if (typeof datagramPacket_in != "undefined") {
-            datagramPacket_in = datagramPacket_in.data;
+            datagramPacket_in = datagramPacket_in.toJSON().data;
 
             id1 = new ID(datagramPacket_in.splice(0,16));
             id2 = new ID(datagramPacket_in.splice(0,16));
             timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,4)));
 
             //ignore the next 16 bytes because it's just extra padding (a random ID)
-            message = datagramPacket_in.splice(0,16); //garbage ID
+            datagramPacket_in.splice(0,16); //garbage ID
             self.partNumber = convertByteArraytoInteger(datagramPacket_in.splice(0,4));
             self.bytesFromResource = datagramPacket_in;
             //message = new Buffer(datagramPacket_in).toString("utf8", 0, datagramPacket_in.length);
@@ -296,6 +301,7 @@ module.exports = function() {
         if(self.hasOwnProperty("partNumber")){
             bufferArray.push(new Buffer(self.partNumber));
             if(self.hasOwnProperty("bytesFromResource")){
+                //console.log(new Buffer(self.bytesFromResource).toString());
                 bufferArray.push(new Buffer(self.bytesFromResource));
             }
         }
@@ -314,7 +320,7 @@ function convertStringToByteArray(stringToConvert) {
     }
 
     return bytes;
-};
+}
 
 function convertByteArraytoInteger(byteArray) {
     var x = 0;

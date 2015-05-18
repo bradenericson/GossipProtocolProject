@@ -64,11 +64,11 @@ client.send(udpPacket, 0, udpPacket.length, 12345, "10.20.51.220", function(err)
 //var testBuffer = new Buffer("test string");
 //
 //var fs = require('fs');
-//var stream = fs.createWriteStream("resources/my_file.txt");
-//stream.once('open', function(fd) {
+//var writeStream = fs.createWriteStream("resources/my_file.txt");
+//writeStream.once('open', function(fd) {
 //    while (resource != complete) {
-//        stream.write(testBuffer);
-//        stream.end();
+//        writeStream.write(testBuffer);
+//        writeStream.end();
 //    }
 //
 //});
