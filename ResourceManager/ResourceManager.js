@@ -478,25 +478,17 @@ server.on('main-to-resourceManager', function(message,udpData){
 });
 
 
-server.on('main-to-resourceManager-build', function(message,udpData){
+server.on('main-to-resourceManager-build', function(message, resource){
     //at this point, we know that it's a response to something we're building
-    var udp = new UDP().createForGetResponse(udpData);
 
+    //resource = {
+    //    resourceId, partNumber, bytesFromResource
+    //};
+
+    writeStream.write(new Buffer(resource.bytesFromResource));
 
     //console.log('Message received');
     //message received, could be used to build resource
-});
-
-server.on('main-to-resourceManager-build', function(message, resourcePart) {
-    //add whatever resourcePart is to fileChunk
-    if (fileChunk !== null) {
-        fileChunk.concat(resourcePart);
-    }
-    else {
-        fileChunk = resourcePart;
-    }
-
-    packetsReceived++;
 });
 
 server.on('start-writeStream', function(message, data) {

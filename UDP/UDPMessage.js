@@ -188,6 +188,7 @@ module.exports = function() {
 
             //ignore the next 16 bytes because it's just extra padding (a random ID)
             datagramPacket_in.splice(0,16); //garbage ID
+
             self.partNumber = convertByteArraytoInteger(datagramPacket_in.splice(0,4));
             self.bytesFromResource = datagramPacket_in;
             //message = new Buffer(datagramPacket_in).toString("utf8", 0, datagramPacket_in.length);

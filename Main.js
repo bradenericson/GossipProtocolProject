@@ -158,14 +158,14 @@ server.on('transceiver-to-main', function(message, data){
                 resource = {
                     resourceId: udp.getID1().id,
                     partNumber: udp.partNumber,
-                    bytesFromResource: udp.bytesFromResource
+                    bytesFromResource: new Buffer(udp.bytesFromResource).toString()
                 };
 
                 //console.log("resource: ", resource);
 
-                //resourceManagerChild.request('main-to-resourceManager-build', resource, function (data) {
-                //    //console.log('main to resource manager data: ' + data);
-                //});
+                resourceManagerChild.request('main-to-resourceManager-build', resource, function (data) {
+                    //console.log('main to resource manager data: ' + data);
+                });
             }
         }
 
