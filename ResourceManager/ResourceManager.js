@@ -479,6 +479,7 @@ server.on('start-stream', function(message, data) {
     if (stream === null) {
         if (data !== null) {
             stream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
+            message.reply("success");
         }
         else {
             message.reply("resourceId wasn't a valid ID");

@@ -274,8 +274,11 @@ module.exports = function() {
 
     self.createUdpPacket = function() {
 
-        //console.log("self.getID1().id: ", self.getID1().id);
-        //console.log("self.getID2().id: ", self.getID2().id);
+        //console.log("self.getID1().id: ", self.getID1().id); //unique Request ID
+        //console.log("self.getID2().id: ", self.getID2().id); //this should be the resource ID
+        //console.log("timeToLive: ", self.getTimeToLive().get());
+        //console.log("message: ", self.getMessage());
+        //console.log("self.partNumber: ", self.partNumber);
 
         var id1Buffer = new Buffer(self.getID1().id); //we need to keep track of this ID because it is our Request ID
         var id2Buffer = new Buffer(self.getID2().id);

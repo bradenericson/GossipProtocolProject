@@ -234,11 +234,23 @@ server.on('ui-resource-get-request', function(message, data) {
     //console.log("data in Main.js: ", data);
 
     resourceManagerChild.request('start-stream', data, function(reply){
-        if(reply){
+        if(reply === "success"){
             //only send the request to peers IF the stream opens successfully
-            //transceiverChild.request('main-to-transceiver', udp.createUdpPacket(), function (data) {
-            //    console.log('data sending from transceiver to main: ' + data);
-            //});
+
+            var udpPacket = udp.createUdpPacket();
+
+            //console.log("udp.createUdpPacket: ", udpPacket);
+
+            transceiverChild.request('main-to-transceiver', udpPacket, function (data) {
+                console.log('data sending from transceiver to main: ' + data);
+                if (data === "success") {
+                    getRequestIds.push(udp.getID1().id.toString());
+                    //console.log("getRequestIds after pushing new GET Request ID onto it: ", getRequestIds);
+                }
+            });
+        }
+        else {
+            console.log(reply);
         }
     });
 
