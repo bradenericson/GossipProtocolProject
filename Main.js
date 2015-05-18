@@ -207,16 +207,20 @@ server.on('ui-resource-get-request', function(message, data) {
     var partNumber = 0; //we're searching for the very first piece
     var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
 
-    for(var i = 0; i < listOfReceivedResources; i++) {
+    for(var i = 0; i < listOfReceivedResources.length; i++) {
         if (listOfReceivedResources[i].resourceId === data.resourceId) {
             resourceFromCollection = listOfReceivedResources[i];
             break;
         }
     }
 
+    //This look will append the file information to the data object for the resourceManager to use
     for(var prop in resourceFromCollection) {
         data[prop] = resourceFromCollection[prop];
     }
+    //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
+
+
 /*
     resourceManagerChild.request('start-stream', data, function(reply){
         if(reply){
