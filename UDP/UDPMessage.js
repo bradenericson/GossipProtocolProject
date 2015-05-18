@@ -132,15 +132,16 @@ module.exports = function() {
         return self;
     };
 
-    self.createForFindResponse = function(resourceId, ttl, message){
-        self.setId2(new ID(resourceId));//append extra characters to make it fit the correct size
-        self.swapID();//swap the IDs
-        //console.log("ID1: ", self.getID1().id);
-        //console.log("ID2: ", self.getID2().id);
+    self.createForFindResponse = function(resourceId, requestId, ttl, message){
+        self.setId1(new ID(resourceId));//append extra characters to make it fit the correct size
+        self.setId2(new ID(requestId));
+        //self.swapID();//swap the IDs
+        console.log("ID1: ", self.getID1().id);
+        console.log("ID2: ", self.getID2().id);
         self.setTimeToLive(new TTL(ttl));//reset the timeToLive
         var randomID = idFactory.idFactory().id;
         self.setMessage(randomID.concat(convertStringToByteArray(message)));//set the message to a randomID and our string shit
-        console.log("ID3: ", randomID.toString());
+        //console.log("ID3: ", randomID.toString());
         return self;
     };
 

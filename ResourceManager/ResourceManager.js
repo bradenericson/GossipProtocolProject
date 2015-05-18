@@ -383,19 +383,22 @@ server.on('main-to-resourceManager', function(message,udpData){
                 }
             }
         }
+        var requestID = udp.getID1().id;
         getFromDatabase(tags, function(err, data){
             if(err){
                 console.error(err);
                 //console.log("BUT WE'RE STILL SENDING THE ORIGINAL PACKET FORWARD");
             }
             else{
-                var UdpCopy;
+                var udpCopy;
                 var string;
+                console.log(data.length, data);
                 for(var i=0; i < data.length; i++) {
                     //copy ID
+                    console.log("looping for the ith time: ", i);
                     udpCopy = udp;
                     string = "|"+data[i].mimeType+"|"+data[i].size+"|"+data[i].description;
-                    udpCopy.createForFindResponse(data[i].gossipID,5,string);
+                    udpCopy.createForFindResponse(data[i].gossipID,requestID,5,string);
 
                     mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
                        //we don't care

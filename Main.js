@@ -137,8 +137,6 @@ server.on('transceiver-to-main', function(message, data){
                     description: data[2]
                 };
 
-                console.log("Received resource: ", resource.resourceId + ". Timestamp: ", Date.now);
-
                 UIChild.request('main-to-UI', resource, function (data) {
 //                    console.log('main to UI data: ' + data);
                     listOfReceivedResources.push(resource);
@@ -194,9 +192,16 @@ server.on('resourceManager-to-main', function(message, data) {
 
 //listening to messages coming in from UI
 server.on('ui-resource-get-request', function(message, data) {
+    /*
+     data.resourceId : Resource ID that we're requesting
+     data.targetResourceName: Desired resource name for the file requested
+     data.timeToLive: Optional time to live parameter passed by user
+     */
+
     //could go to resourceManager also go to transceiver
     //data: {resourceId, targetResourceName, timeToLive} <String>
     var partNumber = 0; //we're searching for the very first piece
+    if(!data.hasOwnProperty("timeToLive")){data.timeToLive = 5;}//set timeToLive to 5 if one isn't passed
     var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
 
     for(var i = 0; i < listOfReceivedResources; i++) {
