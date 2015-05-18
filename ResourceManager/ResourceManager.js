@@ -377,10 +377,10 @@ server.on('main-to-resourceManager', function(message,udpData){
                    var resource = resources[0];
                    //console.log("The resource we get from mongo GET: ",resource);
                    // { _id, name, description, location, mimeType, size, __v, gossipID, tags }
-                   console.log("UDP: ", udp.getMessage());
+                   //console.log("UDP: ", udp.getMessage());
                    //udp.getMessage().splice(0,16); //removes random ID
                    udp.setPartNumber(udp.getMessage().splice(16,20));
-                   console.log("partNumber: ", udp.partNumber);
+                   //console.log("partNumber: ", udp.partNumber);
                    var packet;
                   // if(Number(udp.partNumber) === 0){
                        fs.open(RESOURCE_PATH + resource.location, 'r', function(status, fd) {
@@ -392,7 +392,7 @@ server.on('main-to-resourceManager', function(message,udpData){
                            var buffer = new Buffer(456);
                            fs.read(fd, buffer, 0, 455, (udp.partNumber*456), function(err, num) {
                                //console.log(buffer.toString('utf-8', 0, num));
-                               udp.bytesFromResource = buffer.splice(0,num).toJSON().data;
+                               udp.bytesFromResource = buffer.slice(0,num).toJSON().data;
                                //console.log("hey cool, a byte array: ",buffer.toJSON().data);
                                udp.setId2(udp.getID1()); //switch requestId to second ID
                                udp.setId1(new ID(resource.gossipID)); //switch resourceId to first ID

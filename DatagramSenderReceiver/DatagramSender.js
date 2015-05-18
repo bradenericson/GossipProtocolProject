@@ -37,7 +37,7 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize, addre
                 var addressToSendTo = addresses[i].toString();
 
                 service.socket.send(new Buffer(message.data), 0, message.data.length, service.getPort(), addressToSendTo, function(){
-                    console.log("message sent");
+                    //console.log("message sent");
                 });
             }
         }else{
