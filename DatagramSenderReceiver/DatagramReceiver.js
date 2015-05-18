@@ -29,8 +29,8 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
         service.socket.on('message', function(msg, rinfo) {
 
             incomingPacketQueue.add(msg);
-            console.log('Received %d bytes from %s:%d\n',
-                msg.length, rinfo.address, rinfo.port);
+            //console.log('Received %d bytes from %s:%d\n',
+                //msg.length, rinfo.address, rinfo.port);
         });
     };
 

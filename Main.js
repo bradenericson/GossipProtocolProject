@@ -110,7 +110,7 @@ server.on('transceiver-to-main', function(message, data){
         var tempData = data.data;
         var id2 = new ID(tempData.slice(16, 32));
         var resource;
-        console.log("The ID2: ",id2.id);
+        //console.log("The ID2: ",id2.id);
         //Response to Find Matching Resources Request
         if (searchRequestIds.indexOf(id2.id.toString()) >= 0) {
 
@@ -120,13 +120,13 @@ server.on('transceiver-to-main', function(message, data){
             if (udp.getTimeToLive().get() > 0) {
                 udp.getTimeToLive().decrement();
 
-                console.log("udp.Id1: ", udp.getID1().id.toString());
-                console.log("udp.Id2: ", udp.getID2().id.toString());
-                console.log("udp.ttl: ", udp.getTimeToLive().get());
-                console.log("udp.getMessage: ", udp.getMessage().toString());
+                //console.log("udp.Id1: ", udp.getID1().id.toString());
+                //console.log("udp.Id2: ", udp.getID2().id.toString());
+                //console.log("udp.ttl: ", udp.getTimeToLive().get());
+                //console.log("udp.getMessage: ", udp.getMessage().toString());
 
                 var delimiter = udp.getMessage().toString().substring(0, 1);
-                console.log("got the delimiter: ", delimiter);
+                //console.log("got the delimiter: ", delimiter);
 
                 var data = udp.getMessage().toString().substring(1).split(delimiter);
 
@@ -136,6 +136,8 @@ server.on('transceiver-to-main', function(message, data){
                     resourceSize: data[1],
                     description: data[2]
                 };
+
+                console.log("Received resource: ", resource.resourceId + ". Timestamp: ", Date.now);
 
                 UIChild.request('main-to-UI', resource, function (data) {
 //                    console.log('main to UI data: ' + data);
@@ -159,14 +161,13 @@ server.on('transceiver-to-main', function(message, data){
                 };
 
                 resourceManagerChild.request('main-to-resourceManager-build', resource, function (data) {
-                    console.log('main to resource manager data: ' + data);
+                    //console.log('main to resource manager data: ' + data);
                 });
             }
         }
 
         else {
             //pass it to resourceManager to deal with
-            console.log("We should be here damnit");
             resourceManagerChild.request('main-to-resourceManager', data, function () {
                 console.log("sent to resourceManager successful")
             })
@@ -187,7 +188,7 @@ server.on('resourceManager-to-main', function(message, data) {
 
     //get something from resource manager usually goes to transceiver
     transceiverChild.request('main-to-transceiver', data, function(data) {
-        console.log('data sending from main to transceiver: ' + data);
+        //console.log('data sending from main to transceiver: ' + data);
     });
 });
 

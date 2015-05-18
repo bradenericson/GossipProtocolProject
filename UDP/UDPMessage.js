@@ -135,8 +135,8 @@ module.exports = function() {
     self.createForFindResponse = function(resourceId, ttl, message){
         self.setId2(new ID(resourceId));//append extra characters to make it fit the correct size
         self.swapID();//swap the IDs
-        console.log("ID1: ", self.getID1().id);
-        console.log("ID2: ", self.getID2().id);
+        //console.log("ID1: ", self.getID1().id);
+        //console.log("ID2: ", self.getID2().id);
         self.setTimeToLive(new TTL(ttl));//reset the timeToLive
         var randomID = idFactory.idFactory().id;
         self.setMessage(randomID.concat(convertStringToByteArray(message)));//set the message to a randomID and our string shit
@@ -298,13 +298,13 @@ function convertStringToByteArray(stringToConvert) {
 
 function convertByteArraytoInteger(byteArray) {
     var x = 0;
-    console.log("array coming into function: ",byteArray);
+
     for(var i = 0; i < byteArray.length; i++) {
         x = x << 8;
         x = x | (byteArray[i] & 0xff);
     }
 
-    console.log("returning from function: ", x);
+
     return x;
 }
 
