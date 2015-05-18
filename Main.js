@@ -116,9 +116,9 @@ console.log("The ID ",id2.id);
         if (searchRequestIds.indexOf(id2.id.toString()) >= 0) {
 
             //if the second id is the same as our original request ID, it's a 'Response to Find Matching Resources Request'
-            udp.createFromDatagramPacket(data);
+            udp.createForReceivingFindRequest(data);
 
-            if (udp.getTimeToLive() > 0) {
+            if (udp.getTimeToLive().get() > 0) {
                 udp.getTimeToLive().decrement();
 
                 console.log("Sending to UI: ", udp);

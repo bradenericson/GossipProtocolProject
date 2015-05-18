@@ -100,6 +100,28 @@ module.exports = function() {
         }
     };
 
+    self.createForReceivingFindRequest = function(datagramPacket_in) {
+
+        if (typeof datagramPacket_in != "undefined") {
+            datagramPacket_in = datagramPacket_in.data;
+
+            //console.log("datagramPacket_in is buffer? ", Buffer.isBuffer(buffer));
+
+            id1 = new ID(datagramPacket_in.splice(0,16));
+            id2 = new ID(datagramPacket_in.splice(0,16));
+
+
+            timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,4)));
+            var id3 = datagramPacket_in.splice(0,16); //garbage ID
+            //console.log("ID3: ",id3);
+            //ignore the next 16 bytes because it's just extra padding (a random ID)
+            message = new Buffer(datagramPacket_in);
+        }
+        else {
+            throw new Error("The UDP message class did not receive a datagram");
+        }
+    };
+
     //TODO
     self.createForFindRequest = function(id1, id2, ttl, message){
         self.setId1(id1);
