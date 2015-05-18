@@ -90,7 +90,7 @@ module.exports = function() {
             //id2 = new ID(reader.nextString(16));
            // console.log("the packet before TTL splice: ",datagramPacket_in.splice(0,4));
             timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,4)));
-            var id3 = datagramPacket_in.splice(0,16); //garbage ID
+            //var id3 = datagramPacket_in.splice(0,16); //garbage ID
             //console.log("ID3: ",id3);
             //ignore the next 16 bytes because it's just extra padding (a random ID)
             message = new Buffer(datagramPacket_in);

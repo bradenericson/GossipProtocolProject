@@ -110,9 +110,11 @@ server.on('transceiver-to-main', function(message, data){
         var tempData = data.data;
         var id2 = new ID(tempData.slice(16, 33));
         var resource;
-
+console.log("The ID ",id2.id);
         //Response to Find Matching Resources Request
-        if (searchRequestIds.indexOf((id2.toString()) > 0)) {
+        console.log("the index of the shit: ", searchRequestIds.indexOf((id2.toString())));
+        if (searchRequestIds.indexOf(id2.id) >= 0) {
+
             //if the second id is the same as our original request ID, it's a 'Response to Find Matching Resources Request'
             udp.createFromDatagramPacket(data);
 
@@ -142,7 +144,7 @@ server.on('transceiver-to-main', function(message, data){
         }
 
         //if we are building a resource
-        else if (getRequestIds.indexOf(id2.toString() >= 0)) {
+        else if (getRequestIds.indexOf(id2.id) >= 0) {
 
             udp.createForGetResponse(data);
 
@@ -163,6 +165,7 @@ server.on('transceiver-to-main', function(message, data){
 
         else {
             //pass it to resourceManager to deal with
+            console.log("We should be here damnit");
             resourceManagerChild.request('main-to-resourceManager', data, function () {
                 console.log("sent to resourceManager successful")
             })
@@ -170,16 +173,6 @@ server.on('transceiver-to-main', function(message, data){
 
     }
 
-    console.log("ID1: ", udp.getID1().id);
-    console.log("ID2: ", udp.getID2().id);
-    console.log("TTL: ", udp.getTimeToLive().get());
-    console.log("message: ", udp.getMessage());
-
-    //sending back to transceiver
-    //could be a packet we need to send on
-    transceiverChild.request('main-to-transceiver', {message: 'data'}, function(data){
-        console.log('main back to transceiver data: ' + data);
-    });
     message.reply({message: "success"});
 
 });

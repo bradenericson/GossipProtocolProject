@@ -156,10 +156,14 @@ function getAll() {
 
 //index resources we do not have
 function indexResourceFiles(){
+    console.log("in index resources files function");
+    console.log(RESOURCE_PATH);
     fs.readdir(RESOURCE_PATH,function(err,files){
+        console.log(err, files);
         if(err){ throw err}
 
         files.forEach(function(file){
+
             // do something with each file HERE!
             Resource.where('name').equals(file).limit(1).exec(function(err, resource){
                 if(err){
@@ -341,20 +345,30 @@ function editName(resourceName, newName, callback){
 server.on('main-to-resourceManager', function(message,udpData){
     //this is for every packet that is not a response to something we asked for
     //we need to look at the request ID, see if we have the resource
-    var udp = new UDP().createFromDatagramPacket(udpData);
+    var udp = new UDP();
+    console.log("here i am: ", udpData);
+    udp.createFromDatagramPacket(udpData);
+    console.log("ID1: ", udp.getID1().id);
+    console.log("ID2: ", udp.getID2().id);
+    console.log("TTL: ", udp.getTimeToLive().get());
+    console.log("MSG: ", udp.getMessage().toString());
     var doForward = true;
     //first we check and see if the packet TTL has expired
     if(typeof udp.getTimeToLive().get() === 'number' && udp.getTimeToLive().get() > 0){
-        if(udp.getTimeToLive.get() === 0){
+        if(udp.getTimeToLive().get() === 0){
             //make sure we don't forward dead packets
             doForward = false;
         }
 
-        var msg = udp.getMessage();
-        var delimiter = msg.substring(0,1);
+        /*
+            isValidResource(udp.getID2().id, function(err, obj))
+            if(udp.getID2().id)
+        */
 
-        msg = msg.substring(1);//grabs everything but the first character
-        var tags = msg.split(delimiter);
+
+        var msg = udp.getMessage().toString();
+
+        var tags = msg.split(" ");
 
         for (var i = 0; i < tags.length; i++) {
             for (var y = 0; y < badWords.length; y++) {
@@ -404,10 +418,6 @@ server.on('main-to-resourceManager', function(message,udpData){
 
 
     }
-        //If we have the resource, we need to constuct a response to Find Matching Resource, and forward on the original packet
-        //else, we just forward on the original packet
-
-
     console.log('Message received');
     //message received, could be used to build resource
 });
