@@ -30,8 +30,8 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize, addre
 
           //  console.log("message in datagramsender is: ", message.data);
             for(var i=0; i<addresses.length; i++){
-                console.log("sending to address: ", addresses[i]);
-                console.log("sending on port: ", service.getPort());
+                //console.log("sending to address: ", addresses[i]);
+                //console.log("sending on port: ", service.getPort());
 
                 var addressToSendTo = addresses[i].toString();
 

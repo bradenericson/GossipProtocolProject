@@ -108,14 +108,14 @@ process.on('message', function (m) {
 });
 
 server.on('ui-resource-rename', function(message, data) {
-    console.log("received data from Main to ResourceManager...", data);
+    //console.log("received data from Main to ResourceManager...", data);
     editName(data.oldResourceName, data.newResourceName, function(error, status) {
         message.reply(status);
     });
 });
 
 server.on('ui-resource-description', function(message, data) {
-    console.log("received data from Main to ResourceManager...", data);
+    //console.log("received data from Main to ResourceManager...", data);
     editDescription(data.resourceName, data.description, function(error, status) {
         message.reply(status);
     });
@@ -159,7 +159,7 @@ function getAll() {
 
 //index resources we do not have
 function indexResourceFiles(){
-    console.log("in index resources files function");
+    //console.log("in index resources files function");
     console.log(RESOURCE_PATH);
     fs.readdir(RESOURCE_PATH,function(err,files){
         console.log(err, files);
@@ -191,7 +191,7 @@ function indexResourceFiles(){
                                 });
                             }
                         });
-                        console.log("Indexed "+ file);
+                        //console.log("Indexed "+ file);
                     }
 
                 }
@@ -233,13 +233,13 @@ function deleteResource(resourceName, callback){
 
 //add tags to a resource in the database
 function addTags(resourceName, tags, callback){
-    console.log("resourceName: ", resourceName);
+    //console.log("resourceName: ", resourceName);
     var query = Resource.find({name: resourceName}).limit(1);
     query.exec(function(err, resource){
         if(err){
             callback(err, null);
         }else{
-            console.log("resource: ", resource);
+            //console.log("resource: ", resource);
             resource = resource[0];
             //var resourceTags = resource.tags;
             resource.tags = resource.tags.concat(tags);
@@ -352,10 +352,10 @@ server.on('main-to-resourceManager', function(message,udpData){
     var udp = new UDP();
     //console.log("here i am: ", udpData);
     udp.createFromDatagramPacket(udpData);
-    console.log("ID1: ", udp.getID1().id);
-    console.log("ID2: ", udp.getID2().id);
-    console.log("TTL: ", udp.getTimeToLive().get());
-    console.log("MSG: ", udp.getMessage().toString());
+    //console.log("ID1: ", udp.getID1().id);
+    //console.log("ID2: ", udp.getID2().id);
+    //console.log("TTL: ", udp.getTimeToLive().get());
+    //console.log("MSG: ", udp.getMessage().toString());
     var doForward = true;
     //first we check and see if the packet TTL has expired
     if(typeof udp.getTimeToLive().get() === 'number' && udp.getTimeToLive().get() > 0){
@@ -386,7 +386,7 @@ server.on('main-to-resourceManager', function(message,udpData){
         getFromDatabase(tags, function(err, data){
             if(err){
                 console.error(err);
-                console.log("BUT WE'RE STILL SENDING THE ORIGINAL PACKET FORWARD");
+                //console.log("BUT WE'RE STILL SENDING THE ORIGINAL PACKET FORWARD");
             }
             else{
                 var UdpCopy;
@@ -425,7 +425,7 @@ server.on('main-to-resourceManager', function(message,udpData){
 
 
     }
-    console.log('Message received');
+    //console.log('Message received');
     //message received, could be used to build resource
 });
 
@@ -435,7 +435,7 @@ server.on('main-to-resourceManager-build', function(message,udpData){
     var udp = new UDP().createForGetResponse(udpData);
 
 
-    console.log('Message received');
+    //console.log('Message received');
     //message received, could be used to build resource
 });
 
@@ -457,7 +457,7 @@ server.on('start-stream', function(message, data) {
     var fileExtension = mimeType.extension(data.mimeType);
 
     data.targetResourceName = data.targetResourceName.substring(0, data.targetResourceName.indexOf(".")); //get rid of any supplied extensions from the user
-    console.log("Beginning to write file named: " + data.targetResourceName + "." + fileExtension);
+    //console.log("Beginning to write file named: " + data.targetResourceName + "." + fileExtension);
 
     if (stream === null) {
         if (resourceFromCollection != null) {

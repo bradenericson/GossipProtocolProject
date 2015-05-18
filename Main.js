@@ -110,9 +110,8 @@ server.on('transceiver-to-main', function(message, data){
         var tempData = data.data;
         var id2 = new ID(tempData.slice(16, 32));
         var resource;
-console.log("The ID ",id2.id);
+        console.log("The ID2: ",id2.id);
         //Response to Find Matching Resources Request
-        console.log("the index of the shit: ", searchRequestIds.indexOf(id2.id));
         if (searchRequestIds.indexOf(id2.id.toString()) >= 0) {
 
             //if the second id is the same as our original request ID, it's a 'Response to Find Matching Resources Request'
@@ -121,13 +120,15 @@ console.log("The ID ",id2.id);
             if (udp.getTimeToLive().get() > 0) {
                 udp.getTimeToLive().decrement();
 
-                console.log("Sending to UI: ", udp);
+                console.log("udp.Id1: ", udp.getID1().id.toString());
+                console.log("udp.Id2: ", udp.getID2().id.toString());
+                console.log("udp.ttl: ", udp.getTimeToLive().get());
+                console.log("udp.getMessage: ", udp.getMessage().toString());
 
                 var delimiter = udp.getMessage().toString().substring(0, 1);
+                console.log("got the delimiter: ", delimiter);
 
                 var data = udp.getMessage().toString().substring(1).split(delimiter);
-
-                console.log("data in main: ", data);
 
                 resource = {
                     resourceId: udp.getID1().id,
@@ -137,7 +138,7 @@ console.log("The ID ",id2.id);
                 };
 
                 UIChild.request('main-to-UI', resource, function (data) {
-                    console.log('main to UI data: ' + data);
+//                    console.log('main to UI data: ' + data);
                     listOfReceivedResources.push(resource);
                 });
             }
@@ -264,10 +265,10 @@ server.on('ui-resource-search', function(message, searchPhrase) {
 
     var searchUdpMessage = udpMessage.createForFindRequest(id1, id2, ttl, searchPhrase);
 
-    console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1().id);
-    console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2().id);
-    console.log("searchUdpMessage's TimeToLive: ", searchUdpMessage.getTimeToLive().get());
-    console.log("searchUdpMessage's message: ", searchUdpMessage.getMessage());
+    //console.log("searchUdpMessage's ID1: ", searchUdpMessage.getID1().id);
+    //console.log("searchUdpMessage's ID2: ", searchUdpMessage.getID2().id);
+    //console.log("searchUdpMessage's TimeToLive: ", searchUdpMessage.getTimeToLive().get());
+    //console.log("searchUdpMessage's message: ", searchUdpMessage.getMessage());
 
     transceiverChild.request('main-to-transceiver', searchUdpMessage.createUdpPacket(), function(status) {
         if (status === "success") {

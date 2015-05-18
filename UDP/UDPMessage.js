@@ -113,7 +113,6 @@ module.exports = function() {
 
             timeToLive = new TTL(convertByteArraytoInteger(datagramPacket_in.splice(0,4)));
             var id3 = datagramPacket_in.splice(0,16); //garbage ID
-            //var id3 = datagramPacket_in.splice(0,16); //garbage ID
             //console.log("ID3: ",id3);
             //ignore the next 16 bytes because it's just extra padding (a random ID)
             message = new Buffer(datagramPacket_in);
