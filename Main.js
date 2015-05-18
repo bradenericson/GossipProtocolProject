@@ -202,13 +202,14 @@ server.on('ui-resource-get-request', function(message, data) {
      data.timeToLive: Optional time to live parameter passed by user
      */
 
-    //could go to resourceManager also go to transceiver
-    //data: {resourceId, targetResourceName, timeToLive} <String>
     var partNumber = 0; //we're searching for the very first piece
+
+    //create a UDP object for get Request
     var udp = new UDPMessage().createForGetRequest(data.resourceId, partNumber, data.timeToLive);
 
     //console.log("listOfReceivedResources: ", listOfReceivedResources);
 
+    //loop through our resource list from the FIND request and get the mimetype, filesize, description, etc
     for(var i = 0; i < listOfReceivedResources.length; i++) {
 
         //console.log("listOfReceivedResources[i].resourceId.toString(): ", listOfReceivedResources[i].resourceId.toString());
@@ -217,13 +218,15 @@ server.on('ui-resource-get-request', function(message, data) {
         if (listOfReceivedResources[i].resourceId.toString() === data.resourceId.toString()) {
             //console.log("Resource found!");
             resourceFromCollection = listOfReceivedResources[i];
-            break;
+            break; //save cycles
         }
     }
 
-    //This look will append the file information to the data object for the resourceManager to use
+    //This loop will append the file information to the data object for the resourceManager to use
     for(var prop in resourceFromCollection) {
-        data[prop] = resourceFromCollection[prop];
+        if(resourceFromCollection.hasOwnProperty(prop)){
+            data[prop] = resourceFromCollection[prop];
+        }
     }
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
