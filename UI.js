@@ -113,8 +113,6 @@ process.stdin.on('data', function (text) {
             resourceRequest.timeToLive = 5;
         }
 
-        console.log("resourceRequest: ", resourceRequest);
-
         requestResource(resourceRequest);
     }
     if (text === 'join') {
@@ -237,10 +235,10 @@ function requestResource(resourceRequest) {
         resourceRequest.timeToLive: Optional time to live parameter passed by user
     */
 
-    //console.log("resourceRequest: ", resourceRequest);
+    console.log("resourceRequest: ", resourceRequest);
 
     mainSpeaker.request('ui-resource-get-request', resourceRequest, function(status) {
-
+    
     });
 }
 
