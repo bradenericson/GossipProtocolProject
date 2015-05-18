@@ -108,12 +108,12 @@ server.on('transceiver-to-main', function(message, data){
 
     if (data != null) {
         var tempData = data.data;
-        var id2 = new ID(tempData.slice(16, 33));
+        var id2 = new ID(tempData.slice(16, 32));
         var resource;
 console.log("The ID ",id2.id);
         //Response to Find Matching Resources Request
         console.log("the index of the shit: ", searchRequestIds.indexOf(id2.id));
-        if (searchRequestIds.indexOf(id2.id) >= 0) {
+        if (searchRequestIds.indexOf(id2.id.toString()) >= 0) {
 
             //if the second id is the same as our original request ID, it's a 'Response to Find Matching Resources Request'
             udp.createFromDatagramPacket(data);
@@ -123,9 +123,9 @@ console.log("The ID ",id2.id);
 
                 console.log("Sending to UI: ", udp);
 
-                var delimiter = udp.getMessage().substring(0, 1);
+                var delimiter = udp.getMessage().toString().substring(0, 1);
 
-                var data = udp.getMessage().substring(1).split(delimiter);
+                var data = udp.getMessage().toString().substring(1).split(delimiter);
 
                 console.log("data in main: ", data);
 
@@ -144,7 +144,7 @@ console.log("The ID ",id2.id);
         }
 
         //if we are building a resource
-        else if (getRequestIds.indexOf(id2.id) >= 0) {
+        else if (getRequestIds.indexOf(id2.id.toString()) >= 0) {
 
             udp.createForGetResponse(data);
 
@@ -271,7 +271,7 @@ server.on('ui-resource-search', function(message, searchPhrase) {
 
     transceiverChild.request('main-to-transceiver', searchUdpMessage.createUdpPacket(), function(status) {
         if (status === "success") {
-            searchRequestIds.push(id1.toString()); //ID1 is the request ID from originating peer (us). Store that onto the array
+            searchRequestIds.push(id1.id.toString()); //ID1 is the request ID from originating peer (us). Store that onto the array
             //console.log("Just pushed id1 onto the searchRequestIds array: ", id1);
             message.reply("success");
         }

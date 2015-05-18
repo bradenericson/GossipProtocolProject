@@ -111,7 +111,7 @@ module.exports = function() {
     };
 
     self.createForFindResponse = function(resourceId, ttl, message){
-        self.setId2(new ID(convertStringToByteArray(resourceId)));//append extra characters to make it fit the correct size
+        self.setId2(new ID(resourceId));//append extra characters to make it fit the correct size
         self.swapID();//swap the IDs
         console.log("ID1: ", self.getID1().id);
         console.log("ID2: ", self.getID2().id);
