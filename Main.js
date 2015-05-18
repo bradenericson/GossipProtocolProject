@@ -276,7 +276,7 @@ server.on('ui-resource-search', function(message, searchPhrase) {
     //console.log("searchUdpMessage's TimeToLive: ", searchUdpMessage.getTimeToLive().get());
     //console.log("searchUdpMessage's message: ", searchUdpMessage.getMessage());
 
-    transceiverChild.request('main-to-transceiver', new Buffer(searchUdpMessage.createUdpPacket()), function(status) {
+    transceiverChild.request('main-to-transceiver', searchUdpMessage.createUdpPacket(), function(status) {
         if (status === "success") {
             searchRequestIds.push(id1.toString()); //ID1 is the request ID from originating peer (us). Store that onto the array
             //console.log("Just pushed id1 onto the searchRequestIds array: ", id1);

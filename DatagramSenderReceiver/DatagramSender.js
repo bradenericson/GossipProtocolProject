@@ -32,7 +32,10 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize, addre
             for(var i=0; i<addresses.length; i++){
                 console.log("sending to address: ", addresses[i]);
                 console.log("sending on port: ", service.getPort());
-                service.socket.send(message.data, 0, message.length, service.getPort(), addresses[i], function(){
+
+                var addressToSendTo = addresses[i].toString();
+
+                service.socket.send(new Buffer(message.data), 0, message.data.length, service.getPort(), addressToSendTo, function(){
                     console.log("message sent");
                 });
             }
