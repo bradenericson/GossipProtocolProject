@@ -68,7 +68,7 @@ db.once('open', function (callback) {
     console.log('successful connection')
 });
 
-var stream;
+var stream = null;
 
 var isFileDone = true;
 var fileChunk;
@@ -467,39 +467,24 @@ server.on('start-stream', function(message, data) {
 
     //console.log("Beginning to write file named: " + data.targetResourceName + "." + fileExtension);
 
-    //if (stream === null) {
-    //    if (resourceFromCollection != null) {
-    //        stream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
-    //        stream.once('open', function(fd) {
-    //            isFileDone = false;
-    //            interval = setInterval(function() {
-    //                if (fileChunk !== null) {
-    //                    stream.write(fileChunk);
-    //
-    //                    if (packetsReceived == numFileParts) {
-    //                        isFileDone = true;
-    //                    }
-    //
-    //                    fileChunk = null;
-    //                }
-    //
-    //                if (isFileDone) {
-    //
-    //                    stream.end(); //close the stream
-    //                    clearInterval(interval);
-    //                    fileChunk = null;
-    //                }
-    //            }, 1000);
-    //        });
-    //        message.reply("success");
-    //    }
-    //    else {
-    //        message.reply("resourceId wasn't a valid ID");
-    //        stream.end();
-    //        clearInterval(interval);
-    //    }
-    //}
-    //else {
-    //    message.reply("stream is already open");
-    //}
+    //console.log("is stream null? ", stream === null);
+    //console.log("stream: ", stream);
+    //console.log("is data null? ", data === null);
+
+    //var byteArray1 = [66,114,97,100,101,110,32,108,105,107,101,115,32,98,111,111,98,105,101,115,32,92,114,92,110];
+    //var byteArray2 = [83,111,32,100,111,101,115,32,67,104,97,100];
+
+    //var bradensBuffer = new Buffer(byteArray1.concat(byteArray2));
+
+    if (stream === null) {
+        if (data !== null) {
+            stream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
+        }
+        else {
+            message.reply("resourceId wasn't a valid ID");
+        }
+    }
+    else {
+        message.reply("stream is already open");
+    }
 });
