@@ -42,7 +42,7 @@ console.log("---------------------------------");
 help();
 
 process.stdin.on('data', function (text) {
-    text = text.toLowerCase().trim();
+    text = text.trim();
 
     if (text !== 'quit' &&
         text !== 'help' &&

@@ -176,7 +176,7 @@ function indexResourceFiles(){
                                 Resource.create({
                                     name: file,
                                     description: "",
-                                    tags: [],
+                                    tags: [""],
                                     location: file,
                                     mimeType: mime,
                                     size: size
@@ -225,11 +225,13 @@ function deleteResource(resourceName, callback){
 
 //add tags to a resource in the database
 function addTags(resourceName, tags, callback){
+    console.log("resourceName: ", resourceName);
     var query = Resource.find({name: resourceName}).limit(1);
     query.exec(function(err, resource){
         if(err){
             callback(err, null);
         }else{
+            console.log("resource: ", resource);
             resource = resource[0];
             //var resourceTags = resource.tags;
             resource.tags = resource.tags.concat(tags);
