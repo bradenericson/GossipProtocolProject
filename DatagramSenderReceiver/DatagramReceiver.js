@@ -47,6 +47,7 @@ module.exports = function(datagramSocket, incomingPacketQueue, packetSize) {
            /*console.log("The message:",udp.getMessage());
            console.log("The id1:",udp.getID1().id);
             */
+           //console.log("Received Message: ", udp.toString());
            return udp;
 
        }else{
