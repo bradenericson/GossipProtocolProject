@@ -101,7 +101,6 @@ process.on('message', function (m) {
 });
 
 //WHERE SHIT HAPPENS
-//^I'm leaving this - Matt TODO
 server.on('transceiver-to-main', function(message, data){
     //code that handles what to do with the packet
     var udp = new UDPMessage();
@@ -150,7 +149,6 @@ server.on('transceiver-to-main', function(message, data){
 
         //if we are building a resource
         else if (getRequestIds.indexOf(id2.id.toString()) >= 0) {
-
             udp.createForGetResponse(data);
 
             if (udp.getTimeToLive() > 0) {
@@ -170,6 +168,7 @@ server.on('transceiver-to-main', function(message, data){
 
         else {
             //pass it to resourceManager to deal with
+            console.log("data being passed to RM: ", data);
             resourceManagerChild.request('main-to-resourceManager', data, function () {
                 console.log("sent to resourceManager successful")
             })

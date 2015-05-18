@@ -372,61 +372,69 @@ server.on('main-to-resourceManager', function(message,udpData){
         */
 
 
-        var msg = udp.getMessage().toString();
+        console.log("before callback");
+        getFileFromDB(udp.getID2().id, function(err, resources){
+            console.log("aftercallback");
+           if(err){
+               console.log("MONGO ERROR: ", err);
+           }else{
+               if(resources.length > 0){
+                   //this is a request to GET resource
+                   var resource = resources[0];
+                   console.log("The resource we get from mongo GET: ",resource);
+               }else{
+                   //assuming it's a FIND request
+                   var msg = udp.getMessage().toString();
 
-        var tags = msg.split(" ");
+                   var tags = msg.split(" ");
 
-        for (var i = 0; i < tags.length; i++) {
-            for (var y = 0; y < badWords.length; y++) {
-                if (tags[i] === badWords[y]) {
-                    tags.splice(i,1);
-                }
-            }
-        }
-        var requestID = udp.getID1().id;
-        getFromDatabase(tags, function(err, data){
-            if(err){
-                console.error(err);
-                //console.log("BUT WE'RE STILL SENDING THE ORIGINAL PACKET FORWARD");
-            }
-            else{
-                var udpCopy;
-                var string;
-                //console.log(data.length, data);
-                for(var i=0; i < data.length; i++) {
-                    //copy ID
-                    console.log("looping for the ith time: ", i);
-                    udpCopy = udp;
-                    string = "|"+data[i].mimeType+"|"+data[i].size+"|"+data[i].description;
-                    udpCopy.createForFindResponse(data[i].gossipID,requestID,5,string);
+                   for (var i = 0; i < tags.length; i++) {
+                       for (var y = 0; y < badWords.length; y++) {
+                           if (tags[i] === badWords[y]) {
+                               tags.splice(i,1);
+                           }
+                       }
+                   }
+                   var requestID = udp.getID1().id;
+                   getFromDatabase(tags, function(err, data){
+                       if(err){
+                           console.error(err);
+                           //console.log("BUT WE'RE STILL SENDING THE ORIGINAL PACKET FORWARD");
+                       }
+                       else{
+                           var udpCopy;
+                           var string;
+                           //console.log(data.length, data);
+                           for(var i=0; i < data.length; i++) {
+                               //copy ID
+                               //console.log("looping for the ith time: ", i);
+                               udpCopy = udp;
+                               string = "|"+data[i].mimeType+"|"+data[i].size+"|"+data[i].description;
+                               udpCopy.createForFindResponse(data[i].gossipID,requestID,5,string);
 
-                    mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
-                       //we don't care
-                    });
-                    console.log('sending response to Find Matching Resource Request');
-                    //resourceID is 12 bytes long
-                    //put data[i]
-                    //create byte array, put info in it,
-                    // setMessage() *new function*
-                    //end of loop send new UDP to main
-                    //braden will add sending to main
-                }
-            }
-            if(doForward){
-                mainSpeaker.request('resourceManager-to-main', udp.createUdpPacket(), function(){
-                    //we don't care
-                });
-            }
+                               mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
+                                   //we don't care
+                               });
+                               console.log('sending response to Find Matching Resource Request');
+                               //resourceID is 12 bytes long
+                               //put data[i]
+                               //create byte array, put info in it,
+                               // setMessage() *new function*
+                               //end of loop send new UDP to main
+                               //braden will add sending to main
+                           }
+                       }
+                       if(doForward){
+                           mainSpeaker.request('resourceManager-to-main', udp.createUdpPacket(), function(){
+                               //we don't care
+                           });
+                       }
 
-            //forward on original packet
-        })
-
-
-
-
-
-
-
+                       //forward on original packet
+                   })
+               }
+           }
+        });
     }
     //console.log('Message received');
     //message received, could be used to build resource
@@ -455,6 +463,7 @@ server.on('main-to-resourceManager-build', function(message, resourcePart) {
 });
 
 server.on('start-stream', function(message, data) {
+    //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
     //console.log("data in start-stream: ", data);
 
@@ -489,3 +498,20 @@ server.on('start-stream', function(message, data) {
         message.reply("stream is already open");
     }
 });
+
+
+function getFileFromDB(resourceID, callback){
+    //resourceID <byteArray>
+    //callback: <callback(err,array)
+    var query = Resource.where('gossipID').all(resourceID).limit(1);
+    query.exec(function(err,resources){
+        if(err){
+            callback(err,null);
+        }else{
+            callback(null, resources);
+        }
+    });
+
+
+
+}
