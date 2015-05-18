@@ -151,8 +151,8 @@ module.exports = function() {
     };
 
     //TODO
-    self.createForGetRequest = function(resourceId, partNumber, timeToLive) {
-        var id1 = idFactory.idFactory();
+    self.createForGetRequest = function(resourceId, partNumber, timeToLive, requestId) {
+        var id1 = requestId;
 
         //console.log("resourceId: ", resourceId);
 

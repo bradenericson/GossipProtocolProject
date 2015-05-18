@@ -69,15 +69,10 @@ db.once('open', function (callback) {
 });
 
 var writeStream = null;
-var readFile = null;
-var isFileDone = true;
-var fileChunk;
-
-
-var packetsReceived = 0;
 
 var Resource = require('./models/Resource/Resource.js');
 
+var numFileParts; //the number of file parts a GET resource is going to be
 
 indexResourceFiles();
 //editDescription("test.txt", "Saturday morning finals are unethical and should be canceled", function(err, msg){
@@ -482,13 +477,31 @@ server.on('main-to-resourceManager-build', function(message, resource){
     //at this point, we know that it's a response to something we're building
 
     //resource = {
-    //    resourceId, partNumber, bytesFromResource
+    //    resourceId, partNumber, bytesFromResource, requestId
     //};
 
     writeStream.write(new Buffer(resource.bytesFromResource));
 
+    if (resource.partNumber < numFileParts) {
+        //console.log("in: resource.partNumber < numFileParts");
+        var udpPacket = new UDP();
+        udpPacket.createForGetRequest(resource.resourceId.toString(), resource.partNumber+1, 5, new ID(resource.requestId));
+        //console.log("resource.requestId: ", resource.requestId);
+        //console.log("numFileParts: ", numFileParts);
+        //console.log("typeof resource.partNumber: ", typeof resource.partNumber);
+        mainSpeaker.request('resourceManager-to-main', udpPacket.createUdpPacket(), function(status) {
+            console.log("Received status in ResourceManager: ", status);
+        });
+    }
+    else {
+        console.log("Download complete!");
+        writeStream.end(); //close the stream
+        writeStream = null;
+    }
+
+    //function(resourceId, partNumber, timeToLive, requestId) {
+
     //console.log('Message received');
-    //message received, could be used to build resource
 });
 
 server.on('start-writeStream', function(message, data) {
@@ -496,7 +509,8 @@ server.on('start-writeStream', function(message, data) {
 
     //console.log("data in start-writeStream: ", data);
 
-    var numFileParts = Math.ceil(data.resourceSize / 456);
+    numFileParts = Math.ceil(data.resourceSize / 456);
+    console.log("data.mimeType: ", data.mimeType);
     var fileExtension = Mime.extension(data.mimeType);
 
     if (data.targetResourceName.indexOf('.') > 0) {

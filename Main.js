@@ -158,7 +158,8 @@ server.on('transceiver-to-main', function(message, data){
                 resource = {
                     resourceId: udp.getID1().id,
                     partNumber: udp.partNumber,
-                    bytesFromResource: new Buffer(udp.bytesFromResource).toString()
+                    bytesFromResource: new Buffer(udp.bytesFromResource).toString(),
+                    requestId: udp.getID2().id,
                 };
 
                 //console.log("resource: ", resource);
@@ -192,6 +193,7 @@ server.on('resourceManager-to-main', function(message, data) {
     //get something from resource manager usually goes to transceiver
     transceiverChild.request('main-to-transceiver', data, function(data) {
         //console.log('data sending from main to transceiver: ' + data);
+        message.reply("success");
     });
 });
 
@@ -207,7 +209,7 @@ server.on('ui-resource-get-request', function(message, data) {
 
     //create a UDP object for get Request
     var udp = new UDPMessage();
-    udp.createForGetRequest(data.resourceId, partNumber, data.timeToLive);
+    udp.createForGetRequest(data.resourceId, partNumber, data.timeToLive, idFactory.idFactory());
 
     //console.log("listOfReceivedResources: ", listOfReceivedResources);
 
@@ -232,7 +234,7 @@ server.on('ui-resource-get-request', function(message, data) {
     }
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
-    //console.log("data in Main.js: ", data);
+    console.log("data in Main.js: ", data);
 
     resourceManagerChild.request('start-writeStream', data, function(reply){
         if(reply === "success"){
