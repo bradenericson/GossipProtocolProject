@@ -8,7 +8,7 @@ To challenge ourselves even farther, we took advantage of JavaScript's prototypi
 
 Our application took advantage of NodeJS' event driven system by creating 4 separate processes to handle the logic of the application. We broke our application down into 4 processes:
 
-[A highlevel view of our architecture](resources/JSP2PUML.png?raw=true "A highlevel view of our architecture")
+![A highlevel view of our architecture](resources/JSP2PUML.png?raw=true "A highlevel view of our architecture")
 
 * UI: The UI class is used to handle all interaction with the end user. A user can type in terminal commands to query the peer community for resources, request resources from the peer community, index and tag their own descriptions, and start and stop the client application.
 * Transceiver: The Transceiver class receives and sends all packets to the outside peer community. The transceiver takes the packets, and adds them to a queue until Main is ready to take it for processing. When a packet needs to get sent out to the peer community, the transceiver takes it from the queue, processes it, and sends it out to the IP addresses defined in the AddressBook Class. 
@@ -22,7 +22,6 @@ Our application took advantage of NodeJS' event driven system by creating 4 sepa
 
 #Going above and beyond
 ---
-
 The first steps to the project was getting it to successfully work with peers built with different languages. After meeting the basic requirements, we went above and beyond with a couple unique features to our implementation:
 
 * We used MongoDB to easily reference files on our filesystem without having to go to the filesystem for every request. This also allowed us to add tags and descriptions to our files without having to create additional helper files in the resources folder.
