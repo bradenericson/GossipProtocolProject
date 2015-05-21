@@ -1,0 +1,3 @@
+Put your resources here. The application will automatically index your files into the mongo database. 
+You're going towant to add a description and tags before individuals can query for your resources.
+You can use the UI to do this.
