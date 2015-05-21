@@ -156,10 +156,10 @@ server.on('transceiver-to-main', function(message, data){
                 udp.getTimeToLive().decrement();
 
                 resource = {
-                    resourceId: udp.getID1().id, //byteArray
-                    partNumber: udp.partNumber,  //1
-                    bytesFromResource: udp.bytesFromResource, //shit ton of bytes
-                    requestId: udp.getID2().id //byteArray
+                    resourceId: udp.getID1().id,
+                    partNumber: Number(udp.partNumber),
+                    bytesFromResource: udp.bytesFromResource,
+                    requestId: udp.getID2().id
                 };
 
                 //console.log("resource: ", resource);

@@ -73,28 +73,16 @@ var writeStream = null;
 var Resource = require('./models/Resource/Resource.js');
 
 var numFileParts; //the number of file parts a GET resource is going to be
-var currentPartNumber;
+var currentRequestPart;
+var reRequestTimeout; //timeout for re-getting packet
+var lastPart;
+
 indexResourceFiles();
 //editDescription("test.txt", "Saturday morning finals are unethical and should be canceled", function(err, msg){
 //   console.log(err, msg);
 //});
 
 //deleteResource("test.txt");
-//Generates bogus data
-/*
-for(var i = 0; i < 10; i++) {
-    Resource.create({
-        name: "Test " + i,
-        description: "Test Description " + i,
-        tags: ["test", "cat", "dog", "water", "fire", "earth", "air", "all", "changed", "when", "fire", "nation", "attacked"],
-        location: "C://",
-        mimeType: "image/jpeg",
-        size: 1024
-    });
-
-    console.log("Created Test " + i + " in the database!");
-};
-*/
 
 //on meesasge parse it for keywords, get the resource from the database and swap the IDs
 process.on('message', function (m) {
@@ -155,9 +143,9 @@ function getAll() {
 //index resources we do not have
 function indexResourceFiles(){
     //console.log("in index resources files function");
-    console.log(RESOURCE_PATH);
+    //console.log(RESOURCE_PATH);
     fs.readdir(RESOURCE_PATH,function(err,files){
-        console.log(err, files);
+        //console.log(err, files);
         if(err){ throw err}
 
         files.forEach(function(file){
@@ -174,7 +162,7 @@ function indexResourceFiles(){
                             if(error){console.log(error);}else{
                                 var mime = Mime.lookup(file);
                                 var size = stats.size;
-                                console.log(stats);
+                                //console.log(stats);
                                 Resource.create({
                                     name: file,
                                     description: "",
@@ -385,12 +373,12 @@ server.on('main-to-resourceManager', function(message,udpData){
                   // if(Number(udp.partNumber) === 0){
                        fs.open(RESOURCE_PATH + resource.location, 'r', function(status, fd) {
                            if (status) {
-                               console.log(status.message);
+                               //console.log(status.message);
                                return;
                            }
                            //readFile = fd;
                            var buffer = new Buffer(456);
-                           fs.read(fd, buffer, 0, 456, ((udp.partNumber-1)*456), function(err, num) { //partNumber should NEVER be zero
+                           fs.read(fd, buffer, 0, 456, ((udp.partNumber-1)*456), function(err, num) {
                                //console.log(buffer.toString('utf-8', 0, num));
                                udp.bytesFromResource = buffer.slice(0,num).toJSON().data;
                                //console.log("hey cool, a byte array: ",buffer.toJSON().data);
@@ -430,7 +418,7 @@ server.on('main-to-resourceManager', function(message,udpData){
 
                    getFromDatabase(tags, function(err, data){
                        if(err){
-                           console.error(err);
+                           //console.error(err);
                            //console.log("BUT WE'RE STILL SENDING THE ORIGINAL PACKET FORWARD");
                        }
                        else{
@@ -447,7 +435,7 @@ server.on('main-to-resourceManager', function(message,udpData){
                                mainSpeaker.request('resourceManager-to-main', udpCopy.createUdpPacket(), function(){
                                    //we don't care
                                });
-                               console.log('sending response to Find Matching Resource Request');
+                               //.console.log('sending response to Find Matching Resource Request');
                                //resourceID is 12 bytes long
                                //put data[i]
                                //create byte array, put info in it,
@@ -480,31 +468,48 @@ server.on('main-to-resourceManager-build', function(message, resource){
     //    resourceId, partNumber, bytesFromResource, requestId
     //};
 
-    console.log("Writing partNumber: ", resource.partNumber);
-    console.log("Writing this number of bytes: ", resource.bytesFromResource.length);
-    if(resource.partNumber === currentPartNumber){
-        writeStream.write(new Buffer(resource.bytesFromResource));
-        currentPartNumber++;
 
-        if (resource.partNumber < numFileParts) {
+
+    //console.log("Writing partNumber: ", resource.partNumber);
+    //console.log("Writing this number of bytes: ", resource.bytesFromResource.length);
+
+    if (currentRequestPart < numFileParts) {
+        if (currentRequestPart == resource.partNumber) {
+            console.log("numFileParts: ", numFileParts);
+            writeStream.write(new Buffer(resource.bytesFromResource));
             //console.log("in: resource.partNumber < numFileParts");
             var udpPacket = new UDP();
-            udpPacket.createForGetRequest(resource.resourceId.toString(), currentPartNumber, 5, new ID(resource.requestId));
+            //console.log("typeof resource.partNumber: ", typeof resource.partNumber);
+            //console.log("resource.partNumber: ", parseInt(resource.partNumber) + 1);
+            udpPacket.createForGetRequest(resource.resourceId.toString(), resource.partNumber+1, 5, new ID(resource.requestId));
+            /*reRequestTimeout = setTimeout(function(){
+             mainSpeaker.request('resourceManager-to-main', udpPacket.createUdpPacket(), function(status) {
+             console.log("Received status in ResourceManager: ", status);
+
+             });
+             console.log("rerequesting packet number: ", udpPacket.partNumber+1);
+             },3000);*/
             //console.log("resource.requestId: ", resource.requestId);
             //console.log("numFileParts: ", numFileParts);
             //console.log("typeof resource.partNumber: ", typeof resource.partNumber);
             mainSpeaker.request('resourceManager-to-main', udpPacket.createUdpPacket(), function(status) {
-                console.log("Received status in ResourceManager: ", status);
+                //console.log("Received status in ResourceManager: ", status);
+
             });
+
+            currentRequestPart++;
         }
-        else {
+    }
+    else {
+        if(writeStream !== null){
             console.log("Download complete!");
             writeStream.end(); //close the stream
             writeStream = null;
         }
+
+
+        //clearTimeout(reRequestTimeout);
     }
-
-
 
     //function(resourceId, partNumber, timeToLive, requestId) {
 
@@ -515,8 +520,10 @@ server.on('start-writeStream', function(message, data) {
     //data = {resourceId, targetResourceName, timeToLive, mimeType, resourceSize, description}
 
     //console.log("data in start-writeStream: ", data);
+
+    currentRequestPart = 1;
     numFileParts = Math.ceil(data.resourceSize / 456);
-    console.log("data.mimeType: ", data.mimeType);
+    //console.log("data.mimeType: ", data.mimeType);
     var fileExtension = Mime.extension(data.mimeType);
 
     if (data.targetResourceName.indexOf('.') > 0) {
@@ -537,7 +544,6 @@ server.on('start-writeStream', function(message, data) {
     if (writeStream === null) {
         if (data !== null) {
             writeStream = fs.createWriteStream("resources/" + data.targetResourceName + "." + fileExtension);
-            currentPartNumber = 1;
             message.reply("success");
         }
         else {

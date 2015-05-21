@@ -28,7 +28,7 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/gossip');
 var db = mongoose.connection;
 
-var query = Resource.find().sort({name: 1});
+var query = Resource.find().sort({name: 1}); //sorts the resources alphabetically
 var resources = new Array();
 
 query.exec(function(error, docs) {
