@@ -8,7 +8,7 @@ To challenge ourselves even farther, we took advantage of JavaScript's prototypi
 
 Our application took advantage of NodeJS' event driven system by creating 4 separate processes to handle the logic of the application. We broke our application down into 4 processes:
 
-[A highlevel view of our architecture](resources/JSP2PUML.png)
+[A highlevel view of our architecture](https://github.com/bradenericson/GossipProtocolProject/blob/master/resources/JSP2PUML.png?raw=true)
 
 * UI: The UI class is used to handle all interaction with the end user. A user can type in terminal commands to query the peer community for resources, request resources from the peer community, index and tag their own descriptions, and start and stop the client application.
 * Transceiver: The Transceiver class receives and sends all packets to the outside peer community. The transceiver takes the packets, and adds them to a queue until Main is ready to take it for processing. When a packet needs to get sent out to the peer community, the transceiver takes it from the queue, processes it, and sends it out to the IP addresses defined in the AddressBook Class. 
